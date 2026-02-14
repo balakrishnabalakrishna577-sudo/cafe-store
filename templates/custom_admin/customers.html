@@ -1,0 +1,142 @@
+{% extends 'custom_admin/base.html' %}
+
+{% block title %}Spices of India Cuisine - Customers{% endblock %}
+{% block page_title %}Spices of India Cuisine Customers Management{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <form method="get" class="row g-3">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-0"><i
+                                    class="fas fa-search text-muted"></i></span>
+                            <input type="text" name="search" class="form-control bg-light border-0 shadow-none"
+                                placeholder="Search by name, email or phone..." value="{{ search }}">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th style="width: 25%;">Customer</th>
+                                <th style="width: 20%;">Contact Info</th>
+                                <th style="width: 12%;">Total Orders</th>
+                                <th style="width: 15%;">Total Spent</th>
+                                <th style="width: 13%;">Joined Date</th>
+                                <th style="width: 15%;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for customer in customers %}
+                            <tr>
+                                <td style="width: 25%;">
+                                    <div class="d-flex align-items-center">
+                                        <div class="user-profile-img me-3" style="width: 42px; height: 42px;">
+                                            {{ customer.user.username|make_list|first|upper }}
+                                        </div>
+                                        <div>
+                                            <div class="fw-700 text-dark">{% if customer.user.get_full_name %}{{ customer.user.get_full_name }}{% else %}{{ customer.user.username }}{% endif %}</div>
+                                            <div class="small text-muted">@{{ customer.user.username }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="width: 20%;">
+                                    <div class="small fw-500 text-dark"><i
+                                            class="far fa-envelope me-2 text-muted"></i>{{ customer.user.email }}</div>
+                                    <div class="small text-muted"><i class="fas fa-phone me-2 text-muted"></i>{% if customer.phone %}{{ customer.phone }}{% else %}N/A{% endif %}</div>
+                                </td>
+                                <td style="width: 12%;">
+                                    <span class="badge badge-info px-3">{{ customer.order_count }} Orders</span>
+                                </td>
+                                <td style="width: 15%;">
+                                    <span class="fw-700 text-success">${{ customer.total_spent|floatformat:2 }}</span>
+                                </td>
+                                <td style="width: 13%;">
+                                    <div class="small text-muted">{{ customer.user.date_joined|date:"M d, Y" }}</div>
+                                </td>
+                                <td style="width: 15%;">
+                                    <a href="{% url 'admin_customer_detail' customer.id %}" class="btn btn-sm btn-outline-primary btn-sm">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center py-5">
+                                    <p class="text-muted">No customers found.</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% if customers.has_other_pages %}
+            <div class="card-footer bg-white py-3">
+                <nav>
+                    <ul class="pagination pagination-sm justify-content-center mb-0">
+                        {% if customers.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link shadow-none"
+                                href="?page=1{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}"
+                                title="First Page">
+                                <i class="fas fa-angle-double-left"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link shadow-none"
+                                href="?page={{ customers.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">Previous</a>
+                        </li>
+                        {% endif %}
+
+                        {% for i in customers.paginator.page_range %}
+                        {% if customers.number == i %}
+                        <li class="page-item active">
+                            <span class="page-link shadow-none">{{ i }}</span>
+                        </li>
+                        {% elif i > customers.number|add:'-3' and i < customers.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link shadow-none"
+                                href="?page={{ i }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">{{
+                                i }}</a>
+                            </li>
+                            {% endif %}
+                            {% endfor %}
+
+                            {% if customers.has_next %}
+                            <li class="page-item">
+                                <a class="page-link shadow-none"
+                                    href="?page={{ customers.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}">Next</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link shadow-none"
+                                    href="?page={{ customers.paginator.num_pages }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value|urlencode }}{% endif %}{% endfor %}"
+                                    title="Last Page">
+                                    <i class="fas fa-angle-double-right"></i>
+                                </a>
+                            </li>
+                            {% endif %}
+                    </ul>
+                </nav>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

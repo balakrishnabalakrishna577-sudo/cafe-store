@@ -1,0 +1,124 @@
+{% extends 'cafe/base.html' %}
+{% load static %}
+
+{% block title %}Sign Up - Spices of India Cuisine{% endblock %}
+
+{% block extra_css %}
+<style>
+
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow-lg border-0">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-utensils fa-3x text-primary mb-3"></i>
+                            <h2 class="fw-bold">Create Account</h2>
+                            <p class="text-muted">Join us and start ordering delicious food</p>
+                        </div>
+
+                        <form method="post">
+                            {% csrf_token %}
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="id_first_name" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" name="first_name" id="id_first_name"
+                                        required>
+                                    {% if form.first_name.errors %}
+                                    <div class="text-danger mt-1">{{ form.first_name.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="id_last_name" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" name="last_name" id="id_last_name" required>
+                                    {% if form.last_name.errors %}
+                                    <div class="text-danger mt-1">{{ form.last_name.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="id_username" class="form-label">Username</label>
+                                <input type="text" class="form-control" name="username" id="id_username" required>
+                                {% if form.username.errors %}
+                                <div class="text-danger mt-1">{{ form.username.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="id_email" class="form-label">Email</label>
+                                <input type="email" class="form-control" name="email" id="id_email" required>
+                                {% if form.email.errors %}
+                                <div class="text-danger mt-1">{{ form.email.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="id_password1" class="form-label">Password</label>
+                                <input type="password" class="form-control" name="password1" id="id_password1" required>
+                                {% if form.password1.errors %}
+                                <div class="text-danger mt-1">{{ form.password1.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="id_password2" class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control" name="password2" id="id_password2" required>
+                                {% if form.password2.errors %}
+                                <div class="text-danger mt-1">{{ form.password2.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {{ form.non_field_errors.0 }}
+                            </div>
+                            {% endif %}
+
+                            <div class="d-grid mb-3">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-user-plus me-2"></i>Create Account
+                                </button>
+                            </div>
+                        </form>
+
+                        <hr class="my-4">
+
+                        <div class="text-center">
+                            <p class="mb-0">Already have an account?</p>
+                            <a href="{% url 'login' %}" class="btn btn-outline-primary mt-2">
+                                <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Benefits -->
+                <div class="row mt-4">
+                    <div class="col-md-4 text-center">
+                        <i class="fas fa-truck fa-2x text-primary mb-2"></i>
+                        <h6>Fast Delivery</h6>
+                        <small class="text-muted">Get your food in 30 minutes</small>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <i class="fas fa-star fa-2x text-warning mb-2"></i>
+                        <h6>Quality Food</h6>
+                        <small class="text-muted">Fresh ingredients, great taste</small>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <i class="fas fa-credit-card fa-2x text-success mb-2"></i>
+                        <h6>Secure Payment</h6>
+                        <small class="text-muted">Safe and encrypted transactions</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

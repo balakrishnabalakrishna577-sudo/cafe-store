@@ -1,0 +1,713 @@
+{% extends 'cafe/base.html' %}
+{% load static %}
+
+{% block title %}{{ item.name }} - Spices of India Cuisine{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Hero Section */
+    .item-hero {
+        background: #f8f9fa;
+        padding: 120px 0 40px;
+        position: relative;
+        overflow: hidden;
+        border-bottom: 1px solid #eee;
+    }
+
+
+
+    /* Main Content */
+    .item-section {
+        padding: 2rem 0;
+    }
+
+    /* Image Container */
+    .image-container {
+        position: relative;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .item-image {
+        width: 100%;
+        height: 350px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .item-image:hover {
+        transform: scale(1.05);
+    }
+
+    .item-placeholder {
+        width: 100%;
+        height: 350px;
+        background: linear-gradient(135deg, #ff4d4d 0%, #ff6b35 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 4rem;
+        color: white;
+    }
+
+    /* Details Card */
+    .details-card {
+        background: white;
+        border-radius: 20px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+        height: 100%;
+    }
+
+
+    .category-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #ff4d4d, #ff6b35);
+        color: white;
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .item-title {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: #333;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .veg-badge,
+    .non-veg-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.4rem 0.9rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .veg-badge {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+    }
+
+    .non-veg-badge {
+        background: linear-gradient(135deg, #dc3545, #e74c3c);
+        color: white;
+    }
+
+    .item-badges {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .badge-item {
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .badge-spicy {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .badge-popular {
+        background: #d1ecf1;
+        color: #0c5460;
+    }
+
+    .item-description {
+        color: #6c757d;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+    }
+
+    /* Price Section */
+    .price-box {
+        background: linear-gradient(135deg, #ff4d4d 0%, #ff6b35 100%);
+        padding: 1rem;
+        border-radius: 15px;
+        margin-bottom: 1rem;
+        text-align: center;
+        color: white;
+    }
+
+    .price-original {
+        text-decoration: line-through;
+        opacity: 0.8;
+        font-size: 0.9rem;
+    }
+
+    .price-current {
+        font-size: 2rem;
+        font-weight: 800;
+        margin: 0.25rem 0;
+    }
+
+    .discount-tag {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 0.25rem 0.7rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        display: inline-block;
+    }
+
+    /* Quantity Section */
+    .quantity-section {
+        margin-bottom: 0;
+    }
+
+    .quantity-label {
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+        color: #333;
+        font-size: 0.9rem;
+    }
+
+    .quantity-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        justify-content: flex-start;
+    }
+
+    .qty-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: none;
+        background: linear-gradient(135deg, #ff4d4d, #ff6b35);
+        color: white;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .qty-btn:hover {
+        transform: scale(1.1);
+    }
+
+    .qty-input {
+        width: 60px;
+        height: 40px;
+        text-align: center;
+        border: 2px solid #ff4d4d;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #ff4d4d;
+    }
+
+    /* Action Buttons */
+    .btn-add-cart {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        border: none;
+        padding: 0.75rem;
+        border-radius: 12px;
+        color: white;
+        font-weight: 700;
+        font-size: 1rem;
+        width: 100%;
+        transition: all 0.3s ease;
+        margin-bottom: 0;
+    }
+
+    .btn-add-cart:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+    }
+
+    .btn-wishlist {
+        background: white;
+        border: 2px solid #dc3545;
+        padding: 0.75rem;
+        border-radius: 12px;
+        color: #dc3545;
+        font-weight: 700;
+        width: 100%;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+    }
+
+    .btn-wishlist:hover {
+        background: #dc3545;
+        color: white;
+    }
+
+    /* Info Cards */
+    .info-card {
+        background: #f8f9fa;
+        padding: 0.75rem;
+        border-radius: 12px;
+        margin-bottom: 0;
+        text-align: center;
+    }
+
+    .info-card-title {
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+        color: #333;
+        font-size: 0.8rem;
+    }
+
+    .info-card-text {
+        color: #6c757d;
+        font-size: 0.8rem;
+        margin: 0;
+    }
+
+    /* Related Items */
+    .related-section {
+        padding: 3rem 0;
+        background: #f8f9fa;
+    }
+
+    .section-title {
+        font-size: 1.75rem;
+        font-weight: 800;
+        margin-bottom: 2rem;
+        text-align: center;
+        color: #333;
+    }
+
+    .related-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+
+    .related-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .related-image {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+    }
+
+    .related-placeholder {
+        width: 100%;
+        height: 180px;
+        background: linear-gradient(135deg, #ff4d4d, #ff6b35);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2rem;
+    }
+
+    .related-body {
+        padding: 1rem;
+    }
+
+    .related-title {
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: #333;
+    }
+
+    .related-price {
+        color: #28a745;
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .item-hero {
+            padding: 90px 0 30px;
+        }
+        .item-image,
+        .item-placeholder {
+            height: 300px;
+        }
+
+        .item-title {
+            font-size: 1.5rem;
+        }
+
+        .price-current {
+            font-size: 2rem;
+        }
+
+        .details-card {
+            margin-top: 1rem;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .item-hero {
+            padding: 80px 0 24px;
+        }
+        .item-image,
+        .item-placeholder {
+            height: 260px;
+        }
+        .item-title {
+            font-size: 1.35rem;
+        }
+        .price-current {
+            font-size: 1.5rem;
+        }
+        .price-box {
+            padding: 0.75rem;
+        }
+        .details-card {
+            padding: 1rem;
+        }
+        .btn-lg {
+            min-height: 48px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+
+<!-- Hero Section -->
+<section class="item-hero">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'menu' %}">Menu</a></li>
+                <li class="breadcrumb-item active">{{ item.name }}</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<!-- Main Content -->
+<section class="item-section">
+    <div class="container">
+        <div class="row">
+            <!-- Image Column -->
+            <div class="col-lg-6 mb-4">
+                <div class="image-container">
+                    {% if item.get_image_url %}
+                    <img src="{{ item.get_image_url }}" alt="{{ item.name }}" class="item-image">
+                    {% else %}
+                    <div class="item-placeholder">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Details Column -->
+            <div class="col-lg-6">
+                <div class="details-card">
+                    <!-- Category Badge -->
+                    <span class="category-badge">
+                        <i class="fas fa-tag me-1"></i>{{ item.category.name }}
+                    </span>
+
+                    <!-- Title with Veg/Non-Veg Badge -->
+                    <h1 class="item-title">
+                        {% if item.is_vegetarian %}
+                        <span class="veg-badge">
+                            <i class="fas fa-circle"></i> VEG
+                        </span>
+                        {% else %}
+                        <span class="non-veg-badge">
+                            <i class="fas fa-drumstick-bite"></i> NON-VEG
+                        </span>
+                        {% endif %}
+                        {{ item.name }}
+                    </h1>
+
+                    <!-- Badges -->
+                    <div class="item-badges">
+                        {% if item.is_spicy %}
+                        <span class="badge-item badge-spicy">
+                            <i class="fas fa-fire me-1"></i>Spicy
+                        </span>
+                        {% endif %}
+                        {% if item.is_popular %}
+                        <span class="badge-item badge-popular">
+                            <i class="fas fa-star me-1"></i>Popular
+                        </span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Description -->
+                    <p class="item-description">{{ item.description }}</p>
+
+                    <!-- Price Box -->
+                    <div class="price-box">
+                        {% if item.has_discount %}
+                        <div class="price-original">${{ item.price }}</div>
+                        <div class="price-current">${{ item.discounted_price }}</div>
+                        <span class="discount-tag">
+                            <i class="fas fa-fire me-1"></i>{{ item.discount }}% OFF
+                        </span>
+                        {% else %}
+                        <div class="price-current">${{ item.price }}</div>
+                        {% endif %}
+                    </div>
+
+                    {% if item.available %}
+                    <!-- Quantity and Actions Row -->
+                    <div class="row align-items-center mb-3">
+                        <div class="col-md-6">
+                            <div class="quantity-section">
+                                <div class="quantity-label">Quantity</div>
+                                <div class="quantity-controls">
+                                    <button class="qty-btn" id="decreaseBtn">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <input type="number" class="qty-input" id="quantityInput" value="1" min="1" max="10"
+                                        readonly>
+                                    <button class="qty-btn" id="increaseBtn">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <!-- Info Cards -->
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="info-card">
+                                        <div class="info-card-title">
+                                            <i class="fas fa-clock me-1"></i>Prep
+                                        </div>
+                                        <p class="info-card-text">{{ item.preparation_time }} mins</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="info-card">
+                                        <div class="info-card-title">
+                                            <i class="fas fa-truck me-1"></i>Delivery
+                                        </div>
+                                        <p class="info-card-text">30-40 mins</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons Row -->
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <button class="btn btn-add-cart" onclick="addToCart('{{ item.id }}')">
+                                <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                            </button>
+                        </div>
+                        {% if user.is_authenticated %}
+                        <div class="col-md-6 mb-2">
+                            <button class="btn btn-wishlist" onclick="toggleWishlist('{{ item.id }}')">
+                                <i class="far fa-heart me-2"></i>Add to Wishlist
+                            </button>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% else %}
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Currently Unavailable
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Related Items -->
+{% if related_items %}
+<section class="related-section">
+    <div class="container">
+        <h2 class="section-title">You May Also Like</h2>
+        <div class="row">
+            {% for related in related_items %}
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <a href="{% url 'menu_item_detail' related.slug %}" class="related-card">
+                    {% if related.get_image_url %}
+                    <img src="{{ related.get_image_url }}" alt="{{ related.name }}" class="related-image">
+                    {% else %}
+                    <div class="related-placeholder">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    {% endif %}
+                    <div class="related-body">
+                        <h5 class="related-title">{{ related.name }}</h5>
+                        <div class="related-price">${{ related.discounted_price|default:related.price }}</div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const decreaseBtn = document.getElementById('decreaseBtn');
+        const increaseBtn = document.getElementById('increaseBtn');
+        const quantityInput = document.getElementById('quantityInput');
+
+        if (decreaseBtn && increaseBtn && quantityInput) {
+            decreaseBtn.addEventListener('click', function () {
+                let value = parseInt(quantityInput.value);
+                if (value > 1) {
+                    quantityInput.value = value - 1;
+                }
+            });
+
+            increaseBtn.addEventListener('click', function () {
+                let value = parseInt(quantityInput.value);
+                if (value < 10) {
+                    quantityInput.value = value + 1;
+                }
+            });
+        }
+    });
+
+    function addToCart(itemId) {
+        const quantity = document.getElementById('quantityInput').value;
+        const button = event.target.closest('.btn-add-cart');
+        const originalText = button.innerHTML;
+
+        button.disabled = true;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Adding...';
+
+        fetch('{% url "add_to_cart" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: `menu_item_id=${itemId}&quantity=${quantity}`
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    button.innerHTML = '<i class="fas fa-check me-2"></i>Added!';
+                    button.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+
+                    // Show cart notification
+                    if (window.cart && window.cart.showCartNotification) {
+                        window.cart.showCartNotification(
+                            data.message,
+                            'success',
+                            data.item_name,
+                            data.item_image
+                        );
+                    }
+
+                    // Update cart count
+                    if (window.cart && window.cart.updateCount) {
+                        window.cart.updateCount(data.cart_count);
+                    } else if (typeof updateCartCount === 'function') {
+                        updateCartCount(data.cart_count);
+                    }
+
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.style.background = '';
+                        button.disabled = false;
+                    }, 2000);
+                } else {
+                    showToast(data.message || 'Failed to add item to cart', 'error');
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+
+                    if (data.redirect) {
+                        setTimeout(() => {
+                            window.location.href = data.redirect;
+                        }, 1500);
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('Something went wrong. Please try again.', 'error');
+                button.innerHTML = originalText;
+                button.disabled = false;
+            });
+    }
+
+    function toggleWishlist(itemId) {
+        fetch('{% url "toggle_wishlist" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: `menu_item_id=${itemId}`
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast(data.message, 'success');
+
+                    // Update wishlist icon
+                    const wishlistBtn = document.querySelector('.btn-wishlist');
+                    if (wishlistBtn) {
+                        const icon = wishlistBtn.querySelector('i');
+                        if (data.is_wishlisted) {
+                            icon.className = 'fas fa-heart';
+                            wishlistBtn.classList.add('wishlisted');
+                        } else {
+                            icon.className = 'far fa-heart';
+                            wishlistBtn.classList.remove('wishlisted');
+                        }
+                    }
+                } else {
+                    showToast(data.message || 'Something went wrong. Please try again.', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('Something went wrong. Please try again.', 'error');
+            });
+    }
+
+    function showToast(message, type) {
+        const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+        const iconClass = type === 'success' ? 'check-circle' : 'exclamation-circle';
+
+        const toast = document.createElement('div');
+        toast.className = `alert ${alertClass} alert-dismissible fade show position-fixed`;
+        toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); border-radius: 10px;';
+        toast.innerHTML = `
+            <i class="fas fa-${iconClass} me-2"></i>${message}
+            <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+        `;
+
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.remove();
+            }
+        }, 5000);
+    }
+</script>
+{% endblock %}

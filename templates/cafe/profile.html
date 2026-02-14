@@ -1,0 +1,521 @@
+{% extends 'cafe/base.html' %}
+{% load static %}
+
+{% block title %}My Profile - Spices of India Cuisine{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <!-- Profile Sidebar -->
+        <div class="col-lg-4 mb-4">
+            <div class="card profile-card shadow-sm border-0">
+                <div class="card-body text-center p-4">
+                    <div class="profile-image-container mb-3">
+                        {% if user_profile.image %}
+                            <img src="{{ user_profile.image.url }}" alt="{{ user.username }}" class="profile-image">
+                        {% else %}
+                            <div class="profile-image-placeholder">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <h4 class="mb-1">{{ user.get_full_name|default:user.username }}</h4>
+                    <p class="text-muted mb-2">{{ user.email }}</p>
+                    <span class="badge bg-primary mb-2">Member since {{ user.date_joined|date:"M Y" }}</span>
+                    <p class="text-muted small mb-0"><i class="fas fa-calendar-alt me-1"></i>{{ account_age }} days with us</p>
+                </div>
+                
+                <div class="card-body border-top">
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-shopping-bag text-primary"></i>
+                            <div class="stat-info">
+                                <h5 class="mb-0">{{ total_orders }}</h5>
+                                <small class="text-muted">Total Orders</small>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-clock text-warning"></i>
+                            <div class="stat-info">
+                                <h5 class="mb-0">{{ pending_orders }}</h5>
+                                <small class="text-muted">Pending</small>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-check-circle text-success"></i>
+                            <div class="stat-info">
+                                <h5 class="mb-0">{{ completed_orders }}</h5>
+                                <small class="text-muted">Completed</small>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-rupee-sign text-success"></i>
+                            <div class="stat-info">
+                                <h5 class="mb-0">${{ total_spent }}</h5>
+                                <small class="text-muted">Total Spent</small>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-heart text-danger"></i>
+                            <div class="stat-info">
+                                <h5 class="mb-0">{{ wishlist_count }}</h5>
+                                <small class="text-muted">Wishlist</small>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-star text-warning"></i>
+                            <div class="stat-info">
+                                <h5 class="mb-0">{{ reviews_count }}</h5>
+                                <small class="text-muted">Reviews</small>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-map-marker-alt text-info"></i>
+                            <div class="stat-info">
+                                <h5 class="mb-0">{{ addresses_count }}</h5>
+                                <small class="text-muted">Addresses</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-body border-top">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'orders' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-receipt me-2"></i>My Orders
+                        </a>
+                        <a href="{% url 'wishlist' %}" class="btn btn-outline-danger">
+                            <i class="fas fa-heart me-2"></i>My Wishlist
+                        </a>
+                        <a href="{% url 'delivery_addresses' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-map-marker-alt me-2"></i>Addresses
+                        </a>
+                        <a href="{% url 'password_change' %}" class="btn btn-outline-warning">
+                            <i class="fas fa-key me-2"></i>Change Password
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Profile Content -->
+        <div class="col-lg-8">
+            <!-- Edit Profile Form -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user-edit text-primary me-2"></i>Edit Profile
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ user_form.first_name.id_for_label }}" class="form-label">First Name</label>
+                                {{ user_form.first_name }}
+                                {% if user_form.first_name.errors %}
+                                    <div class="text-danger small">{{ user_form.first_name.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ user_form.last_name.id_for_label }}" class="form-label">Last Name</label>
+                                {{ user_form.last_name }}
+                                {% if user_form.last_name.errors %}
+                                    <div class="text-danger small">{{ user_form.last_name.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ user_form.email.id_for_label }}" class="form-label">Email</label>
+                            {{ user_form.email }}
+                            {% if user_form.email.errors %}
+                                <div class="text-danger small">{{ user_form.email.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ profile_form.phone.id_for_label }}" class="form-label">Phone Number</label>
+                            {{ profile_form.phone }}
+                            {% if profile_form.phone.errors %}
+                                <div class="text-danger small">{{ profile_form.phone.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ profile_form.date_of_birth.id_for_label }}" class="form-label">Date of Birth</label>
+                            {{ profile_form.date_of_birth }}
+                            {% if profile_form.date_of_birth.errors %}
+                                <div class="text-danger small">{{ profile_form.date_of_birth.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ profile_form.address.id_for_label }}" class="form-label">Address</label>
+                            {{ profile_form.address }}
+                            {% if profile_form.address.errors %}
+                                <div class="text-danger small">{{ profile_form.address.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ profile_form.city.id_for_label }}" class="form-label">City</label>
+                                {{ profile_form.city }}
+                                {% if profile_form.city.errors %}
+                                    <div class="text-danger small">{{ profile_form.city.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ profile_form.postal_code.id_for_label }}" class="form-label">Postal Code</label>
+                                {{ profile_form.postal_code }}
+                                {% if profile_form.postal_code.errors %}
+                                    <div class="text-danger small">{{ profile_form.postal_code.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="{{ profile_form.image.id_for_label }}" class="form-label">Profile Picture</label>
+                            {{ profile_form.image }}
+                            {% if profile_form.image.errors %}
+                                <div class="text-danger small">{{ profile_form.image.errors }}</div>
+                            {% endif %}
+                            <small class="form-text text-muted d-block mt-1">
+                                Upload a profile picture (JPG, PNG, max 5MB)
+                            </small>
+                        </div>
+                        
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary px-4">
+                                <i class="fas fa-save me-2"></i>Save Changes
+                            </button>
+                            <a href="{% url 'home' %}" class="btn btn-outline-secondary px-4">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Recent Orders -->
+            {% if recent_orders %}
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white border-0 py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-history text-primary me-2"></i>Recent Orders
+                        </h5>
+                        <a href="{% url 'orders' %}" class="btn btn-sm btn-outline-primary">View All</a>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Order #</th>
+                                    <th>Date</th>
+                                    <th>Items</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in recent_orders %}
+                                <tr>
+                                    <td data-label="Order #"><strong>{{ order.order_number }}</strong></td>
+                                    <td data-label="Date">{{ order.created_at|date:"M d, Y" }}</td>
+                                    <td data-label="Items">{{ order.items.count }} item{{ order.items.count|pluralize }}</td>
+                                    <td data-label="Total"><strong>${{ order.total }}</strong></td>
+                                    <td data-label="Status">
+                                        <span class="badge 
+                                            {% if order.status == 'pending' %}bg-warning
+                                            {% elif order.status == 'confirmed' %}bg-info
+                                            {% elif order.status == 'preparing' %}bg-primary
+                                            {% elif order.status == 'out_for_delivery' %}bg-secondary
+                                            {% elif order.status == 'delivered' %}bg-success
+                                            {% elif order.status == 'cancelled' %}bg-danger
+                                            {% else %}bg-secondary{% endif %}">
+                                            {{ order.get_status_display }}
+                                        </span>
+                                    </td>
+                                    <td data-label="Action">
+                                        <a href="{% url 'order_detail' order.order_number %}" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-eye"></i> View
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Favorite Items -->
+            {% if favorite_items %}
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="mb-0">
+                        <i class="fas fa-fire text-danger me-2"></i>Your Favorite Items
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for item in favorite_items %}
+                        <div class="col-md-4 mb-3">
+                            <div class="favorite-item-card">
+                                {% if item.menu_item__image %}
+                                    <img src="{{ item.menu_item__image.url }}" alt="{{ item.menu_item__name }}" class="favorite-item-image">
+                                {% elif item.menu_item__image_url %}
+                                    <img src="{{ item.menu_item__image_url }}" alt="{{ item.menu_item__name }}" class="favorite-item-image">
+                                {% else %}
+                                    <div class="favorite-item-placeholder">
+                                        <i class="fas fa-utensils"></i>
+                                    </div>
+                                {% endif %}
+                                <div class="favorite-item-info">
+                                    <h6 class="mb-1">{{ item.menu_item__name }}</h6>
+                                    <p class="text-muted small mb-0">
+                                        <i class="fas fa-shopping-cart me-1"></i>Ordered {{ item.order_count }} time{{ item.order_count|pluralize }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Recent Reviews -->
+            {% if recent_reviews %}
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="mb-0">
+                        <i class="fas fa-comment-dots text-info me-2"></i>Your Recent Reviews
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% for review in recent_reviews %}
+                    <div class="review-item mb-3 pb-3 {% if not forloop.last %}border-bottom{% endif %}">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h6 class="mb-0">{{ review.menu_item.name }}</h6>
+                            <small class="text-muted">{{ review.created_at|date:"M d, Y" }}</small>
+                        </div>
+                        <div class="mb-2">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= review.rating %}
+                                <i class="fas fa-star text-warning"></i>
+                                {% else %}
+                                <i class="far fa-star text-warning"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <p class="text-muted mb-0">{{ review.comment }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+.profile-card {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.profile-image-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+}
+
+.profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid var(--gray-100);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.profile-image-placeholder {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 4rem;
+    border: 5px solid var(--gray-100);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.profile-stats {
+    display: grid;
+    gap: 1rem;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    background: var(--gray-50);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+    background: var(--gray-100);
+    transform: translateX(5px);
+}
+
+.stat-item i {
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 10px;
+}
+
+.stat-info h5 {
+    font-weight: 700;
+    color: var(--gray-800);
+}
+
+.stat-info small {
+    font-size: 0.75rem;
+}
+
+.card {
+    border-radius: 15px;
+}
+
+.card-header {
+    border-radius: 15px 15px 0 0 !important;
+}
+
+.form-control, .form-select {
+    border-radius: 10px;
+    border: 1px solid var(--gray-300);
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(255, 77, 77, 0.1);
+}
+
+.btn {
+    border-radius: 10px;
+    padding: 0.6rem 1.2rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.table {
+    font-size: 0.9rem;
+}
+
+.table thead th {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    color: var(--gray-600);
+}
+
+.badge {
+    padding: 0.4rem 0.8rem;
+    font-weight: 600;
+    border-radius: 6px;
+}
+
+.favorite-item-card {
+    background: var(--gray-50);
+    border-radius: 12px;
+    padding: 1rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.favorite-item-card:hover {
+    background: var(--gray-100);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.favorite-item-image {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+}
+
+.favorite-item-placeholder {
+    width: 100%;
+    height: 120px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+}
+
+.favorite-item-info h6 {
+    font-weight: 600;
+    color: var(--gray-800);
+}
+
+.review-item {
+    padding: 0.75rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.review-item:hover {
+    background: var(--gray-50);
+}
+    border-radius: 6px;
+}
+
+@media (max-width: 991.98px) {
+    .profile-image-container,
+    .profile-image,
+    .profile-image-placeholder {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .profile-image-placeholder {
+        font-size: 3rem;
+    }
+}
+</style>
+{% endblock %}

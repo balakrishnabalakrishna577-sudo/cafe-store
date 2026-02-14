@@ -1,0 +1,80 @@
+{% extends 'cafe/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Edit Address - Spices of India Cuisine{% endblock %}
+
+{% block extra_css %}
+<style>
+    .edit-address-hero {
+        background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        padding: 80px 0 40px;
+        color: white;
+        text-align: center;
+    }
+
+    .edit-address-form {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-cancel {
+        background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+        border: none;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-cancel:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 3px 10px rgba(149, 165, 166, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="edit-address-hero">
+    <div class="container">
+        <h1><i class="fas fa-edit me-3"></i>Edit Address</h1>
+        <p>Update your delivery location</p>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="edit-address-form">
+                    <h4 class="mb-4">
+                        <i class="fas fa-map-marker-alt me-2"></i>
+                        Editing: {{ address.label }}
+                    </h4>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        
+                        <div class="d-flex gap-3 mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Update Address
+                            </button>
+                            <a href="{% url 'delivery_addresses' %}" class="btn-cancel">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

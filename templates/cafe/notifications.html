@@ -1,0 +1,578 @@
+{% extends 'cafe/base.html' %}
+{% load static %}
+
+{% block title %}Notifications - Spices of India Cuisine{% endblock %}
+
+{% block extra_css %}
+<style>
+    .notifications-hero {
+        background: linear-gradient(135deg, #ff4d4d 0%, #ff6b35 100%);
+        padding: 80px 0 40px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .notifications-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="25" cy="25" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
+        opacity: 0.3;
+    }
+    
+    .notifications-hero .container {
+        position: relative;
+        z-index: 2;
+    }
+
+    .notification-card {
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+        margin-bottom: 1.5rem;
+        transition: all 0.4s ease;
+        overflow: hidden;
+        background: white;
+        position: relative;
+    }
+
+    .notification-card::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 5px;
+        background: linear-gradient(180deg, #f5576c 0%, #764ba2 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .notification-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+    .notification-card:hover::before {
+        opacity: 1;
+    }
+
+    .notification-card.unread {
+        background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
+        border-left: 5px solid #ff4d4d;
+    }
+    
+    .notification-card.unread::before {
+        opacity: 1;
+    }
+    
+    .notification-card .position-relative {
+        position: relative;
+    }
+
+    .notification-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .notification-icon::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: rgba(255, 255, 255, 0.1);
+        transform: rotate(45deg);
+        transition: all 0.5s ease;
+    }
+    
+    .notification-card:hover .notification-icon::before {
+        left: 100%;
+    }
+
+    .notification-icon.order_update {
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    }
+
+    .notification-icon.promotion {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+    }
+
+    .notification-icon.info {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .notification-icon.system {
+        background: linear-gradient(135deg, #ff4d4d 0%, #ff6b35 100%);
+    }
+
+    .notification-icon.reminder {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+    
+    .notification-icon.warning {
+        background: linear-gradient(135deg, #feca57 0%, #ff9ff3 100%);
+    }
+    
+    .notification-icon.success {
+        background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
+    }
+
+    .notification-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 0.5rem;
+    }
+    
+    .notification-message {
+        color: #4a5568;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 0.75rem;
+    }
+
+    .notification-time {
+        color: #a0aec0;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+    
+    .notification-time i {
+        color: #cbd5e0;
+    }
+
+    .badge-new {
+        background: linear-gradient(135deg, #ff4d4d 0%, #ff6b35 100%);
+        color: white;
+        padding: 0.35rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        box-shadow: 0 2px 8px rgba(255, 77, 77, 0.3);
+    }
+
+    .btn-remove-notification {
+        border: none;
+        background: #fff5f5;
+        color: #e53e3e;
+        padding: 0.5rem 0.75rem;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+    }
+
+    .btn-remove-notification:hover {
+        background: #e53e3e;
+        color: white;
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(229, 62, 62, 0.3);
+    }
+    
+    .btn-clear-all {
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 15px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+    }
+    
+    .btn-clear-all:hover {
+        background: rgba(255, 255, 255, 0.3);
+        border-color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .empty-state {
+        padding: 4rem 2rem;
+        text-align: center;
+    }
+    
+    .empty-state-icon {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 2rem;
+        background: linear-gradient(135deg, #ff4d4d 0%, #ff6b35 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 3rem;
+        box-shadow: 0 10px 40px rgba(255, 77, 77, 0.3);
+    }
+    
+    .empty-state h3 {
+        color: #2d3748;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    
+    .empty-state p {
+        color: #718096;
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+    }
+
+    .notifications-hero .d-flex {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    
+    .notification-type-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 0.5rem;
+    }
+    
+    .notification-type-badge.order_update {
+        background: #d4f4dd;
+        color: #11998e;
+    }
+    
+    .notification-type-badge.promotion {
+        background: #ffe0e0;
+        color: #ff6b6b;
+    }
+    
+    .notification-type-badge.info {
+        background: #e0f2fe;
+        color: #4facfe;
+    }
+    
+    .notification-type-badge.system {
+        background: #ffe8e8;
+        color: #ff4d4d;
+    }
+
+    @media (max-width: 768px) {
+        .notifications-hero {
+            padding: 60px 0 30px;
+        }
+        
+        .notifications-hero h1 {
+            font-size: 1.75rem;
+        }
+        
+        .notifications-hero p {
+            font-size: 0.9rem;
+        }
+        
+        .notifications-hero .d-flex {
+            flex-direction: column;
+            text-align: center;
+            gap: 1rem;
+        }
+        
+        .btn-clear-all {
+            width: 100%;
+            margin-top: 1rem;
+        }
+        
+        .notification-card {
+            margin-bottom: 1rem;
+            border-radius: 15px;
+        }
+        
+        .notification-card .card-body {
+            padding: 1rem !important;
+        }
+        
+        .notification-card .d-flex {
+            flex-direction: column;
+            align-items: flex-start !important;
+        }
+        
+        .notification-icon {
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            margin-right: 0 !important;
+        }
+        
+        .notification-title {
+            font-size: 1rem;
+        }
+        
+        .notification-message {
+            font-size: 0.9rem;
+        }
+        
+        .notification-time {
+            font-size: 0.8rem;
+        }
+        
+        .btn-remove-notification {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.4rem 0.6rem;
+            font-size: 0.85rem;
+        }
+        
+        .notification-type-badge {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.6rem;
+        }
+        
+        .empty-state {
+            padding: 3rem 1rem;
+        }
+        
+        .empty-state-icon {
+            width: 100px;
+            height: 100px;
+            font-size: 2.5rem;
+        }
+        
+        .empty-state h3 {
+            font-size: 1.5rem;
+        }
+        
+        .empty-state p {
+            font-size: 1rem;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .notifications-hero {
+            padding: 50px 0 25px;
+        }
+        
+        .notifications-hero h1 {
+            font-size: 1.5rem;
+        }
+        
+        .notifications-hero h1 i {
+            font-size: 1.2rem;
+        }
+        
+        .notification-card {
+            border-radius: 12px;
+        }
+        
+        .notification-card .card-body {
+            padding: 0.875rem !important;
+        }
+        
+        .notification-icon {
+            width: 45px;
+            height: 45px;
+            font-size: 1.1rem;
+            border-radius: 12px;
+        }
+        
+        .notification-title {
+            font-size: 0.95rem;
+            padding-right: 2rem;
+        }
+        
+        .notification-message {
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+        
+        .badge-new {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.6rem;
+        }
+        
+        .btn-remove-notification {
+            padding: 0.35rem 0.5rem;
+            font-size: 0.8rem;
+        }
+        
+        .notification-time {
+            font-size: 0.75rem;
+        }
+        
+        .notification-type-badge {
+            font-size: 0.65rem;
+            padding: 0.2rem 0.5rem;
+        }
+        
+        .empty-state {
+            padding: 2rem 0.5rem;
+        }
+        
+        .empty-state-icon {
+            width: 80px;
+            height: 80px;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .empty-state h3 {
+            font-size: 1.25rem;
+        }
+        
+        .empty-state p {
+            font-size: 0.9rem;
+        }
+        
+        .btn-clear-all {
+            font-size: 0.9rem;
+            padding: 0.6rem 1.25rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="notifications-hero">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="mb-2">
+                    <i class="fas fa-bell me-3"></i>Notifications
+                </h1>
+                <p class="mb-0 opacity-90">Stay updated with your orders and exclusive offers</p>
+            </div>
+            {% if notifications %}
+            <div>
+                <form id="clear-all-form" action="{% url 'clear_all_notifications' %}" method="post" class="d-inline">
+                    {% csrf_token %}
+                    <button type="button" class="btn btn-clear-all" onclick="confirmClearAll()">
+                        <i class="fas fa-trash-alt me-2"></i>Clear All
+                    </button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        {% if notifications %}
+            <div class="row">
+                <div class="col-lg-9 mx-auto">
+                    {% for notification in notifications %}
+                    <div class="card notification-card {% if not notification.is_read %}unread{% endif %}">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-start position-relative">
+                                <div class="notification-icon {{ notification.notification_type }} me-3 flex-shrink-0">
+                                    {% if notification.notification_type == 'order_update' %}
+                                        <i class="fas fa-shopping-bag"></i>
+                                    {% elif notification.notification_type == 'promotion' %}
+                                        <i class="fas fa-gift"></i>
+                                    {% elif notification.notification_type == 'info' %}
+                                        <i class="fas fa-info-circle"></i>
+                                    {% elif notification.notification_type == 'system' %}
+                                        <i class="fas fa-cog"></i>
+                                    {% elif notification.notification_type == 'reminder' %}
+                                        <i class="fas fa-bell"></i>
+                                    {% elif notification.notification_type == 'warning' %}
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                    {% elif notification.notification_type == 'success' %}
+                                        <i class="fas fa-check-circle"></i>
+                                    {% else %}
+                                        <i class="fas fa-envelope"></i>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap">
+                                        <div class="flex-grow-1 pe-2">
+                                            <h6 class="notification-title mb-1">{{ notification.title }}</h6>
+                                            {% if not notification.is_read %}
+                                                <span class="badge-new">New</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    
+                                    <p class="notification-message mb-2">{{ notification.message }}</p>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                        <small class="notification-time">
+                                            <i class="fas fa-clock me-1"></i>
+                                            {{ notification.created_at|timesince }} ago
+                                        </small>
+                                        <span class="notification-type-badge {{ notification.notification_type }}">
+                                            {{ notification.get_notification_type_display }}
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <form id="remove-form-{{ notification.id }}" action="{% url 'remove_notification' notification.id %}" method="post" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="button" class="btn btn-remove-notification" 
+                                            title="Remove notification"
+                                            onclick="confirmRemove({{ notification.id }})">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-state-icon">
+                    <i class="fas fa-bell-slash"></i>
+                </div>
+                <h3>No notifications yet</h3>
+                <p>We'll notify you about order updates, exclusive promotions, and more</p>
+                <a href="{% url 'menu' %}" class="btn btn-primary btn-lg" style="background: linear-gradient(135deg, #ff4d4d 0%, #ff6b35 100%); border: none; padding: 1rem 2rem; border-radius: 15px; font-weight: 600;">
+                    <i class="fas fa-utensils me-2"></i>Browse Menu
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function confirmClearAll() {
+    showConfirm(
+        'Clear All Notifications',
+        'Are you sure you want to clear all notifications? This action cannot be undone.',
+        () => {
+            document.getElementById('clear-all-form').submit();
+        },
+        'Yes, Clear All',
+        'Cancel'
+    );
+}
+
+function confirmRemove(notificationId) {
+    showConfirm(
+        'Remove Notification',
+        'Are you sure you want to remove this notification?',
+        () => {
+            document.getElementById('remove-form-' + notificationId).submit();
+        },
+        'Yes, Remove',
+        'Cancel'
+    );
+}
+</script>
+{% endblock %}

@@ -1,0 +1,786 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description" content="Spices of India Cuisine - Fresh & Fast food delivery service">
+    <meta name="theme-color" content="#ff6b35">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>{% block title %}Spices of India Cuisine - Fresh Food Delivered{% endblock %}</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800&family=Playfair+Display:wght@700;800;900&family=Dancing+Script:wght@700&family=Gentium+Basic:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=2.0">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}?v=1.3">
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <!-- Modern Floating Navbar (responsive) -->
+    <nav class="navbar navbar-expand-lg main-navbar" role="navigation" aria-label="Main navigation">
+        <div class="container navbar-inner navbar-inner-responsive">
+            <!-- Left Side: Brand Logo -->
+            <a class="navbar-brand brand-logo" href="{% url 'home' %}">
+                <div class="brand-container">
+                    <div class="brand-image-wrapper">
+                        <img src="{% static 'images/logo.jpeg' %}" alt="Spices India Logo" class="brand-logo-img">
+                        <div class="brand-vibe"></div>
+                    </div>
+                    <div class="brand-text">
+                        <span class="brand-name">Spices India</span>
+                        <span class="brand-tagline">Cuisine</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Center: Navigation Links -->
+            <div class="d-none d-lg-block mx-auto">
+                <ul class="navbar-nav desktop-nav">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}"
+                            href="{% url 'home' %}">
+                            <i class="fas fa-home"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'menu' %}active{% endif %}"
+                            href="{% url 'menu' %}">
+                            <i class="fas fa-utensils"></i>Menu
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}"
+                            href="{% url 'about' %}">
+                            <i class="fas fa-info-circle"></i>Our Story
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'gallery' %}active{% endif %}"
+                            href="{% url 'gallery' %}">
+                            <i class="fas fa-images"></i>Gallery
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}"
+                            href="{% url 'contact' %}">
+                            <i class="fas fa-headset"></i>Support
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Right Side: Actions (Search, Account, Cart) -->
+            <div class="navbar-actions-group d-flex align-items-center gap-3">
+                <!-- Desktop Search Toggle -->
+                <div class="navbar-search-wrapper d-none d-lg-block">
+                    <form class="search-form" action="{% url 'menu' %}" method="GET">
+                        <div class="search-input-group">
+                            <i class="fas fa-search search-icon-main"></i>
+                            <input type="text" name="search" class="search-input" placeholder="Search menu..."
+                                id="main-search" autocomplete="off">
+                        </div>
+                    </form>
+                    <div id="live-search-results-container" class="live-search-results"></div>
+                </div>
+
+                <!-- Icons & Auth -->
+                <div class="d-none d-lg-flex align-items-center gap-2">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'notifications' %}" class="action-link-icon" data-bs-toggle="tooltip"
+                        data-bs-placement="bottom" title="Notifications">
+                        <i class="fas fa-bell"></i>
+                        {% if unread_notifications_count > 0 %}
+                        <span class="notification-count">{{ unread_notifications_count }}</span>
+                        {% endif %}
+                    </a>
+
+                    <a href="{% url 'cart' %}" class="action-link-icon" data-bs-toggle="tooltip"
+                        data-bs-placement="bottom" title="My Cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        {% if cart_count > 0 %}
+                        <span class="notification-count">{{ cart_count }}</span>
+                        {% endif %}
+                    </a>
+
+                    <div class="dropdown">
+                        <a href="#" class="action-link-icon profile-trigger dropdown-toggle" data-bs-toggle="dropdown"
+                            aria-expanded="false" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                            title="Account Settings">
+                            <i class="fas fa-user-circle"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end modern-dropdown">
+                            <li class="dropdown-header d-flex align-items-center gap-3">
+                                <div class="user-avatar-mini">
+                                    {% if user.userprofile.image %}
+                                    <img src="{{ user.userprofile.image.url }}" alt="{{ user.username }}">
+                                    {% else %}
+                                    <i class="fas fa-user-circle"></i>
+                                    {% endif %}
+                                </div>
+                                <div class="dropdown-header-info">
+                                    <!-- <span class="d-block fw-bold text-dark">{{
+                                        user.get_full_name|default:user.username|upper }}</span> -->
+                                    <small class="text-muted">{{ user.email }}</small>
+                                </div>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="{% url 'profile' %}"><i class="fas fa-user"></i>My
+                                    Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'orders' %}"><i class="fas fa-receipt"></i>My
+                                    Orders</a></li>
+                            <li>
+                                <form method="post" action="{% url 'logout' %}" class="m-0">
+                                    {% csrf_token %}
+                                    <button type="submit"
+                                        class="dropdown-item text-danger w-100 text-start border-0 bg-transparent">
+                                        <i class="fas fa-sign-out-alt"></i>Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                    {% else %}
+                    <div class="auth-group">
+                        <a href="{% url 'login' %}" class="btn-auth-outline">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </a>
+                        <a href="{% url 'signup' %}" class="btn-auth-solid">
+                            <i class="fas fa-user-plus me-2"></i>Join Now
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Mobile top bar: only Search + Menu (Home/Notifications/Cart/Profile in bottom nav) -->
+            <div class="d-flex d-lg-none align-items-center gap-2 ms-auto mobile-top-actions">
+                <button class="nav-link-mobile" type="button" id="mobileSearchToggle" data-bs-toggle="tooltip"
+                    data-bs-placement="bottom" title="Search">
+                    <i class="fas fa-search"></i>
+                </button>
+                <div class="dropdown">
+                    <button class="nav-link-mobile dropdown-toggle" type="button" id="mobileMenuDropdown"
+                        data-bs-toggle="dropdown" aria-expanded="false" aria-label="Open menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <ul class="dropdown-menu mobile-dropdown-menu" aria-labelledby="mobileMenuDropdown">
+                        <li><a class="dropdown-item" href="{% url 'menu' %}">
+                                <i class="fas fa-utensils"></i>Browse Menu
+                            </a></li>
+                        <li><a class="dropdown-item" href="{% url 'about' %}">
+                                <i class="fas fa-info-circle"></i>Our Story
+                            </a></li>
+                        <li><a class="dropdown-item" href="{% url 'gallery' %}">
+                                <i class="fas fa-images"></i>Gallery
+                            </a></li>
+                        <li><a class="dropdown-item" href="{% url 'orders' %}">
+                                <i class="fas fa-receipt"></i>Track Orders
+                            </a></li>
+                        <li><a class="dropdown-item" href="{% url 'contact' %}">
+                                <i class="fas fa-headset"></i>Support
+                            </a></li>
+                        {% if user.is_authenticated %}
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="dropdown-header text-muted small">Account</li>
+                        <li><a class="dropdown-item" href="{% url 'profile' %}">
+                                <i class="fas fa-user"></i>My Profile
+                            </a></li>
+                        <li><a class="dropdown-item" href="{% url 'wishlist' %}">
+                                <i class="fas fa-heart"></i>Favorites
+                            </a></li>
+                        <li><a class="dropdown-item" href="{% url 'delivery_addresses' %}">
+                                <i class="fas fa-map-marker-alt"></i>Delivery Addresses
+                            </a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <form method="post" action="{% url 'logout' %}" class="m-0">
+                                {% csrf_token %}
+                                <button type="submit"
+                                    class="dropdown-item text-danger w-100 text-start border-0 bg-transparent p-0">
+                                    <i class="fas fa-sign-out-alt"></i>Logout
+                                </button>
+                            </form>
+                        </li>
+                        {% else %}
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="{% url 'login' %}">
+                                <i class="fas fa-sign-in-alt"></i>Login
+                            </a></li>
+                        <li><a class="dropdown-item" href="{% url 'signup' %}">
+                                <i class="fas fa-user-plus"></i>Create Account
+                            </a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Bottom Navigation (Home, Notifications, Cart, Profile) -->
+    <nav class="mobile-bottom-nav d-lg-none" aria-label="Mobile bottom navigation">
+        <a href="{% url 'home' %}" class="bottom-nav-item {% if request.resolver_match.url_name == 'home' %}active{% endif %}" title="Home">
+            <i class="fas fa-home"></i>
+            <span class="bottom-nav-label">Home</span>
+        </a>
+        {% if user.is_authenticated %}
+        <a href="{% url 'notifications' %}" class="bottom-nav-item {% if request.resolver_match.url_name == 'notifications' %}active{% endif %}" title="Notifications">
+            <i class="fas fa-bell"></i>
+            {% if unread_notifications_count > 0 %}<span class="bottom-nav-badge danger"></span>{% endif %}
+            <span class="bottom-nav-label">Notify</span>
+        </a>
+        {% endif %}
+        <a href="{% url 'cart' %}" class="bottom-nav-item {% if request.resolver_match.url_name == 'cart' %}active{% endif %}" title="Cart">
+            <i class="fas fa-shopping-cart"></i>
+            {% if cart_count > 0 %}<span class="bottom-nav-badge">{{ cart_count }}</span>{% endif %}
+            <span class="bottom-nav-label">Cart</span>
+        </a>
+        <div class="dropdown dropup bottom-nav-item-wrap">
+            <a href="#" class="bottom-nav-item dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" title="Account" id="bottomNavProfile">
+                <i class="fas fa-user-circle"></i>
+                <span class="bottom-nav-label">Profile</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end modern-dropdown bottom-nav-dropup" aria-labelledby="bottomNavProfile">
+                {% if user.is_authenticated %}
+                <li class="dropdown-header d-flex align-items-center gap-3">
+                    <div class="user-avatar-mini">
+                        {% if user.userprofile.image %}
+                        <img src="{{ user.userprofile.image.url }}" alt="{{ user.username }}">
+                        {% else %}
+                        <i class="fas fa-user-circle"></i>
+                        {% endif %}
+                    </div>
+                    <div class="dropdown-header-info">
+                        <small class="text-muted">{{ user.email }}</small>
+                    </div>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{% url 'profile' %}"><i class="fas fa-user"></i> My Profile</a></li>
+                <li><a class="dropdown-item" href="{% url 'orders' %}"><i class="fas fa-receipt"></i> My Orders</a></li>
+                <li>
+                    <form method="post" action="{% url 'logout' %}" class="m-0">
+                        {% csrf_token %}
+                        <button type="submit" class="dropdown-item text-danger w-100 text-start border-0 bg-transparent">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </form>
+                </li>
+                {% else %}
+                <li><a class="dropdown-item" href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                <li><a class="dropdown-item" href="{% url 'signup' %}"><i class="fas fa-user-plus"></i> Sign Up</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Mobile Search Overlay -->
+    <div class="mobile-search-overlay" id="mobileSearchOverlay">
+        <div class="mobile-search-container">
+            <div class="mobile-search-header">
+                <h5 class="mb-0">Search Menu</h5>
+                <button type="button" class="btn-close-search" id="closeMobileSearch">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form class="mobile-search-form" onsubmit="return false;">
+                <div class="mobile-search-input-group">
+                    <i class="fas fa-search"></i>
+                    <input type="text" name="search" class="mobile-search-input"
+                        placeholder="Search for food, drinks..." id="mobile-search-input" autocomplete="off">
+                </div>
+            </form>
+            <div id="mobile-search-results" class="mobile-search-results"></div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-content-responsive">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Modern Premium Footer -->
+    <footer class="modern-footer">
+        <div class="footer-top-wave">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"
+                preserveAspectRatio="none">
+                <path
+                    d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C57.23,103.19,114.49,107.03,171.65,97.43,230.17,87.58,276.58,64.79,321.39,56.44Z"
+                    class="shape-fill"></path>
+            </svg>
+        </div>
+        <div class="container py-5">
+            <div class="row g-4">
+                <!-- Brand Column -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="footer-brand mb-4">
+                        <a class="navbar-brand brand-logo mb-3 d-block" href="{% url 'home' %}">
+                            <div class="brand-container">
+                                <div class="brand-text">
+                                    <span class="brand-name text-white">Spices India</span>
+                                    <span class="brand-tagline" style="color: var(--accent-color);">Cuisine</span>
+                                </div>
+                            </div>
+                        </a>
+                        <p class="footer-desc">
+                            Bringing the authentic taste of India to your doorstep. We use only the finest ingredients
+                            and traditional spices to create culinary masterpieces.
+                        </p>
+                        <div class="footer-social mt-4">
+                            <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.instagram.com/spicesofindiacuisine?igsh=MXFpeGNndWFxNmtkYw=="
+                                class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-icon" title="YouTube"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h5 class="footer-heading">Explore</h5>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'home' %}"><i class="fas fa-chevron-right"></i> Home</a></li>
+                        <li><a href="{% url 'menu' %}"><i class="fas fa-chevron-right"></i> Our Menu</a></li>
+                        <li><a href="{% url 'about' %}"><i class="fas fa-chevron-right"></i> Our Story</a></li>
+                        <li><a href="{% url 'contact' %}"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+                        <li><a href="{% url 'orders' %}"><i class="fas fa-chevron-right"></i> Track Order</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="footer-heading">Get in Touch</h5>
+                    <ul class="footer-contact">
+                        <li>
+                            <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
+                            <div class="contact-text">
+                                <span>Sudhi</span>
+                                <a href="tel:+12144935266">214-493-5266</a>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="contact-text">
+                                <span>Email Us</span>
+                                <a
+                                    href="mailto:info@chang.spicesofindiacuisine.com">info@chang.spicesofindiacuisine.com</a>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <div class="contact-text">
+                                <span>Visit Us</span>
+                                <p>700 FM 741, Forney, TX 75126</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter/Hours -->
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="footer-heading">Join the Spice Club</h5>
+                    <p class="footer-desc mb-3">Get the latest recipes, offers and food news delivered to your inbox.
+                    </p>
+                    <form class="footer-newsletter mb-4">
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="Enter your email"
+                                aria-label="Subscription Email">
+                            <button class="btn" type="submit">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <h5 class="footer-heading mb-2" style="font-size: 1rem;">Opening Hours</h5>
+                    <ul class="footer-hours">
+                        <li><span>Mon - Fri:</span> <span>9:00 AM - 7:00 PM</span></li>
+                        <li><span>Sat - Sun:</span> <span>10:00 AM - 12:00 AM</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6 text-center text-md-start">
+                        <p class="copyright-text mb-0">&copy; 2026 <span>Spices of India Cuisine</span>. All rights
+                            reserved.</p>
+                    </div>
+                    <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
+                        <div class="footer-meta">
+                            <span>Made with <i class="fas fa-heart text-danger"></i> by Balakrishna</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Global Confirmation Modal -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold" id="confirmTitle">Confirm Action</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body py-4 text-center">
+                    <div class="mb-3 text-danger">
+                        <i class="fas fa-exclamation-circle fa-4x"></i>
+                    </div>
+                    <p id="confirmMessage" class="mb-0 fs-5 fw-medium text-dark"></p>
+                    <p class="text-muted small mt-2">This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer border-0 pt-0 justify-content-center pb-4">
+                    <button type="button" class="btn btn-light rounded-pill px-4 mx-2" data-bs-dismiss="modal">Go
+                        Back</button>
+                    <button type="button" id="confirmActionBtn" class="btn btn-danger rounded-pill px-4 mx-2">Yes,
+                        Cancel Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Alert Modal -->
+    <div class="modal fade" id="alertModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                <div class="modal-body py-5 text-center">
+                    <div id="alertIconContainer" class="mb-4">
+                        <i id="alertIcon" class="fas fa-check-circle fa-5x"></i>
+                    </div>
+                    <h4 id="alertTitle" class="fw-bold mb-3">Notice</h4>
+                    <p id="alertMessage" class="fs-5 text-secondary px-3"></p>
+                    <button type="button" class="btn btn-primary rounded-pill px-5 py-2 mt-4 shadow-sm"
+                        data-bs-dismiss="modal">Got it</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{% static 'js/main.js' %}"></script>
+    <!-- Real-time Features -->
+    <script src="{% static 'js/realtime-features.js' %}"></script>
+
+
+    <!-- Loading Detection Enhancement -->
+
+    <!-- Notification & Modal System -->
+
+    <!-- Core Helper Systems -->
+    <script>
+        // 1. Unified Modal & Callback System
+        window.modalCallbacks = {};
+        window.showModal = function (title, message, type = 'info', buttons = null) {
+            const modalEl = document.getElementById('unified-modal');
+            if (!modalEl) return null;
+            const modal = new bootstrap.Modal(modalEl);
+
+            document.getElementById('unified-modal-title').textContent = title;
+            const modalBody = document.getElementById('unified-modal-body');
+            const modalFooter = document.getElementById('unified-modal-footer');
+            const modalHeader = modalEl.querySelector('.modal-header');
+
+            const iconMap = {
+                'success': { icon: 'fas fa-check-circle', color: '#28a745' },
+                'error': { icon: 'fas fa-exclamation-circle', color: '#dc3545' },
+                'warning': { icon: 'fas fa-exclamation-triangle', color: '#ffc107' },
+                'info': { icon: 'fas fa-info-circle', color: '#17a2b8' },
+                'question': { icon: 'fas fa-question-circle', color: '#6c757d' }
+            };
+
+            const config = iconMap[type] || iconMap.info;
+            modalBody.innerHTML = `
+                <div class="text-center mb-3">
+                    <i class="${config.icon}" style="font-size: 3.5rem; color: ${config.color};"></i>
+                </div>
+                <div class="text-center" style="font-size: 1.15rem; font-weight: 500;">${message}</div>
+            `;
+
+            modalHeader.style.background = `linear-gradient(135deg, ${config.color}15, ${config.color}05)`;
+
+            if (buttons) {
+                modalFooter.innerHTML = '';
+                buttons.forEach((btn, index) => {
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.className = `btn ${btn.class || 'btn-secondary'} rounded-pill px-4 py-2`;
+                    button.innerHTML = `${btn.icon ? `<i class="${btn.icon} me-2"></i>` : ''}${btn.text}`;
+                    if (btn.dismiss) button.setAttribute('data-bs-dismiss', 'modal');
+                    if (btn.callback) {
+                        button.onclick = () => {
+                            btn.callback();
+                            if (!btn.dismiss) modal.hide();
+                        };
+                    }
+                    modalFooter.appendChild(button);
+                });
+            } else {
+                modalFooter.innerHTML = '<button type="button" class="btn btn-primary rounded-pill px-5" data-bs-dismiss="modal"><i class="fas fa-check me-2"></i>Got it</button>';
+            }
+
+            modal.show();
+            return modal;
+        };
+
+        // 2. Notification wrappers (Toasts)
+        window.showToast = function (message, type = 'success', title = '', image = '') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            toast.className = `toast-modern ${type} ${image ? 'has-image' : ''}`;
+
+            const titles = { 'success': 'Success', 'error': 'Error', 'info': 'Information', 'warning': 'Attention' };
+            const icons = { 'success': 'check-circle', 'error': 'exclamation-circle', 'info': 'info-circle', 'warning': 'exclamation-triangle' };
+
+            let iconHtml = `<div class="toast-icon"><i class="fas fa-${icons[type] || 'info-circle'}"></i></div>`;
+            if (image) {
+                iconHtml = `<div class="toast-image-wrapper"><img src="${image}" alt="Item" class="toast-image"></div>`;
+            }
+
+            toast.innerHTML = `
+                ${iconHtml}
+                <div class="toast-content">
+                    <span class="toast-title">${title || titles[type] || 'Notice'}</span>
+                    <span class="toast-message">${message}</span>
+                </div>
+                <button class="toast-close" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+
+            container.appendChild(toast);
+
+            // Trigger animation
+            setTimeout(() => toast.classList.add('show'), 100);
+
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 500);
+                }
+            }, 5000);
+        };
+
+        // Redefine showNotification to use toasts by default
+        window.showNotification = function (message, type = 'success', title = '') {
+            window.showToast(message, type, title);
+        };
+
+        window.showConfirm = function (title, message, onConfirm, okText = 'Confirm', cancelText = 'Cancel') {
+            window.showModal(title, message, 'question', [
+                { text: cancelText, class: 'btn-outline-secondary', dismiss: true },
+                { text: okText, class: 'btn-primary', callback: onConfirm }
+            ]);
+        };
+
+        // 3. Page Initialization
+        document.addEventListener('DOMContentLoaded', function () {
+            // Django Messages Trigger
+            {% if messages %}
+            {% for message in messages %}
+            window.showNotification("{{ message|escapejs }}", "{{ message.tags }}");
+            {% endfor %}
+            {% endif %}
+
+            // Enhanced Smart Scroll Navbar (Hide on Down, Show on Up)
+            let lastScrollPos = 0;
+            const nav = document.querySelector('.main-navbar');
+
+            if (nav) {
+                window.addEventListener('scroll', () => {
+                    const currentPos = window.pageYOffset || document.documentElement.scrollTop;
+
+                    // Style change after 50px
+                    if (currentPos > 50) nav.classList.add('scrolled');
+                    else nav.classList.remove('scrolled');
+
+                    // Hide/Show logic
+                    if (currentPos > lastScrollPos && currentPos > 120) {
+                        // Scrolling Down - Hide
+                        nav.style.transform = 'translateY(-100%)';
+                        nav.style.opacity = '0';
+                    } else {
+                        // Scrolling Up - Show
+                        nav.style.transform = 'translateY(0)';
+                        nav.style.opacity = '1';
+                    }
+
+                    lastScrollPos = currentPos <= 0 ? 0 : currentPos;
+                }, { passive: true });
+            }
+        });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+
+    <!-- Unified Modal System -->
+    <div id="unified-modal" class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content"
+                style="border-radius: 15px; border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+                <div class="modal-header border-0" style="padding: 1.5rem;">
+                    <h5 class="modal-title fw-bold" id="unified-modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="padding: 1.5rem;" id="unified-modal-body"></div>
+                <div class="modal-footer border-0" style="padding: 1.5rem;" id="unified-modal-footer"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modern Navbar Script -->
+
+    <!-- Features & Forms Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mobile Sidebar Toggling
+            const mobileToggle = document.getElementById('mobileMenuToggle');
+            const closeSidebar = document.getElementById('closeSidebar');
+            const sidebar = document.getElementById('mobileSidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+
+            function toggleSidebar() {
+                if (sidebar && overlay) {
+                    sidebar.classList.toggle('active');
+                    overlay.classList.toggle('active');
+                    document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+                }
+            }
+
+            if (mobileToggle) mobileToggle.onclick = toggleSidebar;
+            if (closeSidebar) closeSidebar.onclick = toggleSidebar;
+            if (overlay) overlay.onclick = toggleSidebar;
+
+            // AJAX Real-time Search
+            const searchInput = document.getElementById('main-search');
+            const searchResults = document.getElementById('live-search-results-container');
+            let searchTimeout;
+
+            const handleSearch = (input, results) => {
+                input.addEventListener('input', function () {
+                    clearTimeout(searchTimeout);
+                    const query = this.value.trim();
+                    if (query.length < 2) {
+                        results.style.display = 'none';
+                        return;
+                    }
+                    searchTimeout = setTimeout(() => {
+                        fetch(`/search/?q=${encodeURIComponent(query)}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.results && data.results.length > 0) {
+                                    results.innerHTML = data.results.map(item => `
+                                            <a href="${item.url}" class="search-result-item">
+                                                <img src="${item.image}" class="search-result-image" alt="${item.name}">
+                                                <div class="search-result-info">
+                                                    <span class="search-result-name">${item.name}</span>
+                                                    <span class="search-result-price">$${item.price}</span>
+                                                </div>
+                                            </a>
+                                        `).join('');
+                                    results.style.display = 'block';
+                                } else {
+                                    results.innerHTML = '<div class="p-3 text-center text-muted">No items found</div>';
+                                    results.style.display = 'block';
+                                }
+                            })
+                            .catch(err => console.error('Search error:', err));
+                    }, 300);
+                });
+            };
+
+            const desktopInput = document.getElementById('main-search');
+            const desktopResults = document.getElementById('live-search-results-container');
+            if (desktopInput && desktopResults) handleSearch(desktopInput, desktopResults);
+
+            const mobileInput = document.getElementById('mobile-search');
+            const mobileResults = document.getElementById('mobile-search-results');
+            if (mobileInput && mobileResults) handleSearch(mobileInput, mobileResults);
+
+            // Close search when clicking outside
+            document.addEventListener('click', function (e) {
+                if (desktopInput && !desktopInput.contains(e.target) && desktopResults && !desktopResults.contains(e.target)) {
+                    desktopResults.style.display = 'none';
+                }
+                if (mobileInput && !mobileInput.contains(e.target) && mobileResults && !mobileResults.contains(e.target)) {
+                    mobileResults.style.display = 'none';
+                }
+            });
+
+            // Initialize Bootstrap Tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
+
+
+
+    <!-- Required Field Indicator Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Add required class to labels for required inputs
+            document.querySelectorAll('input[required], select[required], textarea[required]').forEach(function (field) {
+                const label = document.querySelector('label[for="' + field.id + '"]');
+                if (label && !label.classList.contains('required')) {
+                    label.classList.add('required');
+                }
+
+                // Also check for labels that wrap the input
+                const parentLabel = field.closest('label');
+                if (parentLabel && !parentLabel.classList.contains('required')) {
+                    parentLabel.classList.add('required');
+                }
+            });
+
+            // For Django forms - find labels by checking next sibling
+            document.querySelectorAll('label').forEach(function (label) {
+                const forAttr = label.getAttribute('for');
+                if (forAttr) {
+                    const field = document.getElementById(forAttr);
+                    if (field && field.hasAttribute('required') && !label.classList.contains('required')) {
+                        label.classList.add('required');
+                    }
+                }
+            });
+        });
+    </script>
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container"></div>
+</body>
+
+
+</html>

@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Panel{% endblock %} - Spices of India Cuisine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #ff4d4d;
+            --secondary: #ff9f1c;
+            --accent: #00b0ff;
+            --success: #00c853;
+            --info: #00b0ff;
+            --warning: #ffab00;
+            --danger: #ff1744;
+            --dark: #1a1a1a;
+            --light: #fcfcfc;
+            --sidebar-width: 280px;
+            --card-shadow: 0 10px 30px rgba(255, 77, 77, 0.08);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+            /* Bootstrap Overrides */
+            --bs-primary: var(--primary);
+            --bs-secondary: var(--secondary);
+            --bs-success: var(--success);
+            --bs-info: var(--info);
+            --bs-warning: var(--warning);
+            --bs-danger: var(--danger);
+            --bs-light: var(--light);
+            --bs-dark: var(--dark);
+        }
+
+        /* Enforce Color Overrides */
+        .text-primary {
+            color: var(--primary) !important;
+        }
+
+        .text-secondary {
+            color: var(--secondary) !important;
+        }
+
+        .text-success {
+            color: var(--success) !important;
+        }
+
+        .text-info {
+            color: var(--info) !important;
+        }
+
+        .text-warning {
+            color: var(--warning) !important;
+        }
+
+        .text-danger {
+            color: var(--danger) !important;
+        }
+
+        .text-dark {
+            color: var(--dark) !important;
+        }
+
+        .text-light {
+            color: var(--light) !important;
+        }
+
+        .bg-primary {
+            background-color: var(--primary) !important;
+        }
+
+        .bg-secondary {
+            background-color: var(--secondary) !important;
+        }
+
+        .bg-success {
+            background-color: var(--success) !important;
+        }
+
+        .bg-warning {
+            background-color: var(--warning) !important;
+        }
+
+        .bg-info {
+            background-color: var(--info) !important;
+        }
+
+        .bg-danger {
+            background-color: var(--danger) !important;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: #334155;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            bottom: 20px;
+            width: var(--sidebar-width);
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            z-index: 1000;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Mobile Sidebar Styles */
+        @media (max-width: 768px) {
+            .sidebar {
+                top: 0;
+                left: -100%;
+                bottom: 0;
+                width: 280px;
+                border-radius: 0;
+                z-index: 1050;
+                transform: translateX(0);
+            }
+
+            .sidebar.show {
+                left: 0;
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .sidebar-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 1040;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+            }
+
+            .sidebar-overlay.show {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            /* Prevent body scroll when sidebar is open */
+            body.sidebar-open {
+                overflow: hidden;
+            }
+        }
+
+        /* Mobile Toggle Button */
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1060;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 15px;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .mobile-toggle:hover {
+            background: var(--secondary);
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .mobile-toggle:active {
+            transform: scale(0.95);
+        }
+
+        .mobile-toggle i {
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-toggle {
+                display: block;
+            }
+
+            .top-navbar {
+                margin-left: 60px;
+                margin-right: 0;
+            }
+        }
+
+        /* Sidebar Close Button */
+        #sidebar-close {
+            transition: var(--transition);
+            border-radius: 8px;
+            padding: 8px;
+        }
+
+        #sidebar-close:hover {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--secondary) !important;
+        }
+
+        .sidebar-header {
+            padding: 30px 25px;
+            text-align: left;
+            border-bottom: 1px solid #f1f1f1;
+        }
+
+        .sidebar-header h4 {
+            margin: 0;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-nav {
+            padding: 20px 15px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .sidebar-nav .nav-link {
+            color: #6c757d;
+            padding: 12px 20px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+        }
+
+        .sidebar-nav .nav-link i {
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .sidebar-nav .nav-link:hover {
+            color: var(--primary);
+            background: rgba(67, 97, 238, 0.05);
+            transform: translateX(5px);
+        }
+
+        .sidebar-nav .nav-link.active {
+            color: #fff;
+            background: var(--primary);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.2);
+        }
+
+        /* Main Content Styling */
+        .main-content {
+            margin-left: calc(var(--sidebar-width) + 40px);
+            padding: 20px 40px 40px 0;
+            min-height: 100vh;
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+                padding: 80px 20px 40px 20px;
+            }
+        }
+
+        .top-navbar {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(15px);
+            border-radius: 18px;
+            padding: 12px 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            position: relative;
+            z-index: 1020;
+        }
+
+        /* Dropdown Customization */
+        .dropdown-menu {
+            z-index: 1100 !important;
+            padding: 8px;
+            border: 1px solid rgba(255, 77, 77, 0.1);
+            animation: dropdownFadeIn 0.3s ease-out;
+            transform-origin: top right;
+        }
+
+        @keyframes dropdownFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .dropdown-item {
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #475569;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(255, 77, 77, 0.08);
+            color: var(--primary);
+            transform: translateX(3px);
+        }
+
+        .dropdown-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .dropdown-toggle::after {
+            display: none;
+            /* Hide default arrow */
+        }
+
+        @media (max-width: 768px) {
+            .top-navbar {
+                position: fixed;
+                top: 20px;
+                left: 80px;
+                right: 20px;
+                margin-bottom: 0;
+                z-index: 1030;
+                border-radius: 12px;
+            }
+        }
+
+        .page-title {
+            font-weight: 700;
+            color: var(--dark);
+            margin: 0;
+            font-size: 1.25rem;
+        }
+
+        /* Components Styling */
+        .card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-header {
+            background: #fff;
+            border-bottom: 1px solid #f1f1f1;
+            padding: 20px 25px;
+            font-weight: 600;
+        }
+
+        .stat-card {
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card .stat-icon {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            font-size: 3rem;
+            opacity: 0.1;
+            transform: rotate(-15deg);
+        }
+
+        .stat-number {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn {
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            border: none;
+            box-shadow: 0 4px 15px rgba(255, 77, 77, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 77, 77, 0.4);
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table thead th {
+            background: #f8f9fa;
+            color: #6c757d;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            padding: 15px 25px;
+            border: none;
+        }
+
+        .table tbody td {
+            padding: 15px 25px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f1f1f1;
+        }
+
+        .badge {
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        .badge-pending {
+            background-color: rgba(255, 171, 0, 0.1);
+            color: var(--warning);
+        }
+
+        .badge-success {
+            background-color: rgba(0, 200, 83, 0.1);
+            color: var(--success);
+        }
+
+        .badge-info {
+            background-color: rgba(0, 176, 255, 0.1);
+            color: var(--info);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                left: -100%;
+                top: 0;
+                bottom: 0;
+                border-radius: 0;
+            }
+
+            .sidebar.show {
+                left: 0;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .top-navbar {
+                margin-top: 60px;
+            }
+        }
+
+        .user-profile-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+
+</head>
+
+<body>
+    <!-- Mobile Toggle Button -->
+    <button class="mobile-toggle" id="mobile-sidebar-toggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="admin-sidebar">
+        <div class="sidebar-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h4><i class="fas fa-utensils me-2"></i>Spices of India Cuisine Admin</h4>
+                    <small>Management </small>
+                </div>
+                <button class="btn btn-link d-md-none p-0" id="sidebar-close" style="color: var(--primary);">
+                    <i class="fas fa-times fa-lg"></i>
+                </button>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'custom_admin_dashboard' %}active{% endif %}"
+                        href="{% url 'custom_admin_dashboard' %}">
+                        <i class="fas fa-tachometer-alt"></i>Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if 'admin_orders' in request.resolver_match.url_name %}active{% endif %}"
+                        href="{% url 'admin_orders' %}">
+                        <i class="fas fa-shopping-cart"></i>Orders
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if 'admin_menu' in request.resolver_match.url_name %}active{% endif %}"
+                        href="{% url 'admin_menu' %}">
+                        <i class="fas fa-utensils"></i>Menu
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if 'admin_categories' in request.resolver_match.url_name %}active{% endif %}"
+                        href="{% url 'admin_categories' %}">
+                        <i class="fas fa-tags"></i>Categories
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'admin_customers' %}active{% endif %}"
+                        href="{% url 'admin_customers' %}">
+                        <i class="fas fa-users"></i>Customers
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'admin_reviews' %}active{% endif %}"
+                        href="{% url 'admin_reviews' %}">
+                        <i class="fas fa-star"></i>Reviews
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'admin_analytics' %}active{% endif %}"
+                        href="{% url 'admin_analytics' %}">
+                        <i class="fas fa-chart-bar"></i>Analytics
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'admin_settings' %}active{% endif %}"
+                        href="{% url 'admin_settings' %}">
+                        <i class="fas fa-cog"></i>Settings
+                    </a>
+                </li>
+                <li class="nav-item mt-3">
+                    <a class="nav-link" href="{% url 'home' %}" target="_blank">
+                        <i class="fas fa-external-link-alt"></i>View Website
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'admin_logout' %}">
+                        <i class="fas fa-sign-out-alt"></i>Logout
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Navbar -->
+        <div class="top-navbar">
+            <div class="d-flex align-items-center">
+                <h5 class="mb-0">{% block page_title %}Admin Panel{% endblock %}</h5>
+            </div>
+            <div class="d-flex align-items-center">
+                <div class="dropdown">
+                    <button class="btn btn-outline-primary d-flex align-items-center gap-2 dropdown-toggle"
+                        type="button" id="adminProfileDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+                        style="border-radius: 12px; padding: 6px 12px; border: 1px solid rgba(255, 77, 77, 0.2);">
+                        {% if admin_profile and admin_profile.image and admin_profile.image.name != 'default-user.png' %}
+                            <img src="{{ admin_profile.image.url }}" alt="Profile" class="rounded-circle" 
+                                style="width: 32px; height: 32px; object-fit: cover; border: 2px solid var(--primary);">
+                        {% else %}
+                            <div class="user-profile-img"
+                                style="width: 32px; height: 32px; font-size: 0.85rem; border-radius: 10px;">
+                                {{ admin_username|slice:":1"|upper }}
+                            </div>
+                        {% endif %}
+                        <div class="text-start d-none d-md-block">
+                            <div class="small text-muted" style="font-size: 0.7rem; line-height: 1;">Administrator</div>
+                            <div class="fw-600" style="font-size: 0.9rem;">{{ admin_full_name|default:admin_username }}
+                            </div>
+                        </div>
+                        <i class="fas fa-chevron-down small opacity-50 ms-1 d-none d-md-block"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2"
+                        aria-labelledby="adminProfileDropdown" style="border-radius: 15px; overflow: hidden;">
+                        <li class="dropdown-header d-md-none">
+                            <h6 class="mb-0">{{ admin_full_name|default:admin_username }}</h6>
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-2" href="{% url 'admin_settings' %}">
+                                <i class="fas fa-cog me-2 opacity-50"></i>Settings
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-2" href="{% url 'home' %}" target="_blank">
+                                <i class="fas fa-external-link-alt me-2 opacity-50"></i>View Site
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider my-1">
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-2 text-danger" href="{% url 'admin_logout' %}">
+                                <i class="fas fa-sign-out-alt me-2 opacity-50"></i>Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <!-- Global Confirmation Modal -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold" id="confirmTitle">Confirm Action</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body py-4 text-center">
+                    <div class="mb-3 text-danger">
+                        <i class="fas fa-exclamation-circle fa-4x"></i>
+                    </div>
+                    <p id="confirmMessage" class="mb-0 fs-5 fw-medium text-dark"></p>
+                    <p class="text-muted small mt-2">This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer border-0 pt-0 justify-content-center pb-4">
+                    <button type="button" class="btn btn-light rounded-pill px-4 mx-2" data-bs-dismiss="modal">Go
+                        Back</button>
+                    <button type="button" id="confirmActionBtn"
+                        class="btn btn-danger rounded-pill px-4 mx-2">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Alert Modal -->
+    <div class="modal fade" id="alertModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                <div class="modal-body py-5 text-center">
+                    <div id="alertIconContainer" class="mb-4">
+                        <i id="alertIcon" class="fas fa-check-circle fa-5x"></i>
+                    </div>
+                    <h4 id="alertTitle" class="fw-bold mb-3">Notice</h4>
+                    <p id="alertMessage" class="fs-5 text-secondary px-3"></p>
+                    <button type="button" class="btn btn-primary rounded-pill px-5 py-2 mt-4 shadow-sm"
+                        data-bs-dismiss="modal">Got it</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Global Notification Helper
+        function showNotification(message, type = 'success', title = '') {
+            const modalEl = document.getElementById('alertModal');
+            const modal = new bootstrap.Modal(modalEl);
+
+            const icon = document.getElementById('alertIcon');
+            const iconContainer = document.getElementById('alertIconContainer');
+            const titleEl = document.getElementById('alertTitle');
+            const messageEl = document.getElementById('alertMessage');
+
+            // Set content
+            messageEl.textContent = message;
+            titleEl.textContent = title || (type === 'success' ? 'Success!' : type === 'error' ? 'Oops!' : 'Notice');
+
+            // Set theme
+            iconContainer.className = 'mb-4 ' + (type === 'success' ? 'text-success' : type === 'error' ? 'text-danger' : 'text-warning');
+            icon.className = 'fas fa-5x ' + (type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-times-circle' : 'fa-exclamation-triangle');
+
+            modal.show();
+        }
+
+        // Global Confirmation Dialog Helper
+        function showConfirm(title, message, onConfirm, buttonText = "Confirm") {
+            const modalEl = document.getElementById('confirmModal');
+            const modal = new bootstrap.Modal(modalEl);
+
+            document.getElementById('confirmTitle').textContent = title;
+            document.getElementById('confirmMessage').textContent = message;
+
+            const actionBtn = document.getElementById('confirmActionBtn');
+            actionBtn.textContent = buttonText;
+
+            // Clean up old click listeners
+            const newActionBtn = actionBtn.cloneNode(true);
+            actionBtn.parentNode.replaceChild(newActionBtn, actionBtn);
+
+            newActionBtn.addEventListener('click', () => {
+                onConfirm();
+                modal.hide();
+            });
+
+            modal.show();
+        }
+
+        // Mobile Sidebar Toggle Functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const mobileToggle = document.getElementById('mobile-sidebar-toggle');
+            const sidebar = document.getElementById('admin-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const sidebarClose = document.getElementById('sidebar-close');
+
+            // Function to open sidebar
+            function openSidebar() {
+                sidebar.classList.add('show');
+                overlay.classList.add('show');
+                document.body.classList.add('sidebar-open');
+            }
+
+            // Function to close sidebar
+            function closeSidebar() {
+                sidebar.classList.remove('show');
+                overlay.classList.remove('show');
+                document.body.classList.remove('sidebar-open');
+            }
+
+            // Mobile toggle button click
+            mobileToggle?.addEventListener('click', function (e) {
+                e.stopPropagation();
+                if (sidebar.classList.contains('show')) {
+                    closeSidebar();
+                } else {
+                    openSidebar();
+                }
+            });
+
+            // Close button in sidebar
+            sidebarClose?.addEventListener('click', function (e) {
+                e.stopPropagation();
+                closeSidebar();
+            });
+
+            // Overlay click to close
+            overlay?.addEventListener('click', function () {
+                closeSidebar();
+            });
+
+            // Close sidebar when clicking on navigation links (mobile)
+            const navLinks = sidebar?.querySelectorAll('.nav-link');
+            navLinks?.forEach(link => {
+                link.addEventListener('click', function () {
+                    if (window.innerWidth <= 768) {
+                        closeSidebar();
+                    }
+                });
+            });
+
+            // Handle window resize
+            window.addEventListener('resize', function () {
+                if (window.innerWidth > 768) {
+                    closeSidebar();
+                }
+            });
+
+            // Keyboard support (ESC key to close sidebar)
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && sidebar.classList.contains('show')) {
+                    closeSidebar();
+                }
+            });
+
+            // Prevent sidebar from closing when clicking inside it
+            sidebar?.addEventListener('click', function (e) {
+                e.stopPropagation();
+            });
+
+            // Trigger notifications for server-side messages
+            {% if messages %}
+            {% for message in messages %}
+            showNotification("{{ message|escapejs }}", "{{ message.tags }}");
+            {% endfor %}
+            {% endif %}
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

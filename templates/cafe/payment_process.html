@@ -1,0 +1,220 @@
+{% extends 'cafe/base.html' %}
+{% load static %}
+
+{% block title %}Processing Payment - Spices of India Cuisine{% endblock %}
+
+{% block extra_css %}
+<style>
+    .payment-processing {
+        min-height: 60vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .payment-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        padding: 3rem;
+        text-align: center;
+        max-width: 500px;
+        width: 100%;
+    }
+
+    .payment-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: var(--gradient-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 2rem;
+        color: white;
+        font-size: 2rem;
+    }
+
+    .razorpay-btn {
+        background: linear-gradient(135deg, #3395ff, #1976d2);
+        border: none;
+        border-radius: 12px;
+        padding: 15px 40px;
+        color: white;
+        font-size: 1.1rem;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        width: 100%;
+        margin-top: 2rem;
+    }
+
+    .razorpay-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(51, 149, 255, 0.3);
+    }
+
+    .order-details {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        text-align: left;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="payment-processing">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="payment-card">
+                    <div class="payment-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+
+                    <h2 class="fw-bold mb-3">Complete Your Payment</h2>
+                    <p class="text-muted mb-4">
+                        Your order has been created. Click the button below to complete your payment securely through
+                        Razorpay.
+                    </p>
+
+                    <div class="order-details">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Order Number:</span>
+                            <span class="fw-bold">#{{ order.order_number }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Amount:</span>
+                            <span class="fw-bold text-success">${{ order.grand_total }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>Payment Method:</span>
+                            <span class="fw-bold">Razorpay</span>
+                        </div>
+                    </div>
+
+                    <button id="pay-now-btn" class="razorpay-btn">
+                        <i class="fas fa-lock me-2"></i>Pay Now - ${{ order.grand_total }}
+                    </button>
+
+                    <div class="mt-3">
+                        <small class="text-muted">
+                            <i class="fas fa-shield-alt me-1"></i>
+                            Secured by Razorpay SSL encryption
+                        </small>
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="{% url 'cart' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Cart
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const payNowBtn = document.getElementById('pay-now-btn');
+
+        payNowBtn.addEventListener('click', function () {
+            const options = {
+                "key": "{{ razorpay_key_id }}",
+                "amount": {{ amount }},
+                "currency": "{{ currency }}",
+                "name": "Spices of India Cuisine",
+                "description": "Order #{{ order.order_number }}",
+                "order_id": "{{ razorpay_order_id }}",
+                "image": "https://via.placeholder.com/150x150/ff4d4d/ffffff?text=We+Cafe",
+                "handler": function (response) {
+                // Payment successful, submit form with payment details
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '{% url "checkout" %}';
+
+                // Add CSRF token
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = 'csrfmiddlewaretoken';
+                csrfInput.value = '{{ csrf_token }}';
+                form.appendChild(csrfInput);
+
+                // Add payment method
+                const paymentMethodInput = document.createElement('input');
+                paymentMethodInput.type = 'hidden';
+                paymentMethodInput.name = 'payment_method';
+                paymentMethodInput.value = 'razorpay';
+                form.appendChild(paymentMethodInput);
+
+                // Add order details (from original form)
+                const deliveryAddressInput = document.createElement('input');
+                deliveryAddressInput.type = 'hidden';
+                deliveryAddressInput.name = 'delivery_address';
+                deliveryAddressInput.value = '{{ order.delivery_address }}';
+                form.appendChild(deliveryAddressInput);
+
+                const phoneInput = document.createElement('input');
+                phoneInput.type = 'hidden';
+                phoneInput.name = 'phone';
+                phoneInput.value = '{{ order.phone }}';
+                form.appendChild(phoneInput);
+
+                const notesInput = document.createElement('input');
+                notesInput.type = 'hidden';
+                notesInput.name = 'notes';
+                notesInput.value = '{{ order.notes }}';
+                form.appendChild(notesInput);
+
+                // Add Razorpay response
+                const paymentIdInput = document.createElement('input');
+                paymentIdInput.type = 'hidden';
+                paymentIdInput.name = 'razorpay_payment_id';
+                paymentIdInput.value = response.razorpay_payment_id;
+                form.appendChild(paymentIdInput);
+
+                const orderIdInput = document.createElement('input');
+                orderIdInput.type = 'hidden';
+                orderIdInput.name = 'razorpay_order_id';
+                orderIdInput.value = response.razorpay_order_id;
+                form.appendChild(orderIdInput);
+
+                const signatureInput = document.createElement('input');
+                signatureInput.type = 'hidden';
+                signatureInput.name = 'razorpay_signature';
+                signatureInput.value = response.razorpay_signature;
+                form.appendChild(signatureInput);
+
+                document.body.appendChild(form);
+                form.submit();
+            },
+                "prefill": {
+                    "name": "{{ user_name }}",
+                    "email": "{{ user_email }}",
+                    "contact": "{{ user_phone }}"
+                },
+                "notes": {
+                    "address": "Spices of India Cuisine Order",
+                    "order_number": "{{ order.order_number }}"
+                },
+                "theme": {
+                    "color": "#ff4d4d"
+                },
+                "modal": {
+                    "ondismiss": function () {
+                        console.log('Payment cancelled by user');
+                    }
+                }
+            };
+
+    const rzp = new Razorpay(options);
+    rzp.open();
+        });
+    });
+</script>
+{% endblock %}

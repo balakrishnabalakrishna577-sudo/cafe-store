@@ -1,0 +1,1764 @@
+{% extends 'cafe/base.html' %}
+{% load static %}
+
+{% block title %}Shopping Cart - Spices of India Cuisine{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Modern Cart Page Styles */
+    body {
+        background: #f8f9fa;
+    }
+
+    /* Cart Hero Section */
+    .cart-hero {
+        background: linear-gradient(135deg, #001f3f 0%, #003366 100%);
+        padding: 120px 0 60px;
+        /* Increased top padding to clear the navbar */
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-back-btn {
+        position: absolute;
+        top: 110px;
+        left: 5%;
+        z-index: 10;
+        width: 45px;
+        height: 45px;
+        background: #ffffff;
+        border: none;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #8b0000;
+        text-decoration: none;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .hero-back-btn:hover {
+        background: #8b0000;
+        color: #ffffff;
+        transform: scale(1.1) translateX(-5px);
+        box-shadow: 0 15px 35px rgba(139, 0, 0, 0.3);
+    }
+
+    .hero-back-btn i {
+        font-size: 1.1rem;
+    }
+
+    @media (max-width: 991px) {
+        .hero-back-btn {
+            top: 90px;
+            left: 20px;
+            width: 38px;
+            height: 38px;
+        }
+    }
+    @media (max-width: 575.98px) {
+        .cart-hero {
+            padding: 80px 0 40px;
+        }
+        .cart-title {
+            font-size: 1.75rem;
+        }
+        .cart-subtitle {
+            padding: 0.5rem 1.25rem;
+            font-size: 0.85rem;
+        }
+        .hero-back-btn {
+            top: 72px;
+            left: 0.75rem;
+            width: 42px;
+            height: 42px;
+        }
+    }
+
+    .cart-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="25" cy="25" r="2" fill="rgba(212,175,55,0.1)"/><circle cx="75" cy="75" r="2" fill="rgba(212,175,55,0.1)"/></svg>');
+        opacity: 0.4;
+    }
+
+    .cart-hero-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        color: white;
+    }
+
+    .cart-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 3.2rem;
+        font-weight: 900;
+        margin-bottom: 0.75rem;
+        background: linear-gradient(135deg, #D4AF37 0%, #F9E79F 50%, #D4AF37 100%);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shine 5s linear infinite;
+        text-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    @keyframes shine {
+        to {
+            background-position: 200% center;
+        }
+    }
+
+    .cart-subtitle {
+        font-family: 'Outfit', sans-serif;
+        font-size: 1rem;
+        color: #003366;
+        background: #ffffff;
+        padding: 0.7rem 2.5rem;
+        display: inline-block;
+        border-radius: 50px;
+        margin-bottom: 2rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-weight: 700;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .breadcrumb {
+        background: #ffffff;
+        padding: 0.8rem 2.5rem;
+        display: inline-flex;
+        border-radius: 50px;
+        margin-bottom: 0;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .breadcrumb-item a {
+        color: #003366;
+        text-decoration: none;
+        font-weight: 700;
+        transition: all 0.3s ease;
+        font-size: 1.1rem;
+    }
+
+    .breadcrumb-item a:hover {
+        color: #002244;
+        transform: scale(1.05);
+    }
+
+    .breadcrumb-item.active {
+        color: #003366;
+        font-weight: 800;
+        font-size: 1.1rem;
+    }
+
+    .breadcrumb-item+.breadcrumb-item::before {
+        color: #A9A9A9;
+        content: "\f105";
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        padding: 0 15px;
+    }
+
+
+
+    /* Main Container */
+    .cart-container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    /* Cart Items Section */
+    .cart-items-section {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        margin-bottom: 1.5rem;
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #f0f0f0;
+    }
+
+    .section-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #333;
+        margin: 0;
+    }
+
+    .item-count-badge {
+        background: linear-gradient(135deg, #064e3b, #059669);
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
+
+    /* Cart Item Card - Compact Design */
+    .cart-item-card {
+        background: white;
+        border: 1px solid #e9ecef;
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .cart-item-card:hover {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        border-color: #059669;
+    }
+
+    .item-checkbox {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        accent-color: #059669;
+        flex-shrink: 0;
+    }
+
+    .item-image-wrapper {
+        width: 80px;
+        height: 80px;
+        flex-shrink: 0;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .cart-item-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .cart-item-placeholder {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #064e3b, #059669);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+    }
+
+    .item-details {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .item-name {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 0.25rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .item-category {
+        font-size: 0.875rem;
+        color: #6c757d;
+        margin-bottom: 0.5rem;
+    }
+
+    .item-customization {
+        font-size: 0.75rem;
+        color: #28a745;
+        background: #e8f5e9;
+        padding: 0.25rem 0.5rem;
+        border-radius: 5px;
+        display: inline-block;
+    }
+
+    .item-price-section {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.5rem;
+        flex-shrink: 0;
+    }
+
+    .price-display {
+        text-align: right;
+    }
+
+    .price-original {
+        text-decoration: line-through;
+        color: #999;
+        font-size: 0.875rem;
+    }
+
+    .price-current {
+        color: #333;
+        font-weight: 700;
+        font-size: 1.125rem;
+    }
+
+    /* Compact Quantity Controls */
+    .quantity-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 0.25rem;
+    }
+
+    .quantity-btn {
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        border: none;
+        background: white;
+        color: #059669;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-weight: 700;
+    }
+
+    .quantity-btn:hover:not(:disabled) {
+        background: #059669;
+        color: white;
+    }
+
+    .quantity-btn:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+    }
+
+    .quantity-input {
+        width: 40px;
+        text-align: center;
+        border: none;
+        background: transparent;
+        font-weight: 700;
+        font-size: 0.875rem;
+        color: #333;
+    }
+
+    .item-total-price {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: #059669;
+    }
+
+    .remove-btn {
+        background: transparent;
+        border: 1px solid #dc3545;
+        color: #dc3545;
+        padding: 0.375rem 0.75rem;
+        border-radius: 8px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+
+    .remove-btn:hover {
+        background: #dc3545;
+        color: white;
+    }
+
+    /* Bill Details Card */
+    .bill-details-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        position: sticky;
+        top: 90px;
+    }
+
+    .bill-header {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 1.25rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid #f0f0f0;
+    }
+
+    .bill-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0;
+        font-size: 0.9rem;
+    }
+
+    .bill-row.total {
+        border-top: 2px solid #f0f0f0;
+        margin-top: 0.5rem;
+        padding-top: 1rem;
+        font-size: 1.125rem;
+        font-weight: 700;
+    }
+
+    .bill-row.discount-row {
+        background: linear-gradient(90deg, rgba(40, 167, 69, 0.05) 0%, rgba(40, 167, 69, 0.1) 100%);
+        padding: 0.75rem;
+        margin: 0.5rem -1rem;
+        border-radius: 8px;
+        border-left: 3px solid #28a745;
+    }
+
+    .bill-row.discount-row .bill-label {
+        color: #28a745;
+        font-weight: 600;
+    }
+
+    .bill-row.discount-row .bill-value {
+        color: #28a745;
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+
+    .bill-label {
+        color: #6c757d;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .bill-value {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .bill-value.total {
+        color: #059669;
+        font-size: 1.5rem;
+    }
+
+    .info-icon {
+        color: #6c757d;
+        font-size: 0.75rem;
+        cursor: help;
+    }
+
+    /* Coupon Section */
+    .coupon-section {
+        background: #fff8f0;
+        border: 1px dashed #D4AF37;
+        border-radius: 10px;
+        padding: 1rem;
+        margin: 1rem 0;
+        transition: all 0.3s ease;
+    }
+
+    .coupon-section:hover {
+        background: #fff0e0;
+    }
+
+    .coupon-header {
+        display: flex;
+        align-items: center;
+    }
+
+    .coupon-icon {
+        color: #D4AF37;
+        font-size: 1.25rem;
+    }
+
+    .coupon-text {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #D4AF37;
+        margin: 0;
+    }
+
+    .coupon-form .form-control {
+        text-transform: uppercase;
+    }
+
+    .coupon-form .form-control:focus {
+        border-color: #D4AF37;
+        box-shadow: 0 0 0 0.2rem rgba(255, 107, 53, 0.25);
+    }
+
+    .applied-coupon {
+        padding: 0.75rem;
+        background: #d4edda;
+        border: 1px solid #c3e6cb;
+        border-radius: 8px;
+    }
+
+    /* Checkout Button */
+    .checkout-btn {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        border: none;
+        padding: 1rem;
+        border-radius: 12px;
+        color: white;
+        font-weight: 700;
+        font-size: 1rem;
+        width: 100%;
+        transition: all 0.3s ease;
+        margin-top: 1rem;
+    }
+
+    .checkout-btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
+    }
+
+    .checkout-btn:disabled {
+        background: #6c757d;
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+
+    /* Delivery Options */
+    .delivery-options {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .delivery-option {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        background: white;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: all 0.2s ease;
+    }
+
+    .delivery-option:hover {
+        border-color: #059669;
+    }
+
+    .delivery-option.selected {
+        border-color: #059669;
+        background: #fff5f5;
+    }
+
+    .delivery-option input[type="radio"] {
+        accent-color: #059669;
+    }
+
+    .delivery-info {
+        flex: 1;
+    }
+
+    .delivery-title {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: #333;
+        margin-bottom: 0.25rem;
+    }
+
+    .delivery-desc {
+        font-size: 0.75rem;
+        color: #6c757d;
+    }
+
+    /* Suggestions Box */
+    .suggestions-box {
+        background: #fff8f0;
+        border-radius: 10px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .suggestions-label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .suggestions-input {
+        width: 100%;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 0.5rem;
+        font-size: 0.875rem;
+        resize: vertical;
+        min-height: 60px;
+    }
+
+    /* Continue Shopping */
+    .continue-shopping-btn {
+        background: white;
+        color: #059669;
+        border: 2px solid #059669;
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.875rem;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .continue-shopping-btn:hover {
+        background: #059669;
+        color: white;
+    }
+
+    /* Empty Cart */
+    .empty-cart {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .empty-cart-icon {
+        font-size: 4rem;
+        color: #059669;
+        margin-bottom: 1.5rem;
+        opacity: 0.5;
+    }
+
+    .empty-cart h3 {
+        color: #333;
+        margin-bottom: 1rem;
+        font-weight: 700;
+    }
+
+    .empty-cart p {
+        color: #666;
+        margin-bottom: 2rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 991.98px) {
+        .bill-details-card {
+            position: static;
+            margin-top: 2rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .cart-title {
+            font-size: 1.5rem;
+        }
+
+        .cart-items-section {
+            padding: 1rem;
+        }
+
+        .cart-item-card {
+            flex-direction: column;
+            padding: 1rem;
+            gap: 1rem;
+        }
+
+        .item-image-wrapper {
+            width: 100%;
+            height: 180px;
+            margin: 0;
+        }
+
+        .item-image {
+            border-radius: 12px;
+        }
+
+        .item-details {
+            width: 100%;
+            padding: 0;
+        }
+
+        .item-name {
+            font-size: 1.1rem;
+        }
+
+        .item-category {
+            font-size: 0.85rem;
+        }
+
+        .item-price-section {
+            width: 100%;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1rem;
+        }
+
+        .price-info {
+            text-align: center;
+            padding: 0.75rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .quantity-controls {
+            justify-content: center;
+            padding: 0.75rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .quantity-btn {
+            width: 40px;
+            height: 40px;
+            font-size: 1.1rem;
+        }
+
+        .quantity-input {
+            width: 60px;
+            font-size: 1.1rem;
+        }
+
+        .item-actions {
+            flex-direction: row;
+            justify-content: space-around;
+            gap: 0.5rem;
+        }
+
+        .btn-remove,
+        .btn-wishlist {
+            flex: 1;
+            padding: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .bill-details-card {
+            position: static;
+            margin-top: 1.5rem;
+        }
+
+        .section-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+        }
+
+        /* Coupon section mobile */
+        .coupon-section {
+            padding: 1rem;
+        }
+
+        .coupon-form .input-group {
+            flex-direction: column;
+        }
+
+        .coupon-form .form-control {
+            border-radius: 8px !important;
+            margin-bottom: 0.5rem;
+            width: 100%;
+        }
+
+        .coupon-form .btn {
+            border-radius: 8px !important;
+            width: 100%;
+            padding: 0.75rem;
+        }
+
+        /* Bill details mobile */
+        .bill-row {
+            font-size: 0.95rem;
+        }
+
+        .bill-row.total {
+            font-size: 1.1rem;
+        }
+
+        /* Checkout button mobile */
+        .checkout-btn {
+            padding: 1rem;
+            font-size: 1rem;
+        }
+
+        /* Delivery options mobile */
+        .delivery-option {
+            padding: 0.75rem;
+        }
+
+        .delivery-title {
+            font-size: 0.95rem;
+        }
+
+        .delivery-desc {
+            font-size: 0.85rem;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .cart-hero {
+            padding: 60px 0 30px;
+        }
+
+        .cart-title {
+            font-size: 1.25rem;
+        }
+
+        .cart-subtitle {
+            font-size: 0.9rem;
+        }
+
+        .cart-item-card {
+            padding: 0.75rem;
+        }
+
+        .item-image-wrapper {
+            height: 150px;
+        }
+
+        .item-name {
+            font-size: 1rem;
+        }
+
+        .item-category {
+            font-size: 0.8rem;
+        }
+
+        .price-info {
+            padding: 0.5rem;
+        }
+
+        .item-price {
+            font-size: 1.1rem;
+        }
+
+        .quantity-controls {
+            padding: 0.5rem;
+        }
+
+        .quantity-btn {
+            width: 36px;
+            height: 36px;
+            font-size: 1rem;
+        }
+
+        .quantity-input {
+            width: 50px;
+            font-size: 1rem;
+        }
+
+        .btn-remove,
+        .btn-wishlist {
+            padding: 0.6rem;
+            font-size: 0.85rem;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+        }
+
+        .bill-details-card {
+            padding: 1rem;
+        }
+
+        .bill-row {
+            font-size: 0.9rem;
+            padding: 0.5rem 0;
+        }
+
+        .bill-row.total {
+            font-size: 1rem;
+            padding: 0.75rem 0;
+        }
+
+        .coupon-section {
+            padding: 0.75rem;
+        }
+
+        .coupon-header {
+            margin-bottom: 0.75rem;
+        }
+
+        .coupon-text {
+            font-size: 0.85rem;
+        }
+
+        .delivery-options {
+            padding: 0.75rem;
+        }
+
+        .delivery-option {
+            padding: 0.6rem;
+        }
+
+        .checkout-btn {
+            padding: 0.875rem;
+            font-size: 0.95rem;
+        }
+    }
+
+    /* Animations */
+    .animate-on-scroll {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.4s ease;
+    }
+
+    .animate-on-scroll.animated {
+        opacity: 1;
+        transform: translateY(0);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+
+<!-- Cart Hero Section -->
+<section class="cart-hero">
+    <a href="{% url 'menu' %}" class="hero-back-btn" title="Back to Menu">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+    <div class="container">
+        <div class="cart-hero-content">
+            <h1 class="cart-title">
+                <i class="fas fa-shopping-cart me-3"></i>Your Cart
+            </h1>
+            <p class="cart-subtitle">Review your delicious selections before checkout</p>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'menu' %}">Menu</a></li>
+                    <li class="breadcrumb-item active">Cart</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</section>
+
+<section class="py-4">
+    <div class="container cart-container">
+        {% if cart_items %}
+        <div class="row">
+            <!-- Cart Items -->
+            <div class="col-lg-8">
+                <!-- Cart Items Section -->
+                <div class="cart-items-section animate-on-scroll">
+                    <div class="section-header">
+                        <div class="d-flex align-items-center gap-3">
+                            <h2 class="section-title mb-0">Cart Items</h2>
+                            <span class="item-count-badge">{{ cart_count }} items</span>
+                        </div>
+                        <a href="{% url 'menu' %}" class="continue-shopping-btn">
+                            <i class="fas fa-arrow-left"></i>Continue Shopping
+                        </a>
+                    </div>
+
+                    {% for item in cart_items %}
+                    <div class="cart-item-card" data-item-id="{{ item.id }}">
+                        <input type="checkbox" class="item-checkbox item-selector" data-item-id="{{ item.id }}" {% if
+                            item.is_selected %}checked{% endif %}>
+
+                        <div class="item-image-wrapper">
+                            {% if item.menu_item.get_image_url %}
+                            <img src="{{ item.menu_item.get_image_url }}" alt="{{ item.menu_item.name }}"
+                                class="cart-item-image">
+                            {% else %}
+                            <div class="cart-item-placeholder">
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="item-details">
+                            <h3 class="item-name">{{ item.menu_item.name }}</h3>
+                            <p class="item-category">{{ item.menu_item.category.name }}</p>
+                            {% if item.menu_item.has_discount %}
+                            <span class="item-customization">
+                                <i class="fas fa-fire me-1"></i>{{ item.menu_item.discount }}% OFF
+                            </span>
+                            {% endif %}
+                        </div>
+
+                        <div class="item-price-section">
+                            <div class="price-display">
+                                {% if item.menu_item.has_discount %}
+                                <div class="price-original">${{ item.menu_item.price }}</div>
+                                <div class="price-current">${{ item.menu_item.discounted_price }}</div>
+                                {% else %}
+                                <div class="price-current">${{ item.menu_item.price }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="quantity-controls">
+                                <button class="quantity-btn" data-action="decrease" data-item-id="{{ item.id }}">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="number" class="quantity-input" value="{{ item.quantity }}" min="1" max="10"
+                                    data-item-id="{{ item.id }}" readonly>
+                                <button class="quantity-btn" data-action="increase" data-item-id="{{ item.id }}">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+
+                            <div class="item-total-price item-total">${{ item.total_price }}</div>
+
+                            <button class="remove-btn" type="button" data-item-id="{{ item.id }}">
+                                <i class="fas fa-trash me-1"></i>Remove
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Suggestions Box -->
+                <div class="suggestions-box animate-on-scroll">
+                    <label class="suggestions-label">
+                        <i class="fas fa-comment-dots"></i>
+                        Any suggestions? We will pass it on...
+                    </label>
+                    <textarea class="suggestions-input" placeholder="e.g. Please make it less spicy, extra sauce, etc."
+                        id="orderSuggestions"></textarea>
+                </div>
+            </div>
+
+            <!-- Bill Details -->
+            <div class="col-lg-4">
+                <div class="bill-details-card animate-on-scroll">
+                    <h3 class="bill-header">Bill Details</h3>
+
+                    <div class="bill-row">
+                        <span class="bill-label">Item Total</span>
+                        <span class="bill-value subtotal-amount">${{ total }}</span>
+                    </div>
+
+                    <div class="bill-row">
+                        <span class="bill-label">
+                            Delivery Fee
+                            <i class="fas fa-info-circle info-icon" title="Delivery charges"></i>
+                        </span>
+                        <span class="bill-value delivery-amount">${{ delivery_fee }}</span>
+                    </div>
+
+                    <div class="bill-row">
+                        <span class="bill-label">
+                            GST & Other Charges
+                            <i class="fas fa-info-circle info-icon" title="Taxes and platform fee"></i>
+                        </span>
+                        <span class="bill-value">${{ gst_charges|default:"0" }}</span>
+                    </div>
+
+                    <div class="bill-row total">
+                        <span class="bill-label">TO PAY</span>
+                        <span class="bill-value total total-amount">${{ grand_total }}</span>
+                    </div>
+
+                    <!-- Coupon Section -->
+                    <div class="coupon-section">
+                        <div class="coupon-header mb-3">
+                            <i class="fas fa-tag coupon-icon me-2"></i>
+                            <span class="coupon-text">Apply Coupon</span>
+                        </div>
+                        <form id="couponForm" class="coupon-form">
+                            {% csrf_token %}
+                            <div class="input-group position-relative">
+                                <input type="text" id="couponCode" name="coupon_code" class="form-control"
+                                    placeholder="Enter coupon code"
+                                    style="border-radius: 8px 0 0 8px; border: 1px solid #ddd; padding-right: 40px;">
+                                <span id="validationIcon" class="position-absolute"
+                                    style="right: 120px; top: 50%; transform: translateY(-50%); display: none; z-index: 10;">
+                                    <i class="fas fa-check-circle text-success" id="validIcon"
+                                        style="display: none; font-size: 1.2rem;"></i>
+                                    <i class="fas fa-times-circle text-danger" id="invalidIcon"
+                                        style="display: none; font-size: 1.2rem;"></i>
+                                    <i class="fas fa-spinner fa-spin text-primary" id="checkingIcon"
+                                        style="display: none; font-size: 1.2rem;"></i>
+                                </span>
+                                <button type="submit" class="btn btn-primary" id="applyBtn"
+                                    style="border-radius: 0 8px 8px 0;">
+                                    Apply
+                                </button>
+                            </div>
+                        </form>
+                        <div id="couponMessage" class="mt-2" style="display: none;"></div>
+                        <div id="appliedCoupon" class="applied-coupon mt-2" style="display: none;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <span id="appliedCouponCode" class="fw-bold"></span>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeCoupon()">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <small class="text-muted d-block mt-1" id="couponDescription"></small>
+                        </div>
+                    </div>
+
+                    <!-- Delivery Options -->
+                    <div class="delivery-options">
+                        <div class="delivery-option selected">
+                            <input type="radio" name="delivery" checked>
+                            <div class="delivery-info">
+                                <div class="delivery-title">Standard Delivery</div>
+                                <div class="delivery-desc">30-40 mins</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if not selected_count %}
+                    <button id="proceedToCheckout" class="checkout-btn" disabled>
+                        <i class="fas fa-lock me-2"></i>Select items to checkout
+                    </button>
+                    {% else %}
+                    <button id="proceedToCheckout" class="checkout-btn">
+                        <i class="fas fa-credit-card me-2"></i>Proceed to Checkout ({{ selected_count }})
+                    </button>
+                    {% endif %}
+
+                    <div class="text-center mt-3">
+                        <small class="text-muted">
+                            <i class="fas fa-shield-alt me-1"></i>Secure checkout with SSL encryption
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% else %}
+        <!-- Empty Cart -->
+        <div class="empty-cart animate-on-scroll">
+            <div class="empty-cart-icon">
+                <i class="fas fa-shopping-cart"></i>
+            </div>
+            <h3>Your cart is empty</h3>
+            <p>Looks like you haven't added any delicious items to your cart yet.<br>Let's fix that!</p>
+            <a href="{% url 'menu' %}" class="btn btn-primary btn-lg continue-shopping-btn">
+                <i class="fas fa-utensils me-2"></i>Browse Our Menu
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function (entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        const quantityButtons = document.querySelectorAll('.quantity-btn');
+        const quantityInputs = document.querySelectorAll('.quantity-input');
+        const removeButtons = document.querySelectorAll('.remove-btn');
+
+        // Handle quantity buttons
+        quantityButtons.forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault(); // Prevent any default behavior
+                const action = this.dataset.action;
+                const itemId = this.dataset.itemId;
+                const input = document.querySelector(`.quantity-input[data-item-id="${itemId}"]`);
+                let currentValue = parseInt(input.value);
+
+                if (action === 'increase' && currentValue < 10) {
+                    input.value = currentValue + 1;
+                    updateCartItem(itemId, currentValue + 1);
+                } else if (action === 'decrease' && currentValue > 1) {
+                    input.value = currentValue - 1;
+                    updateCartItem(itemId, currentValue - 1);
+                }
+            });
+        });
+
+        // Handle quantity input changes
+        quantityInputs.forEach(input => {
+            input.addEventListener('change', function () {
+                let value = parseInt(this.value);
+                const itemId = this.dataset.itemId;
+
+                if (value < 1) {
+                    this.value = 1;
+                    value = 1;
+                }
+                if (value > 10) {
+                    this.value = 10;
+                    value = 10;
+                }
+
+                updateCartItem(itemId, value);
+            });
+        });
+
+        // Handle remove buttons
+        removeButtons.forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault(); // Prevent any default behavior
+                const itemId = this.dataset.itemId;
+                removeCartItem(itemId);
+            });
+        });
+
+        const selectAllCheckbox = document.getElementById('selectAllItems');
+        const itemSelectors = document.querySelectorAll('.item-selector');
+        const checkoutBtn = document.getElementById('proceedToCheckout');
+
+        // Handle Select All
+        if (selectAllCheckbox) {
+            selectAllCheckbox.addEventListener('change', function () {
+                const isSelected = this.checked;
+                toggleSelection('all', isSelected);
+                itemSelectors.forEach(selector => selector.checked = isSelected);
+            });
+        }
+
+        // Handle Individual Selection
+        itemSelectors.forEach(selector => {
+            selector.addEventListener('change', function () {
+                const itemId = this.dataset.itemId;
+                const isSelected = this.checked;
+                toggleSelection(itemId, isSelected);
+
+                // Update Select All checkbox state
+                if (selectAllCheckbox) {
+                    const allChecked = Array.from(itemSelectors).every(s => s.checked);
+                    selectAllCheckbox.checked = allChecked;
+                }
+            });
+        });
+
+        function toggleSelection(itemId, isSelected) {
+            fetch('{% url "toggle_cart_item_selection" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: `cart_item_id=${itemId}&is_selected=${isSelected}`
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update the summary section
+                        // For simplicity, we'll reload the page, but in a real app you'd update totals via AJAX
+                        location.reload();
+                    } else {
+                        showNotification('Failed to update selection', 'error');
+                    }
+                });
+        }
+
+        // Handle Checkout Button
+        if (checkoutBtn) {
+            checkoutBtn.addEventListener('click', function () {
+                window.location.href = "{% url 'checkout' %}";
+            });
+        }
+
+        function updateCartItem(itemId, quantity) {
+            // Disable all quantity buttons for this item
+            const buttons = document.querySelectorAll(`[data-item-id="${itemId}"].quantity-btn`);
+            buttons.forEach(btn => btn.disabled = true);
+
+            fetch('{% url "update_cart" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: `cart_item_id=${itemId}&quantity=${quantity}`
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Update cart response:', data);
+
+                    if (data.success) {
+                        // Update the quantity display
+                        const cartItemCard = document.querySelector(`[data-item-id="${itemId}"]`).closest('.cart-item-card');
+                        const quantityInput = cartItemCard.querySelector('.quantity-input');
+                        if (quantityInput) {
+                            quantityInput.value = quantity;
+                        }
+
+                        // Update item total
+                        if (data.item_total !== undefined) {
+                            const itemTotalElement = cartItemCard.querySelector('.item-total');
+                            if (itemTotalElement) {
+                                itemTotalElement.textContent = `$${data.item_total.toFixed(2)}`;
+                            }
+                        }
+
+                        // Update cart summary
+                        if (data.cart_total !== undefined) {
+                            const subtotalElement = document.querySelector('.subtotal-amount');
+                            if (subtotalElement) subtotalElement.textContent = `$${data.cart_total.toFixed(2)}`;
+                        }
+
+                        if (data.delivery_fee !== undefined) {
+                            const deliveryElement = document.querySelector('.delivery-amount');
+                            if (deliveryElement) deliveryElement.textContent = `$${data.delivery_fee.toFixed(2)}`;
+                        }
+
+                        if (data.total !== undefined) {
+                            const totalElement = document.querySelector('.total-amount');
+                            if (totalElement) totalElement.textContent = `$${data.total.toFixed(2)}`;
+                        }
+
+                        // Update cart count
+                        if (window.cart && window.cart.updateCount) {
+                            window.cart.updateCount(data.cart_count);
+                        }
+
+                        // Re-enable buttons (removed notification)
+                        buttons.forEach(btn => btn.disabled = false);
+                    } else {
+                        showNotification(data.message || 'Failed to update cart', 'error');
+                        // Re-enable buttons on error
+                        buttons.forEach(btn => btn.disabled = false);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating cart:', error);
+                    showNotification('Failed to update cart. Please try again.', 'error');
+                    // Re-enable buttons on error
+                    buttons.forEach(btn => btn.disabled = false);
+                });
+        }
+
+        function removeCartItem(itemId) {
+            showConfirm(
+                'Remove Item',
+                'Are you sure you want to remove this delicious item from your cart?',
+                () => {
+                    fetch('{% url "remove_from_cart" %}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                        },
+                        body: `cart_item_id=${itemId}`
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                showNotification('Item removed from cart', 'success');
+
+                                // Animate removal
+                                const cartItemCard = document.querySelector(`[data-item-id="${itemId}"]`).closest('.cart-item-card');
+                                if (cartItemCard) {
+                                    cartItemCard.style.transition = 'all 0.3s ease';
+                                    cartItemCard.style.transform = 'translateX(-100%)';
+                                    cartItemCard.style.opacity = '0';
+                                    setTimeout(() => {
+                                        cartItemCard.remove();
+
+                                        // Check if cart is empty
+                                        const remainingItems = document.querySelectorAll('.cart-item-card').length;
+                                        if (remainingItems === 0) {
+                                            location.reload();
+                                        } else {
+                                            // Update cart summary
+                                            if (data.cart_total !== undefined) {
+                                                const subtotalElement = document.querySelector('.subtotal-amount');
+                                                if (subtotalElement) subtotalElement.textContent = `$${data.cart_total}`;
+                                            }
+
+                                            if (data.delivery_fee !== undefined) {
+                                                const deliveryElement = document.querySelector('.delivery-amount');
+                                                if (deliveryElement) deliveryElement.textContent = `$${data.delivery_fee}`;
+                                            }
+
+                                            if (data.total !== undefined) {
+                                                const totalElement = document.querySelector('.total-amount');
+                                                if (totalElement) totalElement.textContent = `$${data.total}`;
+                                            }
+
+                                            // Update cart count
+                                            if (window.cart && window.cart.updateCount) {
+                                                window.cart.updateCount(data.cart_count);
+                                            }
+                                        }
+                                    }, 300);
+                                }
+                            } else {
+                                showNotification('Failed to remove item', 'error');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            showNotification('Failed to remove item', 'error');
+                        });
+                },
+                'Yes, Remove',
+                'Cancel'
+            );
+        }
+
+        function showNotification(message, type) {
+            // Remove any existing notifications
+            const existingNotifications = document.querySelectorAll('.custom-toast-notification');
+            existingNotifications.forEach(notif => notif.remove());
+
+            const alertClass = type === 'success' ? 'alert-success' :
+                type === 'warning' ? 'alert-warning' : 'alert-danger';
+            const iconClass = type === 'success' ? 'check-circle' :
+                type === 'warning' ? 'exclamation-triangle' : 'times-circle';
+            const bgGradient = type === 'success' ? 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)' :
+                type === 'warning' ? 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' :
+                    'linear-gradient(135deg, #059669 0%, #D4AF37 100%)';
+
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `custom-toast-notification alert ${alertClass} alert-dismissible fade show position-fixed`;
+            alertDiv.style.cssText = `
+                top: 80px; 
+                right: 20px; 
+                z-index: 9999; 
+                min-width: 320px; 
+                max-width: 400px;
+                background: ${bgGradient};
+                color: white;
+                border: none;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+                border-radius: 15px;
+                padding: 1rem 1.25rem;
+                animation: slideInRight 0.4s ease-out;
+            `;
+            alertDiv.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-${iconClass} me-3" style="font-size: 1.5rem;"></i>
+                    <div class="flex-grow-1" style="font-weight: 500;">${message}</div>
+                    <button type="button" class="btn-close btn-close-white ms-2" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+
+            // Add animation keyframes if not already added
+            if (!document.getElementById('toast-animations')) {
+                const style = document.createElement('style');
+                style.id = 'toast-animations';
+                style.textContent = `
+                    @keyframes slideInRight {
+                        from {
+                            transform: translateX(400px);
+                            opacity: 0;
+                        }
+                        to {
+                            transform: translateX(0);
+                            opacity: 1;
+                        }
+                    }
+                    @keyframes slideOutRight {
+                        from {
+                            transform: translateX(0);
+                            opacity: 1;
+                        }
+                        to {
+                            transform: translateX(400px);
+                            opacity: 0;
+                        }
+                    }
+                    .custom-toast-notification {
+                        backdrop-filter: blur(10px);
+                    }
+                    @media (max-width: 576px) {
+                        .custom-toast-notification {
+                            top: 70px !important;
+                            right: 10px !important;
+                            left: 10px !important;
+                            min-width: auto !important;
+                            max-width: none !important;
+                            font-size: 0.9rem;
+                        }
+                        .custom-toast-notification i {
+                            font-size: 1.2rem !important;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            document.body.appendChild(alertDiv);
+
+            // Auto dismiss after 5 seconds with animation
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.style.animation = 'slideOutRight 0.4s ease-in';
+                    setTimeout(() => {
+                        if (alertDiv.parentNode) {
+                            alertDiv.remove();
+                        }
+                    }, 400);
+                }
+            }, 5000);
+        }
+
+        // Coupon handling
+        const couponForm = document.getElementById('couponForm');
+        const couponInput = document.getElementById('couponCode');
+        let validationTimeout;
+
+        // Real-time coupon validation as user types
+        if (couponInput) {
+            couponInput.addEventListener('input', function () {
+                const couponCode = this.value.trim();
+
+                // Clear previous timeout
+                clearTimeout(validationTimeout);
+
+                // Hide all icons initially
+                document.getElementById('validIcon').style.display = 'none';
+                document.getElementById('invalidIcon').style.display = 'none';
+                document.getElementById('checkingIcon').style.display = 'none';
+                document.getElementById('validationIcon').style.display = 'none';
+                document.getElementById('couponMessage').style.display = 'none';
+
+                // Only validate if code is at least 3 characters
+                if (couponCode.length >= 3) {
+                    // Show checking icon
+                    document.getElementById('validationIcon').style.display = 'block';
+                    document.getElementById('checkingIcon').style.display = 'inline-block';
+
+                    // Debounce validation (wait 500ms after user stops typing)
+                    validationTimeout = setTimeout(() => {
+                        validateCoupon(couponCode);
+                    }, 500);
+                }
+            });
+        }
+
+        if (couponForm) {
+            couponForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                applyCoupon();
+            });
+        }
+    });
+
+    // Function to validate coupon without applying
+    function validateCoupon(couponCode) {
+        fetch('{% url "apply_coupon" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: `coupon_code=${encodeURIComponent(couponCode)}&validate_only=true`
+        })
+            .then(response => response.json())
+            .then(data => {
+                const validIcon = document.getElementById('validIcon');
+                const invalidIcon = document.getElementById('invalidIcon');
+                const checkingIcon = document.getElementById('checkingIcon');
+                const messageDiv = document.getElementById('couponMessage');
+
+                // Hide checking icon
+                checkingIcon.style.display = 'none';
+
+                if (data.success) {
+                    // Show valid icon
+                    validIcon.style.display = 'inline-block';
+                    invalidIcon.style.display = 'none';
+
+                    // Show success message
+                    messageDiv.className = 'mt-2 alert alert-success';
+                    messageDiv.innerHTML = `<i class="fas fa-check-circle me-2"></i>${data.message}`;
+                    messageDiv.style.display = 'block';
+                } else {
+                    // Show invalid icon
+                    validIcon.style.display = 'none';
+                    invalidIcon.style.display = 'inline-block';
+
+                    // Show error message
+                    messageDiv.className = 'mt-2 alert alert-danger';
+                    messageDiv.innerHTML = `<i class="fas fa-times-circle me-2"></i>${data.message}`;
+                    messageDiv.style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Validation error:', error);
+                document.getElementById('checkingIcon').style.display = 'none';
+            });
+    }
+
+    function applyCoupon() {
+        const couponCode = document.getElementById('couponCode').value.trim();
+        const messageDiv = document.getElementById('couponMessage');
+
+        if (!couponCode) {
+            messageDiv.className = 'mt-2 alert alert-warning';
+            messageDiv.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Please enter a coupon code';
+            messageDiv.style.display = 'block';
+            return;
+        }
+
+        // Hide validation icons
+        document.getElementById('validIcon').style.display = 'none';
+        document.getElementById('invalidIcon').style.display = 'none';
+        document.getElementById('checkingIcon').style.display = 'none';
+
+        // Show loading
+        const submitBtn = document.getElementById('applyBtn');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Applying...';
+        submitBtn.disabled = true;
+
+        fetch('{% url "apply_coupon" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: `coupon_code=${encodeURIComponent(couponCode)}`
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Show success message
+                    messageDiv.className = 'mt-2 alert alert-success';
+                    messageDiv.innerHTML = `<i class="fas fa-check-circle me-2"></i>${data.message}`;
+                    messageDiv.style.display = 'block';
+
+                    // Show applied coupon
+                    document.getElementById('appliedCouponCode').textContent = couponCode.toUpperCase();
+                    document.getElementById('couponDescription').textContent = `Discount: $${data.discount_amount}`;
+                    document.getElementById('appliedCoupon').style.display = 'block';
+
+                    // Hide form
+                    couponForm.style.display = 'none';
+
+                    // Update totals
+                    const totalElement = document.querySelector('.total-amount');
+                    if (totalElement) {
+                        totalElement.textContent = `$${data.new_total.toFixed(2)}`;
+                    }
+
+                    // Add discount row to bill details
+                    const billDetailsCard = document.querySelector('.bill-details-card');
+                    if (billDetailsCard) {
+                        // Remove existing discount row if any
+                        const existingDiscount = billDetailsCard.querySelector('.discount-row');
+                        if (existingDiscount) {
+                            existingDiscount.remove();
+                        }
+
+                        const discountRow = document.createElement('div');
+                        discountRow.className = 'bill-row discount-row';
+                        discountRow.innerHTML = `
+                        <span class="bill-label">
+                            <i class="fas fa-tag me-1"></i>Coupon Discount
+                        </span>
+                        <span class="bill-value text-success">-$${data.discount_amount.toFixed(2)}</span>
+                    `;
+                        // Insert before the total row
+                        const totalRow = billDetailsCard.querySelector('.bill-row.total');
+                        if (totalRow) {
+                            billDetailsCard.insertBefore(discountRow, totalRow);
+                        }
+                    }
+
+                    // Show notification
+                    if (typeof showNotification === 'function') {
+                        showNotification(data.message, 'success');
+                    }
+                } else {
+                    // Show error message
+                    messageDiv.className = 'mt-2 alert alert-danger';
+                    messageDiv.innerHTML = `<i class="fas fa-times-circle me-2"></i>${data.message}`;
+                    messageDiv.style.display = 'block';
+
+                    // Show notification
+                    if (typeof showNotification === 'function') {
+                        showNotification(data.message, 'error');
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error applying coupon:', error);
+                messageDiv.className = 'mt-2 alert alert-danger';
+                messageDiv.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Failed to apply coupon. Please check your internet connection and try again.';
+                messageDiv.style.display = 'block';
+
+                // Show notification
+                if (typeof showNotification === 'function') {
+                    showNotification('Failed to apply coupon. Please try again.', 'error');
+                }
+            })
+            .finally(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            });
+    }
+
+    function removeCoupon() {
+        // Remove from session
+        fetch('{% url "apply_coupon" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: 'coupon_code='
+        })
+            .then(() => {
+                // Hide applied coupon
+                document.getElementById('appliedCoupon').style.display = 'none';
+                document.getElementById('couponMessage').style.display = 'none';
+
+                // Show form again
+                document.getElementById('couponForm').style.display = 'block';
+                document.getElementById('couponCode').value = '';
+
+                // Remove discount row
+                const discountRow = document.querySelector('.discount-row');
+                if (discountRow) {
+                    discountRow.remove();
+                }
+
+                // Reload page to recalculate totals
+                location.reload();
+            });
+    }
+</script>
+{% endblock %}

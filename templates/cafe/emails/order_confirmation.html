@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Order Confirmation - Spices of India Cuisine</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #FF6B35; color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; background: #f9f9f9; }
+        .order-details { background: white; padding: 15px; margin: 15px 0; border-radius: 5px; }
+        .item { border-bottom: 1px solid #eee; padding: 10px 0; }
+        .total { font-weight: bold; font-size: 18px; color: #FF6B35; }
+        .footer { text-align: center; padding: 20px; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Order Confirmed!</h1>
+            <p>Thank you for your order, {{ user.first_name }}!</p>
+        </div>
+        
+        <div class="content">
+            <h2>Order #{{ order.order_number }}</h2>
+            <p>Your order has been confirmed and is being prepared.</p>
+            
+            <div class="order-details">
+                <h3>Order Items:</h3>
+                {% for item in order.items.all %}
+                <div class="item">
+                    <strong>{{ item.menu_item.name }}</strong><br>
+                    Quantity: {{ item.quantity }} × ${{ item.price }} = ${{ item.total_price }}
+                </div>
+                {% endfor %}
+                
+                <div style="margin-top: 15px; padding-top: 15px; border-top: 2px solid #FF6B35;">
+                    <p>Subtotal: ${{ order.total }}</p>
+                    <p>Delivery Fee: ${{ order.delivery_fee }}</p>
+                    <p>Tax: ${{ order.tax_amount }}</p>
+                    <p class="total">Total: ${{ order.grand_total }}</p>
+                </div>
+            </div>
+            
+            <div class="order-details">
+                <h3>Delivery Information:</h3>
+                <p><strong>Address:</strong> {{ order.delivery_address }}</p>
+                <p><strong>Phone:</strong> {{ order.phone }}</p>
+                <p><strong>Estimated Delivery:</strong> 30-45 minutes</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Questions? Contact us at +91 98765 43210</p>
+            <p>Spices of India Cuisine - Fresh Food, Fast Delivery</p>
+        </div>
+    </div>
+</body>
+</html>

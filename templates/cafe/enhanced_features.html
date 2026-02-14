@@ -1,0 +1,787 @@
+<!-- Enhanced User Features Template -->
+{% extends 'cafe/base.html' %}
+{% load static %}
+
+{% block title %}Enhanced Features - Spices of India Cuisine{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Enhanced Features Styles */
+    .feature-hero {
+        background: linear-gradient(135deg, #ff4d4d 0%, #ff6b35 50%, #ffa726 100%);
+        position: relative;
+        overflow: hidden;
+        padding: 4rem 0;
+    }
+    
+    .feature-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="25" cy="25" r="3" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="2" fill="rgba(255,255,255,0.08)"/></svg>');
+        animation: float 20s ease-in-out infinite;
+    }
+    
+    .feature-card {
+        background: white;
+        border-radius: 25px;
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+        border: none;
+        overflow: hidden;
+        transition: all 0.4s ease;
+        position: relative;
+    }
+    
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #ff4d4d, #ff6b35, #ffa726);
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 25px 70px rgba(0, 0, 0, 0.15);
+    }
+    
+    .feature-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 2rem;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .feature-icon::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transform: rotate(45deg);
+        animation: shine 3s ease-in-out infinite;
+    }
+    
+    @keyframes shine {
+        0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+        50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    }
+    
+    .feature-icon.loyalty {
+        background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+        color: #2d3436;
+    }
+    
+    .feature-icon.recommendations {
+        background: linear-gradient(135deg, #fd79a8, #e84393);
+    }
+    
+    .feature-icon.tracking {
+        background: linear-gradient(135deg, #00b894, #00cec9);
+    }
+    
+    .feature-icon.social {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+    
+    .feature-icon.analytics {
+        background: linear-gradient(135deg, #11998e, #38ef7d);
+    }
+    
+    .feature-icon.notifications {
+        background: linear-gradient(135deg, #fdcb6e, #e17055);
+    }
+    
+    .interactive-demo {
+        background: #f8f9fa;
+        border-radius: 20px;
+        padding: 2rem;
+        margin: 2rem 0;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .demo-button {
+        background: linear-gradient(135deg, #ff4d4d, #ff6b35);
+        border: none;
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 15px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .demo-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(255, 77, 77, 0.4);
+    }
+    
+    .progress-tracker {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        margin: 1rem 0;
+    }
+    
+    .progress-step {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        position: relative;
+    }
+    
+    .progress-step::before {
+        content: '';
+        position: absolute;
+        left: 20px;
+        top: 40px;
+        width: 2px;
+        height: 30px;
+        background: #e9ecef;
+        z-index: 1;
+    }
+    
+    .progress-step:last-child::before {
+        display: none;
+    }
+    
+    .progress-step.completed::before {
+        background: linear-gradient(180deg, #ff4d4d, #ff6b35);
+    }
+    
+    .step-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #e9ecef;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        z-index: 2;
+        position: relative;
+    }
+    
+    .step-icon.completed {
+        background: linear-gradient(135deg, #ff4d4d, #ff6b35);
+        color: white;
+    }
+    
+    .loyalty-meter {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    
+    .loyalty-progress {
+        width: 200px;
+        height: 200px;
+        margin: 0 auto;
+        position: relative;
+    }
+    
+    .loyalty-circle {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: conic-gradient(from 0deg, #ff4d4d 0deg, #ff6b35 180deg, #ffa726 360deg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+    
+    .loyalty-inner {
+        width: 160px;
+        height: 160px;
+        background: white;
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-shadow: inset 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .smart-suggestions {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border-radius: 20px;
+        padding: 2rem;
+        margin: 2rem 0;
+    }
+    
+    .suggestion-item {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 1rem;
+        margin: 1rem 0;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+    }
+    
+    .suggestion-item:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateX(10px);
+    }
+    
+    .social-sharing {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    
+    .share-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 15px;
+        text-decoration: none;
+        font-weight: 600;
+        margin: 0.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .share-button.facebook {
+        background: #3b5998;
+        color: white;
+    }
+    
+    .share-button.twitter {
+        background: #1da1f2;
+        color: white;
+    }
+    
+    .share-button.whatsapp {
+        background: #25d366;
+        color: white;
+    }
+    
+    .share-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        color: white;
+        text-decoration: none;
+    }
+    
+    @media (max-width: 768px) {
+        .feature-hero {
+            padding: 2rem 0;
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+        }
+        
+        .loyalty-progress {
+            width: 150px;
+            height: 150px;
+        }
+        
+        .loyalty-inner {
+            width: 120px;
+            height: 120px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Enhanced Features Hero -->
+<section class="feature-hero text-white">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">Enhanced User Experience</h1>
+                <p class="lead mb-4">Discover powerful features designed to make your food ordering experience exceptional</p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <span class="badge bg-light text-dark px-3 py-2 rounded-pill">Smart Recommendations</span>
+                    <span class="badge bg-light text-dark px-3 py-2 rounded-pill">Real-time Tracking</span>
+                    <span class="badge bg-light text-dark px-3 py-2 rounded-pill">Loyalty Rewards</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Enhanced Features Grid -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Loyalty Program -->
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon loyalty">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Loyalty Program</h4>
+                        <p class="text-muted mb-4">Earn points with every order and unlock exclusive rewards, discounts, and special offers.</p>
+                        <div class="loyalty-meter">
+                            <div class="loyalty-progress">
+                                <div class="loyalty-circle">
+                                    <div class="loyalty-inner">
+                                        <h3 class="mb-0">1,250</h3>
+                                        <small class="text-muted">Points</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0"><strong>Gold Member</strong></p>
+                            <small class="text-muted">750 points to Platinum</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Smart Recommendations -->
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon recommendations">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Smart Recommendations</h4>
+                        <p class="text-muted mb-4">AI-powered suggestions based on your preferences, order history, and trending items.</p>
+                        <div class="smart-suggestions">
+                            <h6 class="mb-3">Recommended for You</h6>
+                            <div class="suggestion-item">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-pizza-slice me-3"></i>
+                                    <div>
+                                        <strong>Margherita Pizza</strong>
+                                        <br><small>Based on your Italian food preference</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="suggestion-item">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-hamburger me-3"></i>
+                                    <div>
+                                        <strong>Veggie Burger</strong>
+                                        <br><small>Popular among vegetarian users</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Real-time Tracking -->
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon tracking">
+                            <i class="fas fa-map-marked-alt"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Real-time Tracking</h4>
+                        <p class="text-muted mb-4">Track your order from kitchen to doorstep with live updates and estimated delivery time.</p>
+                        <div class="progress-tracker">
+                            <div class="progress-step completed">
+                                <div class="step-icon completed">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div>
+                                    <strong>Order Confirmed</strong>
+                                    <br><small class="text-muted">2:30 PM</small>
+                                </div>
+                            </div>
+                            <div class="progress-step completed">
+                                <div class="step-icon completed">
+                                    <i class="fas fa-utensils"></i>
+                                </div>
+                                <div>
+                                    <strong>Preparing</strong>
+                                    <br><small class="text-muted">2:35 PM</small>
+                                </div>
+                            </div>
+                            <div class="progress-step">
+                                <div class="step-icon">
+                                    <i class="fas fa-motorcycle"></i>
+                                </div>
+                                <div>
+                                    <strong>Out for Delivery</strong>
+                                    <br><small class="text-muted">ETA: 3:15 PM</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Features -->
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon social">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Social Features</h4>
+                        <p class="text-muted mb-4">Share your favorite meals, write reviews, and connect with fellow food lovers.</p>
+                        <div class="social-sharing">
+                            <h6 class="mb-3">Share Your Experience</h6>
+                            <a href="#" class="share-button facebook" onclick="shareOnFacebook()">
+                                <i class="fab fa-facebook-f"></i>
+                                Facebook
+                            </a>
+                            <a href="#" class="share-button twitter" onclick="shareOnTwitter()">
+                                <i class="fab fa-twitter"></i>
+                                Twitter
+                            </a>
+                            <a href="#" class="share-button whatsapp" onclick="shareOnWhatsApp()">
+                                <i class="fab fa-whatsapp"></i>
+                                WhatsApp
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Dashboard -->
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon analytics">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Personal Analytics</h4>
+                        <p class="text-muted mb-4">Detailed insights into your ordering patterns, spending habits, and favorite cuisines.</p>
+                        <div class="interactive-demo">
+                            <h6 class="mb-3">Your Food Journey</h6>
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <h4 class="text-primary">42</h4>
+                                    <small>Orders</small>
+                                </div>
+                                <div class="col-4">
+                                    <h4 class="text-success">$8,450</h4>
+                                    <small>Spent</small>
+                                </div>
+                                <div class="col-4">
+                                    <h4 class="text-warning">15</h4>
+                                    <small>Cuisines</small>
+                                </div>
+                            </div>
+                            <button class="demo-button mt-3" onclick="showAnalytics()">
+                                View Full Analytics
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Smart Notifications -->
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon notifications">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Smart Notifications</h4>
+                        <p class="text-muted mb-4">Personalized alerts for order updates, special offers, and your favorite restaurants.</p>
+                        <div class="interactive-demo">
+                            <div class="notification-preview">
+                                <div class="alert alert-info mb-2">
+                                    <i class="fas fa-motorcycle me-2"></i>
+                                    Your order is 5 minutes away!
+                                </div>
+                                <div class="alert alert-warning mb-2">
+                                    <i class="fas fa-percent me-2"></i>
+                                    20% off on your favorite pizza today!
+                                </div>
+                                <div class="alert alert-success mb-0">
+                                    <i class="fas fa-star me-2"></i>
+                                    You earned 50 loyalty points!
+                                </div>
+                            </div>
+                            <button class="demo-button mt-3" onclick="customizeNotifications()">
+                                Customize Alerts
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Enhanced Features JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize enhanced features
+    initializeFeatures();
+});
+
+function initializeFeatures() {
+    // Add smooth scrolling to feature cards
+    const featureCards = document.querySelectorAll('.feature-card');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    featureCards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        card.style.transition = 'all 0.6s ease';
+        observer.observe(card);
+    });
+}
+
+function shareProfile() {
+    if (navigator.share) {
+        navigator.share({
+            title: 'Check out my Spices of India Cuisine profile!',
+            text: 'I\'ve been enjoying amazing food from Spices of India Cuisine. Join me!',
+            url: window.location.href
+        });
+    } else {
+        // Fallback for browsers that don't support Web Share API
+        const url = encodeURIComponent(window.location.href);
+        const text = encodeURIComponent('Check out my Spices of India Cuisine profile!');
+        window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+    }
+}
+
+function editPreferences() {
+    showModal('Edit Dietary Preferences', `
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="vegetarian" checked>
+                    <label class="form-check-label" for="vegetarian">
+                        <i class="fas fa-seedling me-2"></i>Vegetarian
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="vegan">
+                    <label class="form-check-label" for="vegan">
+                        <i class="fas fa-leaf me-2"></i>Vegan
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="spicy" checked>
+                    <label class="form-check-label" for="spicy">
+                        <i class="fas fa-pepper-hot me-2"></i>Spicy Food
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="healthy" checked>
+                    <label class="form-check-label" for="healthy">
+                        <i class="fas fa-heart me-2"></i>Healthy Options
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="glutenfree">
+                    <label class="form-check-label" for="glutenfree">
+                        <i class="fas fa-wheat me-2"></i>Gluten-Free
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="lowcarb">
+                    <label class="form-check-label" for="lowcarb">
+                        <i class="fas fa-weight me-2"></i>Low Carb
+                    </label>
+                </div>
+            </div>
+        </div>
+    `, 'success', [
+        {
+            text: 'Cancel',
+            class: 'btn-secondary',
+            dismiss: true
+        },
+        {
+            text: 'Save Preferences',
+            class: 'btn-primary',
+            icon: 'fas fa-save',
+            callback: savePreferences
+        }
+    ]);
+}
+
+function savePreferences() {
+    // Simulate saving preferences
+    showSuccess('Dietary preferences updated successfully!');
+    
+    // Update the preferences display
+    setTimeout(() => {
+        location.reload();
+    }, 1500);
+}
+
+function shareOnFacebook() {
+    const url = encodeURIComponent(window.location.href);
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank', 'width=600,height=400');
+}
+
+function shareOnTwitter() {
+    const url = encodeURIComponent(window.location.href);
+    const text = encodeURIComponent('Just had an amazing meal from Spices of India Cuisine! 🍕🍔 #SpicesOfIndiaCuisine #FoodDelivery');
+    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank', 'width=600,height=400');
+}
+
+function shareOnWhatsApp() {
+    const url = encodeURIComponent(window.location.href);
+    const text = encodeURIComponent('Check out Spices of India Cuisine - amazing food delivery! ');
+    window.open(`https://wa.me/?text=${text}${url}`, '_blank');
+}
+
+function showAnalytics() {
+    showModal('Personal Analytics Dashboard', `
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card border-0 bg-light">
+                    <div class="card-body text-center">
+                        <i class="fas fa-chart-pie fa-2x text-primary mb-2"></i>
+                        <h5>Favorite Cuisine</h5>
+                        <h3 class="text-primary">Italian</h3>
+                        <small class="text-muted">35% of your orders</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 bg-light">
+                    <div class="card-body text-center">
+                        <i class="fas fa-clock fa-2x text-success mb-2"></i>
+                        <h5>Peak Order Time</h5>
+                        <h3 class="text-success">7:30 PM</h3>
+                        <small class="text-muted">Most active time</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 bg-light">
+                    <div class="card-body text-center">
+                        <i class="fas fa-calendar fa-2x text-warning mb-2"></i>
+                        <h5>Order Frequency</h5>
+                        <h3 class="text-warning">3.2x</h3>
+                        <small class="text-muted">Orders per week</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 bg-light">
+                    <div class="card-body text-center">
+                        <i class="fas fa-star fa-2x text-info mb-2"></i>
+                        <h5>Avg Rating Given</h5>
+                        <h3 class="text-info">4.8</h3>
+                        <small class="text-muted">Out of 5 stars</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-4">
+            <h6>Monthly Spending Trend</h6>
+            <div class="progress mb-2">
+                <div class="progress-bar bg-primary" style="width: 70%"></div>
+            </div>
+            <small class="text-muted">$2,450 this month (↑15% from last month)</small>
+        </div>
+    `, 'info');
+}
+
+function customizeNotifications() {
+    showModal('Customize Notifications', `
+        <div class="row g-3">
+            <div class="col-12">
+                <h6>Order Updates</h6>
+            </div>
+            <div class="col-md-6">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="orderConfirmed" checked>
+                    <label class="form-check-label" for="orderConfirmed">Order Confirmed</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="outForDelivery" checked>
+                    <label class="form-check-label" for="outForDelivery">Out for Delivery</label>
+                </div>
+            </div>
+            <div class="col-12 mt-4">
+                <h6>Promotional Offers</h6>
+            </div>
+            <div class="col-md-6">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="specialOffers" checked>
+                    <label class="form-check-label" for="specialOffers">Special Offers</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="newRestaurants">
+                    <label class="form-check-label" for="newRestaurants">New Restaurants</label>
+                </div>
+            </div>
+            <div class="col-12 mt-4">
+                <h6>Delivery Preferences</h6>
+            </div>
+            <div class="col-12">
+                <label for="notificationTime" class="form-label">Preferred notification time</label>
+                <select class="form-select" id="notificationTime">
+                    <option value="immediate">Immediately</option>
+                    <option value="5min" selected>5 minutes before</option>
+                    <option value="10min">10 minutes before</option>
+                    <option value="15min">15 minutes before</option>
+                </select>
+            </div>
+        </div>
+    `, 'warning', [
+        {
+            text: 'Cancel',
+            class: 'btn-secondary',
+            dismiss: true
+        },
+        {
+            text: 'Save Settings',
+            class: 'btn-primary',
+            icon: 'fas fa-save',
+            callback: () => showSuccess('Notification preferences updated!')
+        }
+    ]);
+}
+</script>
+{% endblock %}

@@ -1,0 +1,1 @@
+web: gunicorn cafe_delivery.wsgi:application --port $PORT --bind 0.0.0.0

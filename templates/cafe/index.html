@@ -1,0 +1,2188 @@
+{% extends 'cafe/base.html' %}
+{% load static %}
+
+{% block title %}Spices of India Cuisine - Fresh Food Delivered Fast{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Index Page Specific Styles */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeInScale {
+        from {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    @keyframes pulse {
+
+        0%,
+        100% {
+            opacity: 0.3;
+            transform: scale(1);
+        }
+
+        50% {
+            opacity: 0.6;
+            transform: scale(1.05);
+        }
+    }
+
+    .hero-section {
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4)),
+            url('https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?auto=format&fit=crop&q=80&w=2070') center/cover no-repeat;
+        min-height: 100vh;
+        /* Increased to full screen height */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        text-align: center;
+        color: white;
+        padding-top: 100px;
+        padding-bottom: 120px;
+        /* Added significant bottom padding */
+    }
+
+
+
+    .menu-item-card .card-body {
+        position: relative;
+        z-index: 2;
+        padding: 1.5rem;
+    }
+
+    /* Enhanced Category Cards */
+    .category-card {
+        border: none;
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        transition: var(--transition);
+        background: white;
+        box-shadow: var(--shadow-light);
+        position: relative;
+        transform: translateY(0);
+        height: 100%;
+    }
+
+    .category-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--primary-gradient);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        z-index: 1;
+    }
+
+    .category-card:hover::before {
+        opacity: 0.95;
+    }
+
+    .category-card:hover {
+        transform: translateY(-18px) scale(1.03);
+        box-shadow: var(--shadow-heavy);
+    }
+
+    .category-card:hover .card-body {
+        position: relative;
+        z-index: 2;
+        color: white;
+    }
+
+    .category-card:hover .card-body .card-title {
+        color: white;
+        transform: scale(1.05);
+        transition: all 0.3s ease;
+    }
+
+    .category-card:hover .card-body .card-text {
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .category-card:hover .badge {
+        background: rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        transform: scale(1.1);
+        transition: all 0.3s ease;
+    }
+
+    .hero-section::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 15vh;
+        background: linear-gradient(to top, var(--bg-cream), transparent);
+        z-index: 1;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .hero-title {
+        font-family: 'Dancing Script', cursive;
+        font-size: clamp(3.5rem, 10vw, 6.5rem);
+        color: #fff;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+        font-weight: 700;
+    }
+
+    .hero-subtitle {
+        font-size: clamp(1.1rem, 3vw, 1.4rem);
+        font-weight: 300;
+        margin-bottom: 2rem;
+        opacity: 0.95;
+        animation: fadeInUp 1s ease-out 0.2s both;
+        line-height: 1.6;
+    }
+
+    .hero-buttons {
+        animation: fadeInUp 1s ease-out 0.4s both;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1.5rem;
+        margin-top: 2.5rem;
+        position: relative;
+        z-index: 10;
+    }
+
+    .hero-btn-main {
+        background: #40CFFF !important;
+        color: #fff !important;
+        font-size: 1.2rem !important;
+        font-weight: 800 !important;
+        padding: 18px 45px !important;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        border: none !important;
+        box-shadow: 0 10px 25px rgba(64, 207, 255, 0.4) !important;
+        transition: all 0.3s ease !important;
+        display: inline-block;
+        text-decoration: none;
+    }
+
+    .hero-btn-main:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 15px 35px rgba(64, 207, 255, 0.6) !important;
+        background: #2cbbe8 !important;
+    }
+
+
+    /* Hero Responsive Adjustments */
+    @media (max-width: 992px) {
+        .hero-section {
+            min-height: 70vh;
+            padding: 2rem 1rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hero-section {
+            min-height: 60vh;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+        }
+
+        .hero-buttons .btn {
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 0.5rem;
+        }
+    }
+
+    /* Category Carousel Styles - Fully Responsive */
+    .category-carousel-wrapper {
+        position: relative;
+        padding: 20px 50px;
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    .category-carousel {
+        display: flex;
+        gap: 30px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-behavior: smooth;
+        padding: 20px 10px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .category-carousel::-webkit-scrollbar {
+        display: none;
+    }
+
+    .category-carousel-item {
+        flex: 0 0 auto;
+        text-align: center;
+        transition: transform 0.3s ease;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .category-carousel-item:hover {
+        transform: translateY(-10px);
+    }
+
+    .category-carousel-item:active {
+        transform: translateY(-5px);
+    }
+
+    .category-circle {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+    }
+
+    .category-carousel-item:hover .category-circle {
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+        transform: scale(1.05);
+    }
+
+    .category-circle img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .category-name {
+        margin-top: 12px;
+        font-weight: 600;
+        font-size: 1rem;
+        color: #333;
+        text-align: center;
+        max-width: 140px;
+        word-wrap: break-word;
+        line-height: 1.3;
+    }
+
+    .carousel-nav-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: white;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        color: #ff4d4d;
+        font-size: 1.2rem;
+    }
+
+    .carousel-nav-btn:hover {
+        background: #ff4d4d;
+        color: white;
+        box-shadow: 0 6px 20px rgba(255, 77, 77, 0.4);
+    }
+
+    .carousel-nav-btn:active {
+        transform: translateY(-50%) scale(0.95);
+    }
+
+    .carousel-nav-prev {
+        left: 5px;
+    }
+
+    .carousel-nav-next {
+        right: 5px;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 991px) {
+        .category-carousel-wrapper {
+            padding: 15px 45px;
+        }
+
+        .category-carousel {
+            gap: 25px;
+            padding: 15px 8px;
+        }
+
+        .category-circle {
+            width: 120px;
+            height: 120px;
+        }
+
+        .category-name {
+            font-size: 0.95rem;
+            max-width: 120px;
+            margin-top: 10px;
+        }
+
+        .carousel-nav-btn {
+            width: 40px;
+            height: 40px;
+            font-size: 1.1rem;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .category-carousel-wrapper {
+            padding: 12px 38px;
+        }
+
+        .category-carousel {
+            gap: 20px;
+            padding: 12px 5px;
+        }
+
+        .category-circle {
+            width: 100px;
+            height: 100px;
+        }
+
+        .category-name {
+            font-size: 0.875rem;
+            max-width: 100px;
+            margin-top: 8px;
+        }
+
+        .carousel-nav-btn {
+            width: 35px;
+            height: 35px;
+            font-size: 1rem;
+        }
+
+        .carousel-nav-prev {
+            left: 2px;
+        }
+
+        .carousel-nav-next {
+            right: 2px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .category-carousel-wrapper {
+            padding: 10px 32px;
+        }
+
+        .category-carousel {
+            gap: 15px;
+            padding: 10px 3px;
+        }
+
+        .category-circle {
+            width: 85px;
+            height: 85px;
+        }
+
+        .category-name {
+            font-size: 0.8rem;
+            max-width: 85px;
+            margin-top: 6px;
+        }
+
+        .carousel-nav-btn {
+            width: 30px;
+            height: 30px;
+            font-size: 0.9rem;
+        }
+
+        .carousel-nav-prev {
+            left: 0;
+        }
+
+        .carousel-nav-next {
+            right: 0;
+        }
+    }
+
+    @media (max-width: 374px) {
+        .category-carousel-wrapper {
+            padding: 8px 28px;
+        }
+
+        .category-carousel {
+            gap: 12px;
+        }
+
+        .category-circle {
+            width: 75px;
+            height: 75px;
+        }
+
+        .category-name {
+            font-size: 0.75rem;
+            max-width: 75px;
+            margin-top: 5px;
+        }
+
+        .carousel-nav-btn {
+            width: 28px;
+            height: 28px;
+            font-size: 0.85rem;
+        }
+    }
+
+    @media (max-height: 500px) and (orientation: landscape) {
+        .category-carousel-wrapper {
+            padding: 8px 35px;
+        }
+
+        .category-circle {
+            width: 80px;
+            height: 80px;
+        }
+
+        .category-name {
+            font-size: 0.8rem;
+            max-width: 80px;
+            margin-top: 5px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Food Truck Styled Hero Section -->
+<section class="hero-section">
+    <div class="container hero-content">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-10">
+                <div class="brand-phone mb-4 text-white fw-bold" style="font-size: 1.2rem; letter-spacing: 2px;">
+                    +1.214.493.5266
+                </div>
+
+                <h1 class="hero-title">Experience True Indian Flavors</h1>
+
+                <div class="title-separator mx-auto mb-4"
+                    style="width: 300px; height: 1px; background: rgba(255,255,255,0.5);"></div>
+
+                <p class="hero-subtitle text-white mb-5" style="font-size: 1.5rem; letter-spacing: 0.5px;">
+                    Delight in Genuine Indian & Indo-Chinese Street Food
+                </p>
+
+                <div class="hero-buttons">
+                    <a href="{% url 'menu' %}" class="hero-btn-main">
+                        EXPLORE OUR MENU
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Cinematic Introduction Section from Official Site -->
+<section class="py-5 bg-white overflow-hidden">
+    <div class="container py-lg-5">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <div class="position-relative">
+                    <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&q=80&w=1024"
+                        alt="Authentic Indian Tandoori" class="img-fluid rounded-4 shadow-lg w-100"
+                        style="object-fit: cover; height: 500px;">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="ps-lg-4">
+                    <span class="badge bg-light text-primary px-3 py-2 mb-3 rounded-pill">OUR STORY</span>
+                    <h2 class="display-3 fw-bold mb-4 font-cursive text-cocoa"
+                        style="font-size: clamp(2.5rem, 5vw, 3.8rem);">
+                        Savor Authentic Indian Flavors
+                    </h2>
+                    <p class="lead text-muted mb-5 font-serif" style="font-size: 1.25rem;">
+                        Experience INDIA’s bold flavors at <span class="text-primary fw-bold">Spices of India
+                            Cuisine</span>.
+                        Dive into our authentic dishes and street food fusion.
+                        Join us at <span class="fw-bold">7200 FM 741, Forney, TX 75126</span>, or call
+                        <span class="fw-bold">214-493-5266</span> for a taste of tradition.
+                    </p>
+                    <div class="d-flex gap-3">
+                        <a href="{% url 'menu' %}" class="btn px-4 py-3 rounded-0 fw-bold"
+                            style="background: #222; color: #fff; border: none; letter-spacing: 1px;">
+                            ORDER PICKUP
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Home Top Advertisements -->
+{% if advertisements.home_top_ads %}
+<section class="py-4 bg-white">
+    <div class="container">
+        <div class="row g-3">
+            {% for ad in advertisements.home_top_ads %}
+            {% if ad.ad_type == 'banner' %}
+            <!-- Banner Ad -->
+            <div class="col-12">
+                <div class="banner-ad"
+                    style="background: linear-gradient(135deg, {{ ad.gradient_start }} 0%, {{ ad.gradient_end }} 100%);">
+                    <div class="banner-content">
+                        <div class="banner-left">
+                            {% if ad.badge_text %}
+                            <span class="banner-tag">{{ ad.badge_text }}</span>
+                            {% endif %}
+                            <h2 class="banner-title">{{ ad.title }}</h2>
+                            {% if ad.subtitle %}
+                            <p class="banner-text">{{ ad.subtitle }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="banner-right">
+                            <a href="{{ ad.button_url }}" class="btn btn-banner">
+                                <i class="fas {{ ad.icon_class }} me-2"></i>{{ ad.button_text }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% elif ad.ad_type == 'promo_card' %}
+            <!-- Promo Card -->
+            <div class="col-md-6">
+                <div class="promo-card"
+                    style="background: linear-gradient(135deg, {{ ad.gradient_start }} 0%, {{ ad.gradient_end }} 100%);">
+                    <div class="promo-content">
+                        {% if ad.badge_text %}
+                        <div class="promo-badge">{{ ad.badge_text }}</div>
+                        {% endif %}
+                        <h3 class="promo-title">{{ ad.title }}</h3>
+                        {% if ad.subtitle %}
+                        <p class="promo-subtitle">{{ ad.subtitle }}</p>
+                        {% endif %}
+                        {% if ad.description %}
+                        <p class="promo-description">{{ ad.description }}</p>
+                        {% endif %}
+                        {% if user.is_authenticated and ad.coupon_code %}
+                        <button onclick="claimOffer('{{ ad.coupon_code }}', '{{ ad.description }}')"
+                            class="btn btn-promo">
+                            <i class="fas {{ ad.icon_class }} me-2"></i>{{ ad.button_text }}
+                        </button>
+                        {% else %}
+                        <a href="{{ ad.button_url }}" class="btn btn-promo">
+                            <i class="fas {{ ad.icon_class }} me-2"></i>{{ ad.button_text }}
+                        </a>
+                        {% endif %}
+                        {% if ad.promo_code_text %}
+                        <div class="promo-code">{{ ad.promo_code_text }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="promo-icon">
+                        <i class="fas {{ ad.icon_class }}"></i>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Category Carousel Section - What's on your mind? -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h3 class="text-center mb-4 fw-bold" style="color: #2d3748;">What's on your mind?</h3>
+
+        <div class="category-carousel-wrapper position-relative">
+            <button class="carousel-nav-btn carousel-nav-prev" id="homeCategoryPrev">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="carousel-nav-btn carousel-nav-next" id="homeCategoryNext">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+
+            <div class="category-carousel" id="homeCategoryCarousel">
+                <!-- Biryani -->
+                <a href="{% url 'menu' %}?category=biryani" class="category-carousel-item text-decoration-none">
+                    <div class="category-circle">
+                        <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=200&h=200&fit=crop"
+                            alt="Biryani">
+                    </div>
+                    <p class="category-name">Biryani</p>
+                </a>
+
+                <!-- Tandoori -->
+                <a href="{% url 'menu' %}?category=tandoori" class="category-carousel-item text-decoration-none">
+                    <div class="category-circle">
+                        <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=200&h=200&fit=crop"
+                            alt="Tandoori">
+                    </div>
+                    <p class="category-name">Tandoori</p>
+                </a>
+
+                <!-- Curries -->
+                <a href="{% url 'menu' %}?category=curries" class="category-carousel-item text-decoration-none">
+                    <div class="category-circle">
+                        <img src="https://images.unsplash.com/photo-1512132411229-c30391241dd8?w=200&h=200&fit=crop"
+                            alt="Curries">
+                    </div>
+                    <p class="category-name">Curries</p>
+                </a>
+
+                <!-- Biryani -->
+                <a href="{% url 'menu' %}?category=biryani" class="category-carousel-item text-decoration-none">
+                    <div class="category-circle">
+                        <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=200&h=200&fit=crop"
+                            alt="Biryani">
+                    </div>
+                    <p class="category-name">Biryani</p>
+                </a>
+
+                <!-- Chinese -->
+                <a href="{% url 'menu' %}?category=chinese" class="category-carousel-item text-decoration-none">
+                    <div class="category-circle">
+                        <img src="https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?w=200&h=200&fit=crop"
+                            alt="Chinese">
+                    </div>
+                    <p class="category-name">Chinese</p>
+                </a>
+
+                <!-- Dessert -->
+                <a href="{% url 'menu' %}?category=dessert" class="category-carousel-item text-decoration-none">
+                    <div class="category-circle">
+                        <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=200&h=200&fit=crop"
+                            alt="Dessert">
+                    </div>
+                    <p class="category-name">Dessert</p>
+                </a>
+
+                <!-- Coffee -->
+                <a href="{% url 'menu' %}?category=beverages" class="category-carousel-item text-decoration-none">
+                    <div class="category-circle">
+                        <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=200&h=200&fit=crop"
+                            alt="Coffee">
+                    </div>
+                    <p class="category-name">Coffee</p>
+                </a>
+
+                <!-- Healthy -->
+                <a href="{% url 'menu' %}?category=salads" class="category-carousel-item text-decoration-none">
+                    <div class="category-circle">
+                        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=200&h=200&fit=crop"
+                            alt="Healthy">
+                    </div>
+                    <p class="category-name">Healthy</p>
+                </a>
+
+                <!-- Pasta -->
+                <a href="{% url 'menu' %}?category=pasta" class="category-carousel-item text-decoration-none">
+                    <div class="category-circle">
+                        <img src="https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=200&h=200&fit=crop"
+                            alt="Pasta">
+                    </div>
+                    <p class="category-name">Pasta</p>
+                </a>
+
+                <!-- Chicken -->
+                <a href="{% url 'menu' %}?category=chicken" class="category-carousel-item text-decoration-none">
+                    <div class="category-circle">
+                        <img src="https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=200&h=200&fit=crop"
+                            alt="Chicken">
+                    </div>
+                    <p class="category-name">Chicken</p>
+                </a>
+
+                <!-- Sandwich -->
+                <a href="{% url 'menu' %}?category=sandwiches" class="category-carousel-item text-decoration-none">
+                    <div class="category-circle">
+                        <img src="https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=200&h=200&fit=crop"
+                            alt="Sandwich">
+                    </div>
+                    <p class="category-name">Sandwich</p>
+                </a>
+
+                <!-- Rolls -->
+                <a href="{% url 'menu' %}?category=rolls" class="category-carousel-item text-decoration-none">
+                    <div class="category-circle">
+                        <img src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=200&h=200&fit=crop"
+                            alt="Rolls">
+                    </div>
+                    <p class="category-name">Rolls</p>
+                </a>
+
+                <!-- Ice Cream -->
+                <a href="{% url 'menu' %}?category=ice-cream" class="category-carousel-item text-decoration-none">
+                    <div class="category-circle">
+                        <img src="https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=200&h=200&fit=crop"
+                            alt="Ice Cream">
+                    </div>
+                    <p class="category-name">Ice Cream</p>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Popular Dishes - Menu Section -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="menu-section-header text-center">
+            <span class="section-tag">Most Ordered</span>
+            <h2 class="display-3 fw-bold mb-3" style="font-family: 'Playfair Display', serif; color: #1a202c;">Our
+                Popular Dishes</h2>
+            <p class="text-muted mx-auto" style="max-width: 650px; font-size: 1.1rem;">Experience the most loved
+                authentic flavors from our kitchen, prepared with tradition and care by our expert chefs.</p>
+        </div>
+
+        <div class="row g-4 mt-2">
+            <!-- Dish 1: Biryani -->
+            <div class="col-lg-4 col-md-6">
+                <div class="popular-dish-card">
+                    <div class="popular-dish-img-wrapper">
+                        <span class="dish-badge">Best Seller</span>
+                        <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&q=80&w=800"
+                            alt="Special Hyderabad Biryani">
+                        <div class="dish-overlay"></div>
+                    </div>
+                    <div class="popular-dish-content">
+                        <h3 class="popular-dish-title">Special Hyderabad Biryani</h3>
+                        <p class="popular-dish-desc">Fragrant basmati rice layered with tender marinated lamb, exotic
+                            spices, and caramelized onions, cooked slow in 'Dum' style.</p>
+                        <div class="popular-dish-footer">
+                            <span class="dish-price">$12.99</span>
+                            <a href="javascript:void(0)" onclick="quickAddToCart(247, event)" class="btn-order-now">
+                                <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dish 2: Butter Chicken -->
+            <div class="col-lg-4 col-md-6">
+                <div class="popular-dish-card">
+                    <div class="popular-dish-img-wrapper">
+                        <span class="dish-badge">Popular</span>
+                        <img src="https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?auto=format&fit=crop&q=80&w=800"
+                            alt="Classic Butter Chicken">
+                        <div class="dish-overlay"></div>
+                    </div>
+                    <div class="popular-dish-content">
+                        <h3 class="popular-dish-title">Classic Butter Chicken</h3>
+                        <p class="popular-dish-desc">Succulent pieces of tandoori chicken simmered in a rich, velvety
+                            tomato and cream gravy with aromatic spices.</p>
+                        <div class="popular-dish-footer">
+                            <span class="dish-price">$14.50</span>
+                            <a href="javascript:void(0)" onclick="quickAddToCart(242, event)" class="btn-order-now">
+                                <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dish 3: Paneer Tikka -->
+            <div class="col-lg-4 col-md-6">
+                <div class="popular-dish-card">
+                    <div class="popular-dish-img-wrapper">
+                        <span class="dish-badge">Vegetarian</span>
+                        <img src="https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&q=80&w=800"
+                            alt="Premium Paneer Tikka">
+                        <div class="dish-overlay"></div>
+                    </div>
+                    <div class="popular-dish-content">
+                        <h3 class="popular-dish-title">Premium Paneer Tikka</h3>
+                        <p class="popular-dish-desc">Fresh cottage cheese cubes marinated in spiced yogurt and grilled
+                            to a golden char in our traditional clay tandoor.</p>
+                        <div class="popular-dish-footer">
+                            <span class="dish-price">$11.25</span>
+                            <a href="javascript:void(0)" onclick="quickAddToCart(249, event)" class="btn-order-now">
+                                <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="{% url 'menu' %}" class="btn px-5 py-3 fw-bold rounded-pill"
+                style="border: 2px solid var(--primary-color); color: var(--primary-color); transition: all 0.3s ease; letter-spacing: 1px;">
+                VIEW FULL MENU <i class="fas fa-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- Promotional Advertisements Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        {% if advertisements.home_middle_ads %}
+        <div class="row g-4">
+            {% for ad in advertisements.home_middle_ads %}
+            {% if ad.ad_type == 'promo_card' %}
+            <!-- Promo Card -->
+            <div class="col-md-6">
+                <div class="promo-card"
+                    style="background: linear-gradient(135deg, {{ ad.gradient_start }} 0%, {{ ad.gradient_end }} 100%);">
+                    <div class="promo-content">
+                        {% if ad.badge_text %}
+                        <div class="promo-badge">{{ ad.badge_text }}</div>
+                        {% endif %}
+                        <h3 class="promo-title">{{ ad.title }}</h3>
+                        {% if ad.subtitle %}
+                        <p class="promo-subtitle">{{ ad.subtitle }}</p>
+                        {% endif %}
+                        {% if ad.description %}
+                        <p class="promo-description">{{ ad.description }}</p>
+                        {% endif %}
+                        {% if user.is_authenticated and ad.coupon_code %}
+                        <button onclick="claimOffer('{{ ad.coupon_code }}', '{{ ad.description }}')"
+                            class="btn btn-promo">
+                            <i class="fas {{ ad.icon_class }} me-2"></i>{{ ad.button_text }}
+                        </button>
+                        {% else %}
+                        <a href="{{ ad.button_url }}" class="btn btn-promo">
+                            <i class="fas {{ ad.icon_class }} me-2"></i>{{ ad.button_text }}
+                        </a>
+                        {% endif %}
+                        {% if ad.promo_code_text %}
+                        <div class="promo-code">{{ ad.promo_code_text }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="promo-icon">
+                        <i class="fas {{ ad.icon_class }}"></i>
+                    </div>
+                </div>
+            </div>
+            {% elif ad.ad_type == 'banner' %}
+            <!-- Banner Ad -->
+            <div class="col-12">
+                <div class="banner-ad"
+                    style="background: linear-gradient(135deg, {{ ad.gradient_start }} 0%, {{ ad.gradient_end }} 100%);">
+                    <div class="banner-content">
+                        <div class="banner-left">
+                            {% if ad.badge_text %}
+                            <span class="banner-tag">{{ ad.badge_text }}</span>
+                            {% endif %}
+                            <h2 class="banner-title">{{ ad.title }}</h2>
+                            {% if ad.subtitle %}
+                            <p class="banner-text">{{ ad.subtitle }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="banner-right">
+                            <a href="{{ ad.button_url }}" class="btn btn-banner">
+                                <i class="fas {{ ad.icon_class }} me-2"></i>{{ ad.button_text }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% else %}
+        <!-- Default Ads if no custom ads are set -->
+        <div class="row g-4">
+            <!-- Ad 1: First Order Discount -->
+            <div class="col-md-6">
+                <div class="promo-card promo-card-1">
+                    <div class="promo-content">
+                        <div class="promo-badge">NEW USER OFFER</div>
+                        <h3 class="promo-title">Get 50% OFF</h3>
+                        <p class="promo-subtitle">On Your First Order</p>
+                        <p class="promo-description">Sign up today and enjoy half-price on your first delicious meal!
+                        </p>
+                        {% if user.is_authenticated %}
+                        <button onclick="claimOffer('FIRST50', '50% off on your first order')" class="btn btn-promo">
+                            <i class="fas fa-gift me-2"></i>Claim Offer
+                        </button>
+                        {% else %}
+                        <a href="{% url 'signup' %}?next={% url 'menu' %}&offer=FIRST50" class="btn btn-promo">
+                            <i class="fas fa-gift me-2"></i>Claim Offer
+                        </a>
+                        {% endif %}
+                        <div class="promo-code">Use Code: <strong>FIRST50</strong></div>
+                    </div>
+                    <div class="promo-icon">
+                        <i class="fas fa-percent"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ad 2: Free Delivery -->
+            <div class="col-md-6">
+                <div class="promo-card promo-card-2">
+                    <div class="promo-content">
+                        <div class="promo-badge">LIMITED TIME</div>
+                        <h3 class="promo-title">FREE Delivery</h3>
+                        <p class="promo-subtitle">On Orders Above $299</p>
+                        <p class="promo-description">No delivery charges! Get your favorite food delivered to your
+                            doorstep.</p>
+                        <a href="{% url 'menu' %}" class="btn btn-promo">
+                            <i class="fas fa-motorcycle me-2"></i>Order Now
+                        </a>
+                        <div class="promo-code">Min Order: <strong>$299</strong></div>
+                    </div>
+                    <div class="promo-icon">
+                        <i class="fas fa-shipping-fast"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Mini Ads Row -->
+        <div class="row g-3 mt-4">
+            <div class="col-md-4">
+                <div class="mini-ad mini-ad-1">
+                    <i class="fas fa-clock"></i>
+                    <div>
+                        <h5>Fast Delivery</h5>
+                        <p>30 mins or FREE</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mini-ad mini-ad-2">
+                    <i class="fas fa-star"></i>
+                    <div>
+                        <h5>Quality Food</h5>
+                        <p>Fresh & Hygienic</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mini-ad mini-ad-3">
+                    <i class="fas fa-headset"></i>
+                    <div>
+                        <h5>24/7 Support</h5>
+                        <p>Always Here to Help</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Promotional Cards */
+    .promo-card {
+        position: relative;
+        border-radius: 20px;
+        padding: 2rem;
+        min-height: 280px;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        transition: all 0.4s ease;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .promo-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    }
+
+    .promo-card-1 {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .promo-card-2 {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+    }
+
+    .promo-content {
+        flex: 1;
+        z-index: 2;
+    }
+
+    .promo-badge {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.3);
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        margin-bottom: 1rem;
+        backdrop-filter: blur(10px);
+    }
+
+    .promo-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        line-height: 1;
+    }
+
+    .promo-subtitle {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        opacity: 0.95;
+    }
+
+    .promo-description {
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+        opacity: 0.9;
+    }
+
+    .btn-promo {
+        background: white;
+        color: #333;
+        padding: 0.75rem 1.5rem;
+        border-radius: 30px;
+        font-weight: 600;
+        border: none;
+        transition: all 0.3s ease;
+        display: inline-block;
+        text-decoration: none;
+    }
+
+    .btn-promo:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        color: #333;
+    }
+
+    .promo-code {
+        margin-top: 1rem;
+        font-size: 0.9rem;
+        opacity: 0.9;
+    }
+
+    .promo-icon {
+        font-size: 8rem;
+        opacity: 0.15;
+        position: absolute;
+        right: -20px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 1;
+    }
+
+    /* Banner Ad */
+    .banner-ad {
+        background: linear-gradient(135deg, #ff4d4d 0%, #ff6b35 100%);
+        border-radius: 20px;
+        padding: 2rem 3rem;
+        color: white;
+        box-shadow: 0 10px 40px rgba(255, 77, 77, 0.3);
+        overflow: hidden;
+        position: relative;
+    }
+
+    .banner-ad::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -10%;
+        width: 300px;
+        height: 300px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+    }
+
+    .banner-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+    }
+
+    .banner-tag {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+    }
+
+    .banner-title {
+        font-size: 2rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+    }
+
+    .banner-text {
+        font-size: 1rem;
+        opacity: 0.95;
+        margin: 0;
+    }
+
+    .btn-banner {
+        background: white;
+        color: #ff4d4d;
+        padding: 0.875rem 2rem;
+        border-radius: 30px;
+        font-weight: 700;
+        border: none;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-banner:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        color: #ff4d4d;
+    }
+
+    /* Mini Ads */
+    .mini-ad {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        border-left: 4px solid;
+    }
+
+    .mini-ad:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .mini-ad-1 {
+        border-color: #11998e;
+    }
+
+    .mini-ad-2 {
+        border-color: #f5576c;
+    }
+
+    .mini-ad-3 {
+        border-color: #4facfe;
+    }
+
+    .mini-ad i {
+        font-size: 2.5rem;
+        opacity: 0.8;
+    }
+
+    .mini-ad-1 i {
+        color: #11998e;
+    }
+
+    .mini-ad-2 i {
+        color: #f5576c;
+    }
+
+    .mini-ad-3 i {
+        color: #4facfe;
+    }
+
+    .mini-ad h5 {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #333;
+    }
+
+    .mini-ad p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .promo-card {
+            min-height: 240px;
+            padding: 1.5rem;
+        }
+
+        .promo-title {
+            font-size: 2rem;
+        }
+
+        .promo-subtitle {
+            font-size: 1rem;
+        }
+
+        .promo-icon {
+            font-size: 5rem;
+            right: -10px;
+        }
+
+        .banner-content {
+            flex-direction: column;
+            text-align: center;
+            gap: 1.5rem;
+        }
+
+        .banner-title {
+            font-size: 1.5rem;
+        }
+
+        .banner-ad {
+            padding: 1.5rem;
+        }
+
+        .mini-ad {
+            padding: 1rem;
+        }
+
+        .mini-ad i {
+            font-size: 2rem;
+        }
+
+        .mini-ad h5 {
+            font-size: 1rem;
+        }
+
+        .mini-ad p {
+            font-size: 0.85rem;
+        }
+    }
+</style>
+
+<!-- Restaurant Showcase Section -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="restaurant-info">
+                    <h2 class="display-5 fw-bold mb-3">The Sapphire Spice Gallery</h2>
+                    <p class="lead text-muted mb-4">Elegance, Tradition, Delivered - Your elite dining destination</p>
+
+                    <div class="restaurant-stats mb-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="stat-icon me-3">
+                                <i class="fas fa-star text-warning"></i>
+                            </div>
+                            <div>
+                                <strong class="fs-5">4.9</strong>
+                                <span class="text-muted">(3.2K+ ratings)</span>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="stat-icon me-3">
+                                <i class="fas fa-clock text-primary"></i>
+                            </div>
+                            <div>
+                                <strong class="fs-5">15-25 mins</strong>
+                                <span class="text-muted">priority delivery</span>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="stat-icon me-3">
+                                <i class="fas fa-gem text-info"></i>
+                            </div>
+                            <div>
+                                <strong class="fs-5">Premium</strong>
+                                <span class="text-muted">Fine Dining Experience</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="category-tags mb-4">
+                        <span class="badge bg-light text-dark px-3 py-2 me-2 mb-2">
+                            <i class="fas fa-crown me-1" style="color: #D4AF37;"></i>Signature Biryani
+                        </span>
+                        <span class="badge bg-light text-dark px-3 py-2 me-2 mb-2">
+                            <i class="fas fa-fire-alt me-1" style="color: #ff4d4d;"></i>Elite Tandoor
+                        </span>
+                        <span class="badge bg-light text-dark px-3 py-2 me-2 mb-2">
+                            <i class="fas fa-leaf me-1" style="color: #28a745;"></i>Pure Gourmet
+                        </span>
+                    </div>
+
+                    <a href="{% url 'menu' %}" class="btn btn-primary btn-lg px-5 py-3 shadow-lg"
+                        style="border-radius: 50px; background: linear-gradient(135deg, #001f3f 0%, #003366 100%); border: none;">
+                        <i class="fas fa-utensils me-2"></i>Explore Elite Menu
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="restaurant-image-container">
+                    <img src="https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&q=80&w=1200"
+                        alt="The Sapphire Spice Gallery Elite Interior" class="img-fluid rounded-4 shadow-lg w-100"
+                        style="height: 450px; object-fit: cover;">
+                    <div class="image-overlay">
+                        <div class="overlay-badge" style="color: #003366;">
+                            <i class="fas fa-crown me-2" style="color: #D4AF37;"></i>
+                            <span>Elite Dining Selection</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .restaurant-info {
+        padding: 20px 0;
+    }
+
+    .stat-icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+    }
+
+    .category-tags .badge {
+        font-size: 0.9rem;
+        font-weight: 500;
+        border: 1px solid #e0e0e0;
+        transition: all 0.3s ease;
+    }
+
+    .category-tags .badge:hover {
+        background: var(--gradient-primary) !important;
+        color: white !important;
+        border-color: transparent;
+        transform: translateY(-2px);
+    }
+
+    .restaurant-image-container {
+        position: relative;
+        overflow: hidden;
+        border-radius: 20px;
+    }
+
+    .restaurant-image-container img {
+        transition: transform 0.5s ease;
+    }
+
+    .restaurant-image-container:hover img {
+        transform: scale(1.05);
+    }
+
+    .image-overlay {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        z-index: 2;
+    }
+
+    .overlay-badge {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 12px 24px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: #ff4d4d;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        display: inline-flex;
+        align-items: center;
+    }
+
+    @media (max-width: 991px) {
+        .restaurant-image-container img {
+            height: 300px !important;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .restaurant-info {
+            text-align: center;
+        }
+
+        .restaurant-stats {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .restaurant-stats>div {
+            justify-content: center;
+        }
+
+        .category-tags {
+            text-align: center;
+        }
+
+        .restaurant-image-container img {
+            height: 280px !important;
+        }
+
+        .image-overlay {
+            top: 15px;
+            left: 15px;
+        }
+
+        .overlay-badge {
+            padding: 10px 20px;
+            font-size: 1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .restaurant-image-container img {
+            height: 240px !important;
+        }
+    }
+</style>
+
+<!-- Featured Items Section -->
+<section id="featured" class="py-5">
+    <div class="container">
+        <div class="text-center mb-5 animate-on-scroll">
+            <h2 class="display-5 fw-bold mb-3">
+                <span
+                    style="background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                    Featured Delights
+                </span>
+            </h2>
+            <p class="lead text-muted">Discover our most popular dishes loved by thousands of customers</p>
+            <div class="mx-auto"
+                style="width: 100px; height: 4px; background: var(--gradient-primary); border-radius: 2px;">
+            </div>
+        </div>
+
+        {% if featured_items %}
+        <div class="row">
+            {% for item in featured_items %}
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 mb-4 animate-on-scroll" data-delay="{{ forloop.counter0 }}">
+                <div class="card menu-item-card h-100">
+                    <div class="position-relative overflow-hidden">
+                        {% if item.get_image_url %}
+                        <img src="{{ item.get_image_url }}" class="card-img-top" alt="{{ item.name }}">
+                        {% endif %}
+                        {% if item.has_discount %}
+                        <div class="position-absolute top-0 start-0 m-3">
+                            <span class="badge bg-danger px-3 py-2 rounded-pill">
+                                <i class="fas fa-fire me-1"></i>{{ item.discount }}% OFF
+                            </span>
+                        </div>
+                        {% endif %}
+                        <div class="position-absolute top-0 end-0 m-3">
+                            <span class="badge bg-success px-3 py-2 rounded-pill">
+                                <i class="fas fa-star me-1"></i>Featured
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body d-flex flex-column p-3">
+                        <div class="mb-2">
+                            <div class="category-highlight">{{ item.category.name }}</div>
+                        </div>
+                        <h5 class="card-title fw-bold mb-2">
+                            {% if item.is_vegetarian %}
+                            <span class="veg-badge me-1" title="Vegetarian"><i class="fas fa-circle"></i>VEG</span>
+                            {% else %}
+                            <span class="non-veg-badge me-1" title="Non-Vegetarian"><i
+                                    class="fas fa-play fa-rotate-270"></i>NON-VEG</span>
+                            {% endif %}
+                            {{ item.name }}
+                        </h5>
+                        <p class="card-text text-muted flex-grow-1 mb-3">{{ item.description|truncatewords:15 }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="price">
+                                {% if item.has_discount %}
+                                <span class="text-decoration-line-through text-muted me-2">${{ item.price }}</span>
+                                <span class="fw-bold text-success fs-5">${{ item.discounted_price }}</span>
+                                {% else %}
+                                <span class="fw-bold text-success fs-5">${{ item.price }}</span>
+                                {% endif %}
+                            </div>
+                            {% if user.is_authenticated %}
+                            <button class="btn btn-primary btn-modern add-to-cart-btn" data-item-id="{{ item.id }}"
+                                style="padding: 10px 20px;">
+                                <i class="fas fa-plus me-1"></i>Add
+                            </button>
+                            {% else %}
+                            <a href="{% url 'login' %}" class="btn btn-outline-primary btn-modern"
+                                style="padding: 10px 20px;">
+                                <i class="fas fa-sign-in-alt me-1"></i>Login
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center animate-on-scroll">
+            <div class="p-5">
+                <i class="fas fa-utensils fa-4x text-muted mb-3"></i>
+                <p class="lead">No featured items available at the moment.</p>
+                <p class="text-muted">Check back soon for delicious new additions!</p>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="text-center mt-5 animate-on-scroll">
+            <a href="{% url 'menu' %}" class="btn btn-primary btn-modern btn-lg">
+                <i class="fas fa-utensils me-2"></i>Explore Full Menu
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- App Download Section -->
+<section class="py-5" style="background: linear-gradient(135deg, #ff4d4d 0%, #ff6b35 100%);">
+    <div class="container">
+        <div class="row align-items-center animate-on-scroll">
+            <div class="col-lg-6 text-white mb-4 mb-lg-0">
+                <h2 class="display-5 fw-bold mb-4">Get the Spices of India Cuisine App</h2>
+                <p class="lead mb-4">Order food anytime, anywhere. Download our app for exclusive deals and faster
+                    checkout.</p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="#" class="btn btn-light btn-lg d-flex align-items-center"
+                        style="border-radius: 15px; padding: 12px 24px;">
+                        <i class="fab fa-apple fa-2x me-3"></i>
+                        <div class="text-start">
+                            <small class="d-block" style="font-size: 0.7rem;">Download on the</small>
+                            <strong style="font-size: 1.1rem;">App Store</strong>
+                        </div>
+                    </a>
+                    <a href="#" class="btn btn-light btn-lg d-flex align-items-center"
+                        style="border-radius: 15px; padding: 12px 24px;">
+                        <i class="fab fa-google-play fa-2x me-3"></i>
+                        <div class="text-start">
+                            <small class="d-block" style="font-size: 0.7rem;">Get it on</small>
+                            <strong style="font-size: 1.1rem;">Google Play</strong>
+                        </div>
+                    </a>
+                </div>
+                <div class="mt-4">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <span>Exclusive app-only deals</span>
+                    </div>
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <span>Track your order in real-time</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <span>Save your favorite orders</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="position-relative" style="max-width: 400px; margin: 0 auto;">
+                    <div
+                        style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 30px; padding: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+                        <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&h=300&fit=crop"
+                            alt="Mobile App" class="img-fluid rounded-4 shadow-lg"
+                            style="max-height: 400px; object-fit: cover;">
+                    </div>
+                    <!-- Floating badges -->
+                    <div class="position-absolute top-0 start-0 m-3" style="animation: float 3s ease-in-out infinite;">
+                        <div class="badge bg-white text-dark px-3 py-2 shadow-lg" style="border-radius: 20px;">
+                            <i class="fas fa-star text-warning me-1"></i>
+                            <strong>4.8</strong> Rating
+                        </div>
+                    </div>
+                    <div class="position-absolute bottom-0 end-0 m-3"
+                        style="animation: float 3s ease-in-out infinite 1.5s;">
+                        <div class="badge bg-white text-dark px-3 py-2 shadow-lg" style="border-radius: 20px;">
+                            <i class="fas fa-download text-success me-1"></i>
+                            <strong>50K+</strong> Downloads
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="cta-section animate-on-scroll">
+            <div class="position-relative" style="z-index: 2;">
+                <h3 class="display-6 fw-bold mb-4">
+                    Ready to Experience Amazing Food?
+                </h3>
+                <p class="lead text-muted mb-4">
+                    Join thousands of satisfied customers and discover why we're the #1 choice for food delivery.
+                    Fresh ingredients, expert chefs, and lightning-fast delivery - all in one place.
+                </p>
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    <a href="{% url 'menu' %}" class="btn btn-primary btn-modern btn-lg">
+                        <i class="fas fa-shopping-cart me-2"></i>Start Ordering Now
+                    </a>
+                    {% if not user.is_authenticated %}
+                    <a href="{% url 'signup' %}" class="btn btn-outline-primary btn-modern btn-lg">
+                        <i class="fas fa-user-plus me-2"></i>Join Us Today
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function (entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Add to cart functionality
+        const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const itemId = this.dataset.itemId;
+                const originalText = this.innerHTML;
+
+                // Show loading state
+                this.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Adding...';
+                this.disabled = true;
+
+                addToCart(itemId, 1, this, originalText);
+            });
+        });
+
+        function addToCart(itemId, quantity, button, originalText) {
+            fetch('{% url "add_to_cart" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: `menu_item_id=${itemId}&quantity=${quantity}`
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Use enhanced cart notification from main.js if available
+                        if (window.cart && window.cart.showCartNotification) {
+                            window.cart.showCartNotification(
+                                data.message,
+                                'success',
+                                data.item_name,
+                                data.item_image
+                            );
+                        } else {
+                            showNotification(data.message, 'success');
+                        }
+
+                        updateCartCount(data.cart_count);
+
+                        // Show success state
+                        button.innerHTML = '<i class="fas fa-check me-1"></i>Added!';
+                        button.classList.remove('btn-primary');
+                        button.classList.add('btn-success');
+
+                        // Reset after 2 seconds
+                        setTimeout(() => {
+                            button.innerHTML = originalText;
+                            button.classList.remove('btn-success');
+                            button.classList.add('btn-primary');
+                            button.disabled = false;
+                        }, 2000);
+                    } else {
+                        if (data.redirect) {
+                            showNotification(data.message, 'warning');
+                            setTimeout(() => {
+                                window.location.href = data.redirect;
+                            }, 1500);
+                        } else {
+                            showNotification(data.message || 'Failed to add item to cart', 'error');
+                        }
+
+                        // Reset button
+                        button.innerHTML = originalText;
+                        button.disabled = false;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('Failed to add item to cart', 'error');
+
+                    // Reset button
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                });
+        }
+
+        function updateCartCount(count) {
+            const cartBadge = document.querySelector('.cart-badge');
+            if (cartBadge) {
+                cartBadge.textContent = count;
+                cartBadge.style.animation = 'none';
+                setTimeout(() => {
+                    cartBadge.style.animation = 'pulse 0.6s ease-in-out';
+                }, 10);
+            }
+        }
+
+        function showNotification(message, type) {
+            // Remove any existing notifications
+            const existingNotifications = document.querySelectorAll('.custom-toast-notification');
+            existingNotifications.forEach(notif => notif.remove());
+
+            const alertClass = type === 'success' ? 'alert-success' :
+                type === 'warning' ? 'alert-warning' : 'alert-danger';
+            const iconClass = type === 'success' ? 'check-circle' :
+                type === 'warning' ? 'exclamation-triangle' : 'times-circle';
+            const bgGradient = type === 'success' ? 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)' :
+                type === 'warning' ? 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' :
+                    'linear-gradient(135deg, #ff4d4d 0%, #ff6b35 100%)';
+
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `custom-toast-notification alert ${alertClass} alert-dismissible fade show position-fixed`;
+            alertDiv.style.cssText = `
+                top: 80px; 
+                right: 20px; 
+                z-index: 9999; 
+                min-width: 320px; 
+                max-width: 400px;
+                background: ${bgGradient};
+                color: white;
+                border: none;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+                border-radius: 15px;
+                padding: 1rem 1.25rem;
+                animation: slideInRight 0.4s ease-out;
+            `;
+            alertDiv.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-${iconClass} me-3" style="font-size: 1.5rem;"></i>
+                    <div class="flex-grow-1" style="font-weight: 500;">${message}</div>
+                    <button type="button" class="btn-close btn-close-white ms-2" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+
+            // Add animation keyframes if not already added
+            if (!document.getElementById('toast-animations')) {
+                const style = document.createElement('style');
+                style.id = 'toast-animations';
+                style.textContent = `
+                    @keyframes slideInRight {
+                        from {
+                            transform: translateX(400px);
+                            opacity: 0;
+                        }
+                        to {
+                            transform: translateX(0);
+                            opacity: 1;
+                        }
+                    }
+                    @keyframes slideOutRight {
+                        from {
+                            transform: translateX(0);
+                            opacity: 1;
+                        }
+                        to {
+                            transform: translateX(400px);
+                            opacity: 0;
+                        }
+                    }
+                    .custom-toast-notification {
+                        backdrop-filter: blur(10px);
+                    }
+                    @media (max-width: 576px) {
+                        .custom-toast-notification {
+                            top: 70px !important;
+                            right: 10px !important;
+                            left: 10px !important;
+                            min-width: auto !important;
+                            max-width: none !important;
+                            font-size: 0.9rem;
+                        }
+                        .custom-toast-notification i {
+                            font-size: 1.2rem !important;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            document.body.appendChild(alertDiv);
+
+            // Auto dismiss after 5 seconds with animation
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.style.animation = 'slideOutRight 0.4s ease-in';
+                    setTimeout(() => {
+                        if (alertDiv.parentNode) {
+                            alertDiv.remove();
+                        }
+                    }, 400);
+                }
+            }, 5000);
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Category Carousel Navigation - Reusable function
+        function setupCarousel(carouselId, prevBtnId, nextBtnId) {
+            const carousel = document.getElementById(carouselId);
+            const prevBtn = document.getElementById(prevBtnId);
+            const nextBtn = document.getElementById(nextBtnId);
+
+            if (!carousel || !prevBtn || !nextBtn) return;
+
+            const scrollAmount = 300;
+
+            prevBtn.addEventListener('click', () => {
+                carousel.scrollBy({
+                    left: -scrollAmount,
+                    behavior: 'smooth'
+                });
+            });
+
+            nextBtn.addEventListener('click', () => {
+                carousel.scrollBy({
+                    left: scrollAmount,
+                    behavior: 'smooth'
+                });
+            });
+
+            // Hide/show navigation buttons based on scroll position
+            function updateNavButtons() {
+                const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+
+                if (carousel.scrollLeft <= 0) {
+                    prevBtn.style.opacity = '0.3';
+                    prevBtn.style.pointerEvents = 'none';
+                } else {
+                    prevBtn.style.opacity = '1';
+                    prevBtn.style.pointerEvents = 'auto';
+                }
+
+                if (carousel.scrollLeft >= maxScroll - 10) {
+                    nextBtn.style.opacity = '0.3';
+                    nextBtn.style.pointerEvents = 'none';
+                } else {
+                    nextBtn.style.opacity = '1';
+                    nextBtn.style.pointerEvents = 'auto';
+                }
+            }
+
+            carousel.addEventListener('scroll', updateNavButtons);
+            updateNavButtons(); // Initial check
+
+            // Touch/swipe support for mobile
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            carousel.addEventListener('mousedown', (e) => {
+                isDown = true;
+                carousel.style.cursor = 'grabbing';
+                startX = e.pageX - carousel.offsetLeft;
+                scrollLeft = carousel.scrollLeft;
+            });
+
+            carousel.addEventListener('mouseleave', () => {
+                isDown = false;
+                carousel.style.cursor = 'grab';
+            });
+
+            carousel.addEventListener('mouseup', () => {
+                isDown = false;
+                carousel.style.cursor = 'grab';
+            });
+
+            carousel.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - carousel.offsetLeft;
+                const walk = (x - startX) * 2;
+                carousel.scrollLeft = scrollLeft - walk;
+            });
+        }
+
+        // Setup home page carousel
+        setupCarousel('homeCategoryCarousel', 'homeCategoryPrev', 'homeCategoryNext');
+
+        // Setup categories section carousel (if exists)
+        setupCarousel('categoryCarousel', 'categoryPrev', 'categoryNext');
+    });
+
+    // Claim Offer Function
+    function claimOffer(couponCode, offerDescription) {
+        // Copy coupon code to clipboard
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(couponCode).then(() => {
+                showNotification(`Coupon code "${couponCode}" copied! ${offerDescription}`, 'success');
+
+                // Redirect to menu after 1.5 seconds
+                setTimeout(() => {
+                    window.location.href = "{% url 'menu' %}";
+                }, 1500);
+            }).catch(() => {
+                // Fallback if clipboard API fails
+                showOfferModal(couponCode, offerDescription);
+            });
+        } else {
+            // Fallback for browsers that don't support clipboard API
+            showOfferModal(couponCode, offerDescription);
+        }
+    }
+
+    // Show offer modal as fallback
+    function showOfferModal(couponCode, offerDescription) {
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease;
+        `;
+
+        modal.innerHTML = `
+            <div style="
+                background: white;
+                border-radius: 20px;
+                padding: 2rem;
+                max-width: 400px;
+                text-align: center;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                animation: slideUp 0.3s ease;
+            ">
+                <div style="
+                    width: 80px;
+                    height: 80px;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 0 auto 1.5rem;
+                    color: white;
+                    font-size: 2.5rem;
+                ">
+                    <i class="fas fa-gift"></i>
+                </div>
+                <h3 style="color: #333; margin-bottom: 1rem; font-weight: 700;">Offer Claimed!</h3>
+                <p style="color: #666; margin-bottom: 1.5rem;">${offerDescription}</p>
+                <div style="
+                    background: #f8f9fa;
+                    padding: 1rem;
+                    border-radius: 12px;
+                    margin-bottom: 1.5rem;
+                    border: 2px dashed #667eea;
+                ">
+                    <p style="margin: 0; color: #666; font-size: 0.9rem;">Your Coupon Code:</p>
+                    <h2 style="
+                        margin: 0.5rem 0 0 0;
+                        color: #667eea;
+                        font-weight: 800;
+                        letter-spacing: 2px;
+                    ">${couponCode}</h2>
+                </div>
+                <button onclick="window.location.href='{% url 'menu' %}'" style="
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    border: none;
+                    padding: 0.875rem 2rem;
+                    border-radius: 30px;
+                    font-weight: 700;
+                    cursor: pointer;
+                    width: 100%;
+                    font-size: 1rem;
+                    transition: all 0.3s ease;
+                " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    <i class="fas fa-utensils me-2"></i>Browse Menu
+                </button>
+            </div>
+        `;
+
+        // Close modal on background click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => modal.remove(), 300);
+            }
+        });
+
+        document.body.appendChild(modal);
+    }
+
+    // Quick Add to Cart for Popular Dishes
+    function quickAddToCart(itemId, event) {
+        if (event) event.preventDefault();
+        const button = event.currentTarget || event.target.closest('.btn-order-now');
+        const originalText = button.innerHTML;
+
+        button.disabled = true;
+        button.style.pointerEvents = 'none';
+        button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Adding...';
+
+        const formData = new FormData();
+        formData.append('menu_item_id', itemId);
+        formData.append('quantity', 1);
+
+        fetch('{% url "add_to_cart" %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    button.innerHTML = '<i class="fas fa-check me-2"></i>Added!';
+                    button.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+                    button.style.borderColor = 'transparent';
+
+                    // Show Success Toast with Image
+                    showToast(data.message, 'success', 'Added to Cart', data.item_image);
+
+                    // Update cart count components in navbar
+                    const cartCountElements = document.querySelectorAll('.notification-count');
+                    cartCountElements.forEach(el => {
+                        el.innerText = data.cart_count;
+                        el.style.display = 'block';
+                    });
+
+                    // Trigger a custom event for other listeners if any
+                    document.dispatchEvent(new CustomEvent('cartUpdated', { detail: data }));
+
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.style.background = '';
+                        button.style.borderColor = '';
+                        button.style.pointerEvents = '';
+                        button.disabled = false;
+                    }, 2000);
+                } else {
+                    showToast(data.message || 'Failed to add item to cart', 'error');
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                    button.style.pointerEvents = '';
+                    if (data.redirect) window.location.href = data.redirect;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                button.innerHTML = originalText;
+                button.disabled = false;
+                button.style.pointerEvents = '';
+            });
+    }
+
+</script>
+
+<style>
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes fadeOut {
+        from {
+            opacity: 1;
+        }
+
+        to {
+            opacity: 0;
+        }
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(50px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+</style>
+{% endblock %}

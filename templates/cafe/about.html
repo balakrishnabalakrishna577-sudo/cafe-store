@@ -1,0 +1,174 @@
+{% extends 'cafe/base.html' %}
+{% load static %}
+
+{% block title %}Our Story | Spices of India Cuisine{% endblock %}
+
+{% block extra_css %}
+<style>
+    @media (max-width: 991.98px) {
+        section.py-5.position-relative {
+            min-height: 30vh !important;
+            padding: 2.5rem 0 !important;
+        }
+        .display-2 {
+            font-size: 2rem !important;
+        }
+    }
+    @media (max-width: 767.98px) {
+        .ps-lg-4 {
+            padding-left: 0 !important;
+        }
+        .img-fluid[style*="min-height"] {
+            min-height: 280px !important;
+        }
+    }
+    @media (max-width: 575.98px) {
+        section.py-5.position-relative {
+            min-height: 25vh !important;
+            padding: 2rem 0 !important;
+        }
+        .display-2 {
+            font-size: 1.75rem !important;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Heritage Feel -->
+<section class="py-5 position-relative overflow-hidden"
+    style="background: var(--gray-900); min-height: 40vh; display: flex; align-items: center;">
+    <div class="position-absolute top-0 start-0 w-100 h-100 opacity-25">
+    </div>
+    <div class="container position-relative z-1 text-center">
+        <span class="badge bg-primary px-3 py-2 mb-3 rounded-pill" style="letter-spacing: 2px;">SINCE 2024</span>
+        <h1 class="display-2 fw-bold text-white mb-4 font-cursive">Our Story</h1>
+        <div class="mx-auto" style="width: 80px; height: 3px; background: var(--brand-blue);"></div>
+    </div>
+</section>
+
+<!-- Chef Sudhi & The Legacy -->
+<section class="py-5 bg-white">
+    <div class="container py-lg-5">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-5">
+                <div class="position-relative">
+                    <!-- Premium Framed Image -->
+                    <div class="p-3 bg-white shadow-lg rounded-4 overflow-hidden border">
+                        <img src="{% static 'images/logo.jpeg' %}" alt="Chef Sudhi" class="img-fluid rounded-3"
+                            style="min-height: 450px; object-fit: cover;">
+                    </div>
+                    <!-- Stats Badge Overlapping -->
+                    <div class="position-absolute top-0 end-0 translate-middle p-4 bg-primary text-white rounded-circle shadow-lg d-none d-md-flex flex-column align-items-center justify-content-center"
+                        style="width: 120px; height: 120px; margin-top: 40px;">
+                        <span class="h2 fw-bold mb-0">20+</span>
+                        <small class="text-uppercase" style="font-size: 0.7rem;">Years Experience</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="ps-lg-4">
+                    <h2 class="display-5 fw-bold mb-4 font-serif text-cocoa">Welcome to Spices of India</h2>
+                    <p class="lead text-primary fw-bold mb-4 font-cursive" style="font-size: 1.5rem;">
+                        Where tradition, flavor, and passion come together.
+                    </p>
+                    <div class="font-serif text-muted" style="font-size: 1.15rem; line-height: 1.8;">
+                        <p class="mb-4">
+                            Hello, my name is <strong>Sudhi</strong>, and I am delighted to welcome you to Spices of
+                            India in Forney, TX.
+                            My culinary journey began in India, where I earned my degree from the <strong>Institute of
+                                Hotel Management and Catering Technology, Chennai</strong>.
+                        </p>
+                        <p class="mb-4">
+                            I later trained at the iconic <strong>Taj Connemara, Chennai</strong>, and worked as a Chef
+                            at <strong>ITC Maratha</strong>, a Luxury Collection Hotel in Mumbai.
+                            These institutions are globally recognized for setting the gold standard in Indian
+                            hospitality and culinary arts.
+                        </p>
+                        <p class="mb-4">
+                            Over the years, I have owned and operated several restaurants across the United States,
+                            specializing in
+                            authentic Indian and Indo-Chinese cuisine. These experiences have shaped my passion for bold
+                            flavors,
+                            premium ingredients, and traditional cooking techniques.
+                        </p>
+                        <p class="mb-0">
+                            At Spices of India, every dish is prepared with care, authenticity, and attention to detail.
+                            It is my pleasure to bring the rich culinary heritage of India to the Forney community.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Secondary Story Section: Vibrant Flavors -->
+<section class="py-5" style="background: #F8FDFF;">
+    <div class="container py-lg-5">
+        <div class="row align-items-center g-5 flex-lg-row-reverse">
+            <div class="col-lg-6">
+                <div class="rounded-4 overflow-hidden shadow-lg">
+                    <img src="{% static 'images/about/vibrant-food.jpg' %}" alt="Indian Flavors" class="img-fluid"
+                        style="height: 400px; width: 100%; object-fit: cover;">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="pe-lg-5">
+                    <h2 class="display-6 fw-bold mb-4 font-cursive text-brand">Taste India’s Vibrant Flavors</h2>
+                    <h3 class="h4 fw-bold mb-3 font-serif">Bold Flavors, Authentic Taste</h3>
+                    <p class="text-muted mb-5 font-serif" style="font-size: 1.2rem;">
+                        Experience the bold, authentic flavors of India with our street food and fusion dishes. Each
+                        bite is a journey through India’s rich culinary heritage.
+                    </p>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="bg-white p-3 rounded shadow-sm text-primary">
+                                    <i class="fas fa-map-marker-alt fa-lg"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 fw-bold">Forney, TX</h6>
+                                    <small class="text-muted">7200 FM 741, 75126</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="bg-white p-3 rounded shadow-sm text-primary">
+                                    <i class="fas fa-phone-alt fa-lg"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 fw-bold">214.493.5266</h6>
+                                    <small class="text-muted">Call Sudhi Directly</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Final CTA Section -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="p-5 rounded-4 text-center position-relative overflow-hidden" style="background: var(--brand-blue);">
+            <!-- Decorative Pattern -->
+            <div class="position-absolute top-0 start-0 w-100 h-100 opacity-10"
+                style="background: url('https://www.transparenttextures.com/patterns/az-subtle.png');"></div>
+
+            <div class="position-relative z-1">
+                <h3 class="display-5 fw-bold text-white mb-4 font-cursive">We look forward to serving you!</h3>
+                <p class="text-white mb-4 opacity-75" style="font-size: 1.25rem;">Experience true hospitality and the
+                    finest Indian cuisine in Texas.</p>
+                <div class="d-flex gap-3 justify-content-center">
+                    <a href="{% url 'menu' %}" class="btn btn-outline-light px-5 py-3 rounded-0 fw-bold">BROWSE MENU</a>
+                    <a href="{% url 'contact' %}" class="btn btn-dark px-5 py-3 rounded-0 fw-bold">CONTACT US</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
