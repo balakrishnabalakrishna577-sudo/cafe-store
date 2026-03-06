@@ -296,7 +296,7 @@ class CouponViewSet(viewsets.ReadOnlyModelViewSet):
             if cart_total < coupon.minimum_order_amount:
                 return Response({
                     'valid': False,
-                    'message': f'Minimum order amount is ₹{coupon.minimum_order_amount}'
+                    'message': f'Minimum order amount is ${coupon.minimum_order_amount}'
                 }, status=status.HTTP_400_BAD_REQUEST)
             
             discount = coupon.calculate_discount(cart_total)
@@ -304,7 +304,7 @@ class CouponViewSet(viewsets.ReadOnlyModelViewSet):
             return Response({
                 'valid': True,
                 'discount_amount': float(discount),
-                'message': f'Coupon applied! You save ₹{discount}'
+                'message': f'Coupon applied! You save ${discount}'
             })
         except Coupon.DoesNotExist:
             return Response({

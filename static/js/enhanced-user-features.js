@@ -445,7 +445,7 @@ function updateQuantity(itemId, action) {
             // Update item total
             const itemTotal = document.querySelector(`[data-item-id="${itemId}"] .item-total`);
             if (itemTotal) {
-                itemTotal.textContent = `₹${data.item_total}`;
+                itemTotal.textContent = `${data.item_total}`;
             }
             
             // Update cart totals
@@ -824,7 +824,7 @@ function updateCartTotals(data) {
     Object.entries(elements).forEach(([selector, value]) => {
         const element = document.querySelector(selector);
         if (element && value !== undefined) {
-            element.textContent = `₹${value}`;
+            element.textContent = `${value}`;
         }
     });
 }

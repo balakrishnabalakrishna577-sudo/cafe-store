@@ -6,37 +6,150 @@
 
 {% block extra_css %}
 <style>
-    .addresses-hero {
-        background: linear-gradient(135deg, #ff4d4d 0%, #ff6b35 100%);
-        padding: 80px 0 40px;
+    .addresses-hero-premium {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        padding: 100px 0 60px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .addresses-hero-premium::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(139, 26, 16, 0.1) 0%, transparent 70%);
+        animation: rotate 20s linear infinite;
+    }
+
+    @keyframes rotate {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .notification-style-header {
+        max-width: 600px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 30px;
+        padding: 25px 35px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         color: white;
-        text-align: center;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .notification-style-header:hover {
+        transform: scale(1.02) translateY(-5px);
+        border-color: rgba(255, 255, 255, 0.4);
+        box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.6);
+    }
+
+    .header-content {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+    }
+
+    .icon-badge {
+        position: relative;
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, #8B1A10 0%, #D32F2F 100%);
+        border-radius: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        box-shadow: 0 10px 20px rgba(139, 26, 16, 0.3);
+    }
+
+    .badge-pulse {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        width: 15px;
+        height: 15px;
+        background: #22c55e;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        animation: pulse-green 2s infinite;
+    }
+
+    @keyframes pulse-green {
+        0% {
+            box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+        }
+
+        70% {
+            box-shadow: 0 0 0 10px rgba(34, 197, 94, 0);
+        }
+
+        100% {
+            box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+        }
+    }
+
+    .text-content {
+        text-align: left;
+    }
+
+    .text-content h1 {
+        margin: 0;
+        letter-spacing: -1px;
+        color: white !important;
+    }
+
+    @media (max-width: 768px) {
+        .header-content {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .text-content {
+            text-align: center;
+        }
+
+        .notification-style-header {
+            padding: 30px 20px;
+            margin: 0 15px;
+        }
     }
 
     .address-card {
         border: none;
-        border-radius: 15px;
-        box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+        border-radius: 20px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
         margin-bottom: 1.5rem;
         transition: all 0.3s ease;
+        background: white;
     }
 
     .address-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        transform: translateY(-5px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
     }
 
     .address-card.default {
-        border: 2px solid #28a745;
+        border-left: 5px solid #22c55e;
     }
 
     .default-badge {
-        background: linear-gradient(135deg, #28a745, #20c997);
-        color: white;
-        padding: 0.25rem 0.75rem;
-        border-radius: 20px;
-        font-size: 0.75rem;
-        font-weight: 600;
+        background: #dcfce7;
+        color: #166534;
+        padding: 4px 12px;
+        border-radius: 50px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
     }
 
     .address-actions {
@@ -44,43 +157,69 @@
         gap: 0.5rem;
     }
 
-    .btn-edit {
-        background: linear-gradient(135deg, #ff6b35, #ff4d4d);
+    .btn-edit,
+    .btn-delete,
+    .btn-set-default {
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
         border: none;
+        transition: all 0.2s ease;
         color: white;
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        transition: all 0.3s ease;
+    }
+
+    .btn-edit {
+        background: #f1f5f9;
+        color: #64748b;
     }
 
     .btn-edit:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 3px 10px rgba(255, 77, 77, 0.4);
-        color: white;
+        background: #e2e8f0;
+        color: #1e293b;
     }
 
     .btn-delete {
-        background: linear-gradient(135deg, #dc3545, #c82333);
-        border: none;
-        color: white;
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        transition: all 0.3s ease;
+        background: #fee2e2;
+        color: #ef4444;
     }
 
     .btn-delete:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 3px 10px rgba(220, 53, 69, 0.4);
-        color: white;
+        background: #fecaca;
+    }
+
+    .btn-set-default {
+        background: #f1f5f9;
+        color: #fbbf24;
+    }
+
+    .btn-set-default:hover {
+        background: #fef3c7;
     }
 
     .add-address-form {
         background: white;
-        border-radius: 15px;
-        padding: 2rem;
+        border-radius: 24px;
+        padding: 2.5rem;
         margin-bottom: 2rem;
-        box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
         display: none;
+        border: 1px solid #f1f5f9;
+        animation: slideUp 0.4s ease-out;
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(20px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
     }
 
     .add-address-form.show {
@@ -88,78 +227,214 @@
     }
 
     .btn-add-new {
-        background: linear-gradient(135deg, #ff4d4d, #ff6b35);
+        background: #1e293b;
         border: none;
         color: white;
-        padding: 0.875rem 1.5rem;
-        border-radius: 10px;
-        font-weight: 600;
+        padding: 1rem 2rem;
+        border-radius: 16px;
+        font-weight: 700;
         transition: all 0.3s ease;
         margin-bottom: 2rem;
         width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
     }
 
     .btn-add-new:hover {
+        background: #000;
         transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(255, 77, 77, 0.3);
-        color: white;
-    }
-
-    .btn-add-new i {
-        margin-right: 0.5rem;
-    }
-
-    .btn-set-default {
-        background: linear-gradient(135deg, #28a745, #20c997);
-        border: none;
-        color: white;
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-    }
-
-    .btn-set-default:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 3px 10px rgba(40, 167, 69, 0.4);
-        color: white;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     }
 
     .btn-primary {
-        background: linear-gradient(135deg, #ff4d4d, #ff6b35);
+        background: #8B1A10;
         border: none;
-        padding: 0.75rem 1.5rem;
-        border-radius: 10px;
-        font-weight: 600;
+        padding: 12px 28px;
+        border-radius: 14px;
+        font-weight: 700;
+        transition: all 0.3s ease;
     }
 
     .btn-primary:hover {
-        background: linear-gradient(135deg, #ff6b35, #ff4d4d);
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(255, 77, 77, 0.3);
+        background: #D32F2F;
+        transform: scale(1.02);
     }
 
     .btn-cancel {
-        background: #6c757d;
+        background: #f1f5f9;
         border: none;
-        color: white;
-        padding: 0.75rem 1.5rem;
-        border-radius: 10px;
+        color: #64748b;
+        padding: 12px 28px;
+        border-radius: 14px;
         font-weight: 600;
         margin-left: 0.5rem;
     }
 
     .btn-cancel:hover {
-        background: #5a6268;
-        color: white;
+        background: #e2e8f0;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 991.98px) {
+        .addresses-hero-premium {
+            padding: 80px 0 40px;
+        }
+        
+        .notification-style-header {
+            padding: 20px 25px;
+            max-width: 90%;
+        }
+        
+        .header-content {
+            flex-direction: column;
+            text-align: center;
+            gap: 15px;
+        }
+        
+        .icon-badge {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+        }
+        
+        .display-5 {
+            font-size: 2rem;
+        }
+    }
+
+    @media (max-width: 767.98px) {
+        .addresses-hero-premium {
+            padding: 60px 0 30px;
+        }
+        
+        .notification-style-header {
+            padding: 15px 20px;
+            max-width: 95%;
+        }
+        
+        .display-5 {
+            font-size: 1.75rem;
+        }
+        
+        .text-white-50 {
+            font-size: 0.9rem;
+        }
+        
+        .btn-add-new {
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+        
+        .add-address-form {
+            padding: 1.5rem;
+        }
+        
+        .address-card {
+            margin-bottom: 1rem;
+        }
+        
+        .d-flex.justify-content-between {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .address-actions {
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .btn-edit,
+        .btn-delete,
+        .btn-set-default {
+            width: 45px;
+            height: 45px;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .addresses-hero-premium {
+            padding: 40px 0 20px;
+        }
+        
+        .notification-style-header {
+            padding: 12px 15px;
+        }
+        
+        .display-5 {
+            font-size: 1.5rem;
+        }
+        
+        .icon-badge {
+            width: 50px;
+            height: 50px;
+            font-size: 1.25rem;
+        }
+        
+        .add-address-form {
+            padding: 1rem;
+        }
+        
+        .card-body {
+            padding: 1rem;
+        }
+        
+        h5 {
+            font-size: 1.1rem;
+        }
+        
+        .address-details p {
+            font-size: 0.9rem;
+        }
+        
+        .btn {
+            min-height: 44px;
+            font-size: 16px;
+        }
+    }
+
+    /* Touch-friendly adjustments */
+    @media (hover: none) and (pointer: coarse) {
+        .notification-style-header:hover {
+            transform: none;
+        }
+        
+        .btn-edit:hover,
+        .btn-delete:hover,
+        .btn-set-default:hover {
+            transform: none;
+        }
+        
+        .btn {
+            min-height: 44px;
+            font-size: 16px;
+        }
+        
+        .form-control,
+        .form-select {
+            min-height: 44px;
+            font-size: 16px;
+        }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<section class="addresses-hero">
-    <div class="container">
-        <h1><i class="fas fa-map-marker-alt me-3"></i>Delivery Addresses</h1>
-        <p>Manage your delivery locations</p>
+<section class="addresses-hero-premium py-5">
+    <div class="container text-center">
+        <div class="notification-style-header mx-auto animate-on-scroll">
+            <div class="header-content">
+                <div class="icon-badge">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <span class="badge-pulse"></span>
+                </div>
+                <div class="text-content">
+                    <h1 class="display-5 fw-bold mb-1">Delivery Addresses</h1>
+                    <p class="mb-0 text-white-50">Manage your locations with precision</p>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -183,13 +458,13 @@
                             <button type="button" class="btn-close" onclick="toggleAddressForm()"></button>
                         </div>
                     </div>
-                    
+
                     <!-- Location Status Alert -->
                     <div id="locationStatus" class="alert alert-info d-none mb-3" role="alert">
                         <i class="fas fa-spinner fa-spin me-2"></i>
                         <span id="locationStatusText">Detecting your location...</span>
                     </div>
-                    
+
                     <form method="post" action="{% url 'delivery_addresses' %}" id="addressForm">
                         {% csrf_token %}
                         {{ form|crispy }}
@@ -227,10 +502,11 @@
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 {% if not address.is_default %}
-                                <form id="delete-address-form-{{ address.id }}" method="post" action="{% url 'delete_address' address.id %}"
-                                    style="display: inline;">
+                                <form id="delete-address-form-{{ address.id }}" method="post"
+                                    action="{% url 'delete_address' address.id %}" style="display: inline;">
                                     {% csrf_token %}
-                                    <button type="button" class="btn btn-delete btn-sm" onclick="confirmDeleteAddress({{ address.id }})">
+                                    <button type="button" class="btn btn-delete btn-sm"
+                                        onclick="confirmDeleteAddress({{ address.id }})">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
@@ -274,233 +550,233 @@
 
 {% block extra_js %}
 <script>
-function toggleAddressForm() {
-    const form = document.getElementById('addAddressForm');
-    const btn = document.getElementById('toggleAddressFormBtn');
-    
-    if (form.classList.contains('show')) {
-        form.classList.remove('show');
-        btn.style.display = 'block';
-        // Scroll to button
-        btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    } else {
-        form.classList.add('show');
-        btn.style.display = 'none';
-        // Scroll to form
-        form.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-}
+    function toggleAddressForm() {
+        const form = document.getElementById('addAddressForm');
+        const btn = document.getElementById('toggleAddressFormBtn');
 
-function confirmDeleteAddress(addressId) {
-    showConfirm(
-        'Delete Address',
-        'Are you sure you want to delete this address?',
-        () => {
-            document.getElementById('delete-address-form-' + addressId).submit();
-        },
-        'Yes, Delete',
-        'Cancel'
-    );
-}
-
-// Hide form on page load
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('addAddressForm');
-    const btn = document.getElementById('toggleAddressFormBtn');
-    
-    // Check if there are form errors (form was submitted with errors)
-    const hasErrors = form.querySelector('.alert-danger, .invalid-feedback');
-    
-    if (hasErrors) {
-        // Show form if there are errors
-        form.classList.add('show');
-        btn.style.display = 'none';
-    } else {
-        // Hide form by default
-        form.classList.remove('show');
-        btn.style.display = 'block';
+        if (form.classList.contains('show')) {
+            form.classList.remove('show');
+            btn.style.display = 'block';
+            // Scroll to button
+            btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+            form.classList.add('show');
+            btn.style.display = 'none';
+            // Scroll to form
+            form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     }
 
-    // Location Detection Feature
-    const detectLocationBtn = document.getElementById('detectLocationBtn');
-    const locationStatus = document.getElementById('locationStatus');
-    const locationStatusText = document.getElementById('locationStatusText');
+    function confirmDeleteAddress(addressId) {
+        showConfirm(
+            'Delete Address',
+            'Are you sure you want to delete this address?',
+            () => {
+                document.getElementById('delete-address-form-' + addressId).submit();
+            },
+            'Yes, Delete',
+            'Cancel'
+        );
+    }
 
-    if (detectLocationBtn) {
-        detectLocationBtn.addEventListener('click', function() {
-            if (!navigator.geolocation) {
-                showLocationStatus('error', 'Geolocation is not supported by your browser');
-                return;
-            }
+    // Hide form on page load
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('addAddressForm');
+        const btn = document.getElementById('toggleAddressFormBtn');
 
-            // Show loading status
-            showLocationStatus('info', 'Detecting your location...');
-            detectLocationBtn.disabled = true;
+        // Check if there are form errors (form was submitted with errors)
+        const hasErrors = form.querySelector('.alert-danger, .invalid-feedback');
 
-            navigator.geolocation.getCurrentPosition(
-                // Success callback
-                function(position) {
-                    const latitude = position.coords.latitude;
-                    const longitude = position.coords.longitude;
-                    
-                    showLocationStatus('info', 'Location detected! Fetching address details...');
-                    
-                    // Use reverse geocoding to get address
-                    reverseGeocode(latitude, longitude);
-                },
-                // Error callback
-                function(error) {
-                    let errorMessage = 'Unable to detect location. ';
-                    switch(error.code) {
-                        case error.PERMISSION_DENIED:
-                            errorMessage += 'Please allow location access in your browser.';
-                            break;
-                        case error.POSITION_UNAVAILABLE:
-                            errorMessage += 'Location information is unavailable.';
-                            break;
-                        case error.TIMEOUT:
-                            errorMessage += 'Location request timed out.';
-                            break;
-                        default:
-                            errorMessage += 'An unknown error occurred.';
-                    }
-                    showLocationStatus('error', errorMessage);
-                    detectLocationBtn.disabled = false;
-                },
-                // Options
-                {
-                    enableHighAccuracy: true,
-                    timeout: 10000,
-                    maximumAge: 0
+        if (hasErrors) {
+            // Show form if there are errors
+            form.classList.add('show');
+            btn.style.display = 'none';
+        } else {
+            // Hide form by default
+            form.classList.remove('show');
+            btn.style.display = 'block';
+        }
+
+        // Location Detection Feature
+        const detectLocationBtn = document.getElementById('detectLocationBtn');
+        const locationStatus = document.getElementById('locationStatus');
+        const locationStatusText = document.getElementById('locationStatusText');
+
+        if (detectLocationBtn) {
+            detectLocationBtn.addEventListener('click', function () {
+                if (!navigator.geolocation) {
+                    showLocationStatus('error', 'Geolocation is not supported by your browser');
+                    return;
                 }
-            );
-        });
-    }
 
-    function reverseGeocode(lat, lng) {
-        // Using Nominatim (OpenStreetMap) for reverse geocoding
-        const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`;
-        
-        fetch(url, {
-            headers: {
-                'User-Agent': 'WeCafe/1.0'
+                // Show loading status
+                showLocationStatus('info', 'Detecting your location...');
+                detectLocationBtn.disabled = true;
+
+                navigator.geolocation.getCurrentPosition(
+                    // Success callback
+                    function (position) {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+
+                        showLocationStatus('info', 'Location detected! Fetching address details...');
+
+                        // Use reverse geocoding to get address
+                        reverseGeocode(latitude, longitude);
+                    },
+                    // Error callback
+                    function (error) {
+                        let errorMessage = 'Unable to detect location. ';
+                        switch (error.code) {
+                            case error.PERMISSION_DENIED:
+                                errorMessage += 'Please allow location access in your browser.';
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                errorMessage += 'Location information is unavailable.';
+                                break;
+                            case error.TIMEOUT:
+                                errorMessage += 'Location request timed out.';
+                                break;
+                            default:
+                                errorMessage += 'An unknown error occurred.';
+                        }
+                        showLocationStatus('error', errorMessage);
+                        detectLocationBtn.disabled = false;
+                    },
+                    // Options
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 0
+                    }
+                );
+            });
+        }
+
+        function reverseGeocode(lat, lng) {
+            // Using Nominatim (OpenStreetMap) for reverse geocoding
+            const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`;
+
+            fetch(url, {
+                headers: {
+                    'User-Agent': 'WeCafe/1.0'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.address) {
+                        fillAddressFields(data.address, data.display_name);
+                        showLocationStatus('success', 'Location detected successfully! Address fields have been filled.');
+
+                        // Auto-hide success message after 5 seconds
+                        setTimeout(() => {
+                            locationStatus.classList.add('d-none');
+                        }, 5000);
+                    } else {
+                        showLocationStatus('warning', 'Location detected but unable to fetch address details. Please enter manually.');
+                    }
+                    detectLocationBtn.disabled = false;
+                })
+                .catch(error => {
+                    console.error('Geocoding error:', error);
+                    showLocationStatus('error', 'Unable to fetch address details. Please enter manually.');
+                    detectLocationBtn.disabled = false;
+                });
+        }
+
+        function fillAddressFields(address, fullAddress) {
+            // Get form fields - adjust IDs based on your form structure
+            const addressLine1Field = document.querySelector('input[name="address_line_1"], input[name="address_line1"], textarea[name="address_line_1"]');
+            const addressLine2Field = document.querySelector('input[name="address_line_2"], input[name="address_line2"], textarea[name="address_line_2"]');
+            const cityField = document.querySelector('input[name="city"]');
+            const stateField = document.querySelector('input[name="state"]');
+            const postalCodeField = document.querySelector('input[name="postal_code"]');
+            const phoneField = document.querySelector('input[name="phone"]');
+
+            // Fill address line 1
+            if (addressLine1Field) {
+                const addressParts = [];
+                if (address.house_number) addressParts.push(address.house_number);
+                if (address.road) addressParts.push(address.road);
+
+                const addressString = addressParts.length > 0 ? addressParts.join(', ') : fullAddress.split(',')[0];
+                addressLine1Field.value = addressString;
+                addressLine1Field.dispatchEvent(new Event('change', { bubbles: true }));
             }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data && data.address) {
-                fillAddressFields(data.address, data.display_name);
-                showLocationStatus('success', 'Location detected successfully! Address fields have been filled.');
-                
-                // Auto-hide success message after 5 seconds
-                setTimeout(() => {
-                    locationStatus.classList.add('d-none');
-                }, 5000);
-            } else {
-                showLocationStatus('warning', 'Location detected but unable to fetch address details. Please enter manually.');
+
+            // Fill address line 2
+            if (addressLine2Field) {
+                const addressParts = [];
+                if (address.suburb) addressParts.push(address.suburb);
+                if (address.neighbourhood) addressParts.push(address.neighbourhood);
+
+                addressLine2Field.value = addressParts.join(', ');
+                addressLine2Field.dispatchEvent(new Event('change', { bubbles: true }));
             }
-            detectLocationBtn.disabled = false;
-        })
-        .catch(error => {
-            console.error('Geocoding error:', error);
-            showLocationStatus('error', 'Unable to fetch address details. Please enter manually.');
-            detectLocationBtn.disabled = false;
-        });
-    }
 
-    function fillAddressFields(address, fullAddress) {
-        // Get form fields - adjust IDs based on your form structure
-        const addressLine1Field = document.querySelector('input[name="address_line_1"], input[name="address_line1"], textarea[name="address_line_1"]');
-        const addressLine2Field = document.querySelector('input[name="address_line_2"], input[name="address_line2"], textarea[name="address_line_2"]');
-        const cityField = document.querySelector('input[name="city"]');
-        const stateField = document.querySelector('input[name="state"]');
-        const postalCodeField = document.querySelector('input[name="postal_code"]');
-        const phoneField = document.querySelector('input[name="phone"]');
-        
-        // Fill address line 1
-        if (addressLine1Field) {
-            const addressParts = [];
-            if (address.house_number) addressParts.push(address.house_number);
-            if (address.road) addressParts.push(address.road);
-            
-            const addressString = addressParts.length > 0 ? addressParts.join(', ') : fullAddress.split(',')[0];
-            addressLine1Field.value = addressString;
-            addressLine1Field.dispatchEvent(new Event('change', { bubbles: true }));
-        }
-        
-        // Fill address line 2
-        if (addressLine2Field) {
-            const addressParts = [];
-            if (address.suburb) addressParts.push(address.suburb);
-            if (address.neighbourhood) addressParts.push(address.neighbourhood);
-            
-            addressLine2Field.value = addressParts.join(', ');
-            addressLine2Field.dispatchEvent(new Event('change', { bubbles: true }));
-        }
-        
-        // Fill city field
-        if (cityField) {
-            const city = address.city || address.town || address.village || address.municipality || '';
-            cityField.value = city;
-            cityField.dispatchEvent(new Event('change', { bubbles: true }));
-        }
-        
-        // Fill state field
-        if (stateField) {
-            const state = address.state || address.region || '';
-            stateField.value = state;
-            stateField.dispatchEvent(new Event('change', { bubbles: true }));
-        }
-        
-        // Fill postal code field
-        if (postalCodeField) {
-            const postalCode = address.postcode || '';
-            postalCodeField.value = postalCode;
-            postalCodeField.dispatchEvent(new Event('change', { bubbles: true }));
-        }
-
-        // Highlight filled fields
-        [addressLine1Field, addressLine2Field, cityField, stateField, postalCodeField].forEach(field => {
-            if (field && field.value) {
-                field.classList.add('border-success');
-                setTimeout(() => {
-                    field.classList.remove('border-success');
-                }, 3000);
+            // Fill city field
+            if (cityField) {
+                const city = address.city || address.town || address.village || address.municipality || '';
+                cityField.value = city;
+                cityField.dispatchEvent(new Event('change', { bubbles: true }));
             }
-        });
-    }
 
-    function showLocationStatus(type, message) {
-        locationStatus.classList.remove('d-none', 'alert-info', 'alert-success', 'alert-warning', 'alert-danger');
-        
-        const iconMap = {
-            'info': 'fa-spinner fa-spin',
-            'success': 'fa-check-circle',
-            'warning': 'fa-exclamation-triangle',
-            'error': 'fa-times-circle'
-        };
-        
-        const alertClass = type === 'error' ? 'alert-danger' : `alert-${type}`;
-        locationStatus.classList.add(alertClass);
-        
-        const icon = iconMap[type] || 'fa-info-circle';
-        locationStatusText.innerHTML = `<i class="fas ${icon} me-2"></i>${message}`;
-    }
-
-    // Add visual feedback for location permission
-    if (navigator.permissions && detectLocationBtn) {
-        navigator.permissions.query({ name: 'geolocation' }).then(function(result) {
-            if (result.state === 'granted') {
-                detectLocationBtn.classList.remove('btn-outline-success');
-                detectLocationBtn.classList.add('btn-success');
-            } else if (result.state === 'denied') {
-                detectLocationBtn.innerHTML = '<i class="fas fa-location-slash me-1"></i>Location Blocked';
-                detectLocationBtn.classList.remove('btn-outline-success');
-                detectLocationBtn.classList.add('btn-outline-danger');
-                detectLocationBtn.title = 'Location access is blocked. Please enable it in your browser settings.';
+            // Fill state field
+            if (stateField) {
+                const state = address.state || address.region || '';
+                stateField.value = state;
+                stateField.dispatchEvent(new Event('change', { bubbles: true }));
             }
-        });
-    }
-});
+
+            // Fill postal code field
+            if (postalCodeField) {
+                const postalCode = address.postcode || '';
+                postalCodeField.value = postalCode;
+                postalCodeField.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+
+            // Highlight filled fields
+            [addressLine1Field, addressLine2Field, cityField, stateField, postalCodeField].forEach(field => {
+                if (field && field.value) {
+                    field.classList.add('border-success');
+                    setTimeout(() => {
+                        field.classList.remove('border-success');
+                    }, 3000);
+                }
+            });
+        }
+
+        function showLocationStatus(type, message) {
+            locationStatus.classList.remove('d-none', 'alert-info', 'alert-success', 'alert-warning', 'alert-danger');
+
+            const iconMap = {
+                'info': 'fa-spinner fa-spin',
+                'success': 'fa-check-circle',
+                'warning': 'fa-exclamation-triangle',
+                'error': 'fa-times-circle'
+            };
+
+            const alertClass = type === 'error' ? 'alert-danger' : `alert-${type}`;
+            locationStatus.classList.add(alertClass);
+
+            const icon = iconMap[type] || 'fa-info-circle';
+            locationStatusText.innerHTML = `<i class="fas ${icon} me-2"></i>${message}`;
+        }
+
+        // Add visual feedback for location permission
+        if (navigator.permissions && detectLocationBtn) {
+            navigator.permissions.query({ name: 'geolocation' }).then(function (result) {
+                if (result.state === 'granted') {
+                    detectLocationBtn.classList.remove('btn-outline-success');
+                    detectLocationBtn.classList.add('btn-success');
+                } else if (result.state === 'denied') {
+                    detectLocationBtn.innerHTML = '<i class="fas fa-location-slash me-1"></i>Location Blocked';
+                    detectLocationBtn.classList.remove('btn-outline-success');
+                    detectLocationBtn.classList.add('btn-outline-danger');
+                    detectLocationBtn.title = 'Location access is blocked. Please enable it in your browser settings.';
+                }
+            });
+        }
+    });
 </script>
 {% endblock %}

@@ -1,220 +1,669 @@
 {% extends 'cafe/base.html' %}
 {% load static %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+.user-page .main-navbar {
+    min-height: 60px;
+}
+
+@media (max-width: 991.98px) {
+    .user-page .main-navbar {
+        min-height: 50px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .user-page .main-navbar {
+        min-height: 46px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .user-page .main-navbar {
+        min-height: 42px;
+    }
+}
+
+/* Modern User Dashboard Styles */
+.user-dashboard {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    min-height: 100vh;
+    padding: 2rem 0;
+}
+
+.dashboard-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Hero Section */
+.dashboard-hero {
+    background: linear-gradient(135deg, #8B1A10 0%, #D4AF37 100%);
+    color: white;
+    padding: 3rem 0;
+    border-radius: 20px;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+    background-size: cover;
+}
+
+.dashboard-hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Main Dashboard Layout */
+.dashboard-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+/* Sidebar */
+.sidebar {
+    background: white;
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
+}
+
+.profile-summary {
+    text-align: center;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.profile-cover {
+    height: 120px;
+    background: linear-gradient(135deg, #8B1A10 0%, #D4AF37 100%);
+    border-radius: 15px 15px 0 0;
+    margin: -2rem -2rem 1.5rem -2rem;
+    position: relative;
+}
+
+.profile-avatar-container {
+    position: relative;
+    display: inline-block;
+    margin-top: -60px;
+    z-index: 10;
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid white;
+    margin: 0 auto 1rem;
+    box-shadow: 0 10px 30px rgba(139, 26, 16, 0.3);
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.profile-avatar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 40px rgba(139, 26, 16, 0.4);
+}
+
+.profile-info {
+    padding-top: 1rem;
+}
+
+.profile-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 0.25rem;
+    transition: all 0.3s ease;
+}
+
+.profile-name:hover {
+    color: #8B1A10;
+}
+
+.profile-email {
+    color: #6c757d;
+    margin-bottom: 0.5rem;
+}
+
+.member-since {
+    color: #8B1A10;
+    font-weight: 500;
+    font-size: 0.9rem;
+    background: rgba(139, 26, 16, 0.1);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-menu li {
+    margin-bottom: 0.5rem;
+}
+
+.sidebar-menu a {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    text-decoration: none;
+    color: #495057;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.sidebar-menu a:hover,
+.sidebar-menu a.active {
+    background: linear-gradient(135deg, #8B1A10 0%, #D4AF37 100%);
+    color: white;
+    transform: translateX(5px);
+}
+
+/* Main Content */
+.main-content {
+    display: grid;
+    gap: 2rem;
+}
+
+/* Cards */
+.content-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f8f9fa;
+}
+
+.card-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #212529;
+}
+
+.view-all-btn {
+    background: transparent;
+    border: 2px solid #8B1A10;
+    color: #8B1A10;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.view-all-btn:hover {
+    background: #8B1A10;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Profile Form */
+.profile-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.profile-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #495057;
+}
+
+.profile-form input,
+.profile-form select,
+.profile-form textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.profile-form input:focus,
+.profile-form select:focus,
+.profile-form textarea:focus {
+    outline: none;
+    border-color: #8B1A10;
+    box-shadow: 0 0 0 3px rgba(139, 26, 16, 0.1);
+}
+
+/* Order Table */
+.order-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.order-table th,
+.order-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.order-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #495057;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+}
+
+.order-table tr:hover {
+    background: #f8f9fa;
+}
+
+.status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: capitalize;
+}
+
+/* Responsive Design */
+@media (max-width: 1199px) {
+    .dashboard-layout {
+        grid-template-columns: 250px 1fr;
+    }
+}
+
+@media (max-width: 991px) {
+    .dashboard-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .sidebar {
+        position: static;
+        margin-bottom: 2rem;
+    }
+    
+    .hero-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 0 0.5rem;
+    }
+    
+    .dashboard-hero {
+        padding: 2rem 1rem;
+    }
+    
+    .hero-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .content-card {
+        padding: 1.5rem;
+    }
+    
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .order-table {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 576px) {
+    .dashboard-hero {
+        padding: 1.5rem 1rem;
+    }
+    
+    .stat-card {
+        padding: 1rem;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+    }
+    
+    .content-card {
+        padding: 1rem;
+    }
+    
+    .profile-avatar {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+/* Dark Mode Toggle */
+.dark-mode-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.dark-mode-toggle:hover {
+    transform: scale(1.1);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Accessibility */
+.focus-visible:focus {
+    outline: 2px solid #8B1A10;
+    outline-offset: 2px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #8B1A10 0%, #D4AF37 100%);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #6B140D 0%, #B8962E 100%);
+}
+</style>
+{% endblock %}
+
 {% block title %}My Profile - Spices of India Cuisine{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="row">
-        <!-- Profile Sidebar -->
-        <div class="col-lg-4 mb-4">
-            <div class="card profile-card shadow-sm border-0">
-                <div class="card-body text-center p-4">
-                    <div class="profile-image-container mb-3">
-                        {% if user_profile.image %}
-                            <img src="{{ user_profile.image.url }}" alt="{{ user.username }}" class="profile-image">
-                        {% else %}
-                            <div class="profile-image-placeholder">
-                                <i class="fas fa-user"></i>
-                            </div>
-                        {% endif %}
-                    </div>
-                    <h4 class="mb-1">{{ user.get_full_name|default:user.username }}</h4>
-                    <p class="text-muted mb-2">{{ user.email }}</p>
-                    <span class="badge bg-primary mb-2">Member since {{ user.date_joined|date:"M Y" }}</span>
-                    <p class="text-muted small mb-0"><i class="fas fa-calendar-alt me-1"></i>{{ account_age }} days with us</p>
-                </div>
-                
-                <div class="card-body border-top">
-                    <div class="profile-stats">
-                        <div class="stat-item">
-                            <i class="fas fa-shopping-bag text-primary"></i>
-                            <div class="stat-info">
-                                <h5 class="mb-0">{{ total_orders }}</h5>
-                                <small class="text-muted">Total Orders</small>
-                            </div>
+<div class="user-dashboard">
+    <div class="dashboard-container">
+        <!-- Hero Section -->
+        <section class="dashboard-hero animate-fade-in-up">
+            <div class="container">
+                <div class="dashboard-hero-content text-center">
+                    <h1>Welcome Back, {{ user.get_full_name|default:user.username }}!</h1>
+                    <p class="lead mb-0">Manage your account, orders, and preferences in one place</p>
+                    
+                    <div class="hero-stats">
+                        <div class="stat-card">
+                            <div class="stat-number">{{ total_orders }}</div>
+                            <div class="stat-label">Total Orders</div>
                         </div>
-                        <div class="stat-item">
-                            <i class="fas fa-clock text-warning"></i>
-                            <div class="stat-info">
-                                <h5 class="mb-0">{{ pending_orders }}</h5>
-                                <small class="text-muted">Pending</small>
-                            </div>
+                        <div class="stat-card">
+                            <div class="stat-number">${{ total_spent }}</div>
+                            <div class="stat-label">Total Spent</div>
                         </div>
-                        <div class="stat-item">
-                            <i class="fas fa-check-circle text-success"></i>
-                            <div class="stat-info">
-                                <h5 class="mb-0">{{ completed_orders }}</h5>
-                                <small class="text-muted">Completed</small>
-                            </div>
+                        <div class="stat-card">
+                            <div class="stat-number">{{ wishlist_count }}</div>
+                            <div class="stat-label">Wishlist Items</div>
                         </div>
-                        <div class="stat-item">
-                            <i class="fas fa-rupee-sign text-success"></i>
-                            <div class="stat-info">
-                                <h5 class="mb-0">${{ total_spent }}</h5>
-                                <small class="text-muted">Total Spent</small>
-                            </div>
+                        <div class="stat-card">
+                            <div class="stat-number">{{ reviews_count }}</div>
+                            <div class="stat-label">Reviews</div>
                         </div>
-                        <div class="stat-item">
-                            <i class="fas fa-heart text-danger"></i>
-                            <div class="stat-info">
-                                <h5 class="mb-0">{{ wishlist_count }}</h5>
-                                <small class="text-muted">Wishlist</small>
-                            </div>
-                        </div>
-                        <div class="stat-item">
-                            <i class="fas fa-star text-warning"></i>
-                            <div class="stat-info">
-                                <h5 class="mb-0">{{ reviews_count }}</h5>
-                                <small class="text-muted">Reviews</small>
-                            </div>
-                        </div>
-                        <div class="stat-item">
-                            <i class="fas fa-map-marker-alt text-info"></i>
-                            <div class="stat-info">
-                                <h5 class="mb-0">{{ addresses_count }}</h5>
-                                <small class="text-muted">Addresses</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="card-body border-top">
-                    <div class="d-grid gap-2">
-                        <a href="{% url 'orders' %}" class="btn btn-outline-primary">
-                            <i class="fas fa-receipt me-2"></i>My Orders
-                        </a>
-                        <a href="{% url 'wishlist' %}" class="btn btn-outline-danger">
-                            <i class="fas fa-heart me-2"></i>My Wishlist
-                        </a>
-                        <a href="{% url 'delivery_addresses' %}" class="btn btn-outline-secondary">
-                            <i class="fas fa-map-marker-alt me-2"></i>Addresses
-                        </a>
-                        <a href="{% url 'password_change' %}" class="btn btn-outline-warning">
-                            <i class="fas fa-key me-2"></i>Change Password
-                        </a>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Profile Content -->
-        <div class="col-lg-8">
-            <!-- Edit Profile Form -->
-            <div class="card shadow-sm border-0 mb-4">
-                <div class="card-header bg-white border-0 py-3">
-                    <h5 class="mb-0">
-                        <i class="fas fa-user-edit text-primary me-2"></i>Edit Profile
-                    </h5>
+        </section>
+
+        <!-- Main Dashboard Layout -->
+        <div class="dashboard-layout">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="profile-summary">
+                    <div class="profile-cover"></div>
+                    <div class="profile-avatar-container">
+                        <div class="profile-avatar">
+                            {% if user_profile.image %}
+                            <img src="{{ user_profile.image.url }}" alt="{{ user.username }}" class="profile-avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                            {% else %}
+                            <i class="fas fa-user" style="font-size: 60px; color: #8B1A10; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;"></i>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="profile-info">
+                        <h4 class="profile-name">{{ user.get_full_name|default:user.username }}</h4>
+                        <p class="profile-email">{{ user.email }}</p>
+                        <small class="member-since">Member since {{ user.date_joined|date:"M Y" }}</small>
+                    </div>
                 </div>
-                <div class="card-body p-4">
-                    <form method="post" enctype="multipart/form-data">
+
+                <ul class="sidebar-menu">
+                    <li><a href="{% url 'profile' %}" class="active"><i class="fas fa-user"></i> My Profile</a></li>
+                    <li><a href="{% url 'orders' %}"><i class="fas fa-receipt"></i> My Orders</a></li>
+                    <li><a href="{% url 'wishlist' %}"><i class="fas fa-heart"></i> Wishlist</a></li>
+                    <li><a href="{% url 'delivery_addresses' %}"><i class="fas fa-map-marker-alt"></i> Addresses</a></li>
+                    <li><a href="{% url 'password_change' %}"><i class="fas fa-key"></i> Change Password</a></li>
+                    <li><a href="{% url 'notifications' %}"><i class="fas fa-bell"></i> Notifications</a></li>
+                </ul>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Edit Profile Form -->
+                <article class="content-card">
+                    <header class="card-header">
+                        <h2 class="card-title">Edit Profile</h2>
+                    </header>
+                    <form method="post" enctype="multipart/form-data" class="profile-form">
                         {% csrf_token %}
                         
                         <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ user_form.first_name.id_for_label }}" class="form-label">First Name</label>
-                                {{ user_form.first_name }}
-                                {% if user_form.first_name.errors %}
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="{{ user_form.first_name.id_for_label }}">First Name</label>
+                                    {{ user_form.first_name }}
+                                    {% if user_form.first_name.errors %}
                                     <div class="text-danger small">{{ user_form.first_name.errors }}</div>
-                                {% endif %}
+                                    {% endif %}
+                                </div>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ user_form.last_name.id_for_label }}" class="form-label">Last Name</label>
-                                {{ user_form.last_name }}
-                                {% if user_form.last_name.errors %}
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="{{ user_form.last_name.id_for_label }}">Last Name</label>
+                                    {{ user_form.last_name }}
+                                    {% if user_form.last_name.errors %}
                                     <div class="text-danger small">{{ user_form.last_name.errors }}</div>
-                                {% endif %}
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
-                        
-                        <div class="mb-3">
-                            <label for="{{ user_form.email.id_for_label }}" class="form-label">Email</label>
+
+                        <div class="form-group">
+                            <label for="{{ user_form.email.id_for_label }}">Email</label>
                             {{ user_form.email }}
                             {% if user_form.email.errors %}
-                                <div class="text-danger small">{{ user_form.email.errors }}</div>
+                            <div class="text-danger small">{{ user_form.email.errors }}</div>
                             {% endif %}
                         </div>
-                        
-                        <div class="mb-3">
-                            <label for="{{ profile_form.phone.id_for_label }}" class="form-label">Phone Number</label>
+
+                        <div class="form-group">
+                            <label for="{{ profile_form.phone.id_for_label }}">Phone Number</label>
                             {{ profile_form.phone }}
                             {% if profile_form.phone.errors %}
-                                <div class="text-danger small">{{ profile_form.phone.errors }}</div>
+                            <div class="text-danger small">{{ profile_form.phone.errors }}</div>
                             {% endif %}
                         </div>
-                        
-                        <div class="mb-3">
-                            <label for="{{ profile_form.date_of_birth.id_for_label }}" class="form-label">Date of Birth</label>
-                            {{ profile_form.date_of_birth }}
-                            {% if profile_form.date_of_birth.errors %}
-                                <div class="text-danger small">{{ profile_form.date_of_birth.errors }}</div>
-                            {% endif %}
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="{{ profile_form.address.id_for_label }}" class="form-label">Address</label>
-                            {{ profile_form.address }}
-                            {% if profile_form.address.errors %}
-                                <div class="text-danger small">{{ profile_form.address.errors }}</div>
-                            {% endif %}
-                        </div>
-                        
+
                         <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ profile_form.city.id_for_label }}" class="form-label">City</label>
-                                {{ profile_form.city }}
-                                {% if profile_form.city.errors %}
-                                    <div class="text-danger small">{{ profile_form.city.errors }}</div>
-                                {% endif %}
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="{{ profile_form.date_of_birth.id_for_label }}">Date of Birth</label>
+                                    {{ profile_form.date_of_birth }}
+                                    {% if profile_form.date_of_birth.errors %}
+                                    <div class="text-danger small">{{ profile_form.date_of_birth.errors }}</div>
+                                    {% endif %}
+                                </div>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ profile_form.postal_code.id_for_label }}" class="form-label">Postal Code</label>
-                                {{ profile_form.postal_code }}
-                                {% if profile_form.postal_code.errors %}
-                                    <div class="text-danger small">{{ profile_form.postal_code.errors }}</div>
-                                {% endif %}
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="{{ profile_form.address.id_for_label }}">Address</label>
+                                    {{ profile_form.address }}
+                                    {% if profile_form.address.errors %}
+                                    <div class="text-danger small">{{ profile_form.address.errors }}</div>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
-                        
-                        <div class="mb-4">
-                            <label for="{{ profile_form.image.id_for_label }}" class="form-label">Profile Picture</label>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="{{ profile_form.city.id_for_label }}">City</label>
+                                    {{ profile_form.city }}
+                                    {% if profile_form.city.errors %}
+                                    <div class="text-danger small">{{ profile_form.city.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="{{ profile_form.postal_code.id_for_label }}">Postal Code</label>
+                                    {{ profile_form.postal_code }}
+                                    {% if profile_form.postal_code.errors %}
+                                    <div class="text-danger small">{{ profile_form.postal_code.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="{{ profile_form.image.id_for_label }}">Profile Picture</label>
                             {{ profile_form.image }}
                             {% if profile_form.image.errors %}
-                                <div class="text-danger small">{{ profile_form.image.errors }}</div>
+                            <div class="text-danger small">{{ profile_form.image.errors }}</div>
                             {% endif %}
                             <small class="form-text text-muted d-block mt-1">
                                 Upload a profile picture (JPG, PNG, max 5MB)
                             </small>
                         </div>
-                        
-                        <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary px-4">
+
+                        <div class="d-flex gap-3 mt-4">
+                            <button type="submit" class="btn btn-primary px-4 py-2">
                                 <i class="fas fa-save me-2"></i>Save Changes
                             </button>
-                            <a href="{% url 'home' %}" class="btn btn-outline-secondary px-4">
+                            <a href="{% url 'home' %}" class="btn btn-outline-secondary px-4 py-2">
                                 <i class="fas fa-times me-2"></i>Cancel
                             </a>
                         </div>
                     </form>
-                </div>
-            </div>
-            
-            <!-- Recent Orders -->
-            {% if recent_orders %}
-            <div class="card shadow-sm border-0 mb-4">
-                <div class="card-header bg-white border-0 py-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">
-                            <i class="fas fa-history text-primary me-2"></i>Recent Orders
-                        </h5>
-                        <a href="{% url 'orders' %}" class="btn btn-sm btn-outline-primary">View All</a>
-                    </div>
-                </div>
-                <div class="card-body p-0">
+                </article>
+
+                <!-- Recent Orders -->
+                {% if recent_orders %}
+                <article class="content-card">
+                    <header class="card-header">
+                        <h2 class="card-title">Recent Orders</h2>
+                        <a href="{% url 'orders' %}" class="view-all-btn">View All</a>
+                    </header>
                     <div class="table-responsive">
-                        <table class="table table-hover mb-0">
-                            <thead class="table-light">
+                        <table class="order-table">
+                            <thead>
                                 <tr>
                                     <th>Order #</th>
                                     <th>Date</th>
@@ -227,23 +676,23 @@
                             <tbody>
                                 {% for order in recent_orders %}
                                 <tr>
-                                    <td data-label="Order #"><strong>{{ order.order_number }}</strong></td>
-                                    <td data-label="Date">{{ order.created_at|date:"M d, Y" }}</td>
-                                    <td data-label="Items">{{ order.items.count }} item{{ order.items.count|pluralize }}</td>
-                                    <td data-label="Total"><strong>${{ order.total }}</strong></td>
-                                    <td data-label="Status">
-                                        <span class="badge 
-                                            {% if order.status == 'pending' %}bg-warning
-                                            {% elif order.status == 'confirmed' %}bg-info
-                                            {% elif order.status == 'preparing' %}bg-primary
-                                            {% elif order.status == 'out_for_delivery' %}bg-secondary
-                                            {% elif order.status == 'delivered' %}bg-success
-                                            {% elif order.status == 'cancelled' %}bg-danger
-                                            {% else %}bg-secondary{% endif %}">
+                                    <td><strong>{{ order.order_number }}</strong></td>
+                                    <td>{{ order.created_at|date:"M d, Y" }}</td>
+                                    <td>{{ order.items.count }} item{{ order.items.count|pluralize }}</td>
+                                    <td><strong>${{ order.total }}</strong></td>
+                                    <td>
+                                        <span class="status-badge 
+                                            {% if order.status == 'pending' %}bg-warning text-dark
+                                            {% elif order.status == 'confirmed' %}bg-info text-white
+                                            {% elif order.status == 'preparing' %}bg-primary text-white
+                                            {% elif order.status == 'out_for_delivery' %}bg-secondary text-white
+                                            {% elif order.status == 'delivered' %}bg-success text-white
+                                            {% elif order.status == 'cancelled' %}bg-danger text-white
+                                            {% else %}bg-secondary text-white{% endif %}">
                                             {{ order.get_status_display }}
                                         </span>
                                     </td>
-                                    <td data-label="Action">
+                                    <td>
                                         <a href="{% url 'order_detail' order.order_number %}" class="btn btn-sm btn-outline-primary">
                                             <i class="fas fa-eye"></i> View
                                         </a>
@@ -253,34 +702,31 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </div>
-            {% endif %}
-            
-            <!-- Favorite Items -->
-            {% if favorite_items %}
-            <div class="card shadow-sm border-0 mb-4">
-                <div class="card-header bg-white border-0 py-3">
-                    <h5 class="mb-0">
-                        <i class="fas fa-fire text-danger me-2"></i>Your Favorite Items
-                    </h5>
-                </div>
-                <div class="card-body">
+                </article>
+                {% endif %}
+
+                <!-- Favorite Items -->
+                {% if favorite_items %}
+                <article class="content-card">
+                    <header class="card-header">
+                        <h2 class="card-title">Your Favorite Items</h2>
+                        <a href="{% url 'wishlist' %}" class="view-all-btn">View All</a>
+                    </header>
                     <div class="row">
                         {% for item in favorite_items %}
                         <div class="col-md-4 mb-3">
-                            <div class="favorite-item-card">
-                                {% if item.menu_item__image %}
-                                    <img src="{{ item.menu_item__image.url }}" alt="{{ item.menu_item__name }}" class="favorite-item-image">
-                                {% elif item.menu_item__image_url %}
-                                    <img src="{{ item.menu_item__image_url }}" alt="{{ item.menu_item__name }}" class="favorite-item-image">
-                                {% else %}
-                                    <div class="favorite-item-placeholder">
-                                        <i class="fas fa-utensils"></i>
+                            <div class="favorite-item-card card h-100">
+                                <div class="card-body text-center">
+                                    {% if item.menu_item__image %}
+                                    <img src="{{ item.menu_item__image.url }}" alt="{{ item.menu_item__name }}" class="img-fluid rounded mb-3" style="height: 150px; object-fit: cover;">
+                                    {% elif item.menu_item__image_url %}
+                                    <img src="{{ item.menu_item__image_url }}" alt="{{ item.menu_item__name }}" class="img-fluid rounded mb-3" style="height: 150px; object-fit: cover;">
+                                    {% else %}
+                                    <div class="placeholder rounded mb-3 d-flex align-items-center justify-content-center" style="height: 150px; background: linear-gradient(135deg, #8B1A10 0%, #D4AF37 100%);">
+                                        <i class="fas fa-utensils text-white" style="font-size: 2rem;"></i>
                                     </div>
-                                {% endif %}
-                                <div class="favorite-item-info">
-                                    <h6 class="mb-1">{{ item.menu_item__name }}</h6>
+                                    {% endif %}
+                                    <h6 class="card-title mb-1">{{ item.menu_item__name }}</h6>
                                     <p class="text-muted small mb-0">
                                         <i class="fas fa-shopping-cart me-1"></i>Ordered {{ item.order_count }} time{{ item.order_count|pluralize }}
                                     </p>
@@ -289,233 +735,124 @@
                         </div>
                         {% endfor %}
                     </div>
-                </div>
-            </div>
-            {% endif %}
-            
-            <!-- Recent Reviews -->
-            {% if recent_reviews %}
-            <div class="card shadow-sm border-0 mb-4">
-                <div class="card-header bg-white border-0 py-3">
-                    <h5 class="mb-0">
-                        <i class="fas fa-comment-dots text-info me-2"></i>Your Recent Reviews
-                    </h5>
-                </div>
-                <div class="card-body">
+                </article>
+                {% endif %}
+
+                <!-- Recent Reviews -->
+                {% if recent_reviews %}
+                <article class="content-card">
+                    <header class="card-header">
+                        <h2 class="card-title">Your Recent Reviews</h2>
+                        <a href="#" class="view-all-btn">View All</a>
+                    </header>
                     {% for review in recent_reviews %}
-                    <div class="review-item mb-3 pb-3 {% if not forloop.last %}border-bottom{% endif %}">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div class="review-item mb-4 pb-4 {% if not forloop.last %}border-bottom{% endif %}">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
                             <h6 class="mb-0">{{ review.menu_item.name }}</h6>
                             <small class="text-muted">{{ review.created_at|date:"M d, Y" }}</small>
                         </div>
                         <div class="mb-2">
                             {% for i in "12345" %}
-                                {% if forloop.counter <= review.rating %}
+                            {% if forloop.counter <= review.rating %} 
                                 <i class="fas fa-star text-warning"></i>
-                                {% else %}
+                            {% else %}
                                 <i class="far fa-star text-warning"></i>
-                                {% endif %}
+                            {% endif %}
                             {% endfor %}
                         </div>
                         <p class="text-muted mb-0">{{ review.comment }}</p>
                     </div>
                     {% endfor %}
-                </div>
-            </div>
-            {% endif %}
+                </article>
+                {% endif %}
+            </main>
         </div>
     </div>
 </div>
 
-<style>
-.profile-card {
-    border-radius: 15px;
-    overflow: hidden;
-}
+<!-- Dark Mode Toggle Button -->
+<button class="dark-mode-toggle" onclick="toggleDarkMode()">
+    <i class="fas fa-moon"></i>
+</button>
 
-.profile-image-container {
-    position: relative;
-    width: 150px;
-    height: 150px;
-    margin: 0 auto;
-}
+<script>
+// Smooth scrolling for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
 
-.profile-image {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 5px solid var(--gray-100);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-.profile-image-placeholder {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 4rem;
-    border: 5px solid var(--gray-100);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-.profile-stats {
-    display: grid;
-    gap: 1rem;
-}
-
-.stat-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.75rem;
-    background: var(--gray-50);
-    border-radius: 10px;
-    transition: all 0.3s ease;
-}
-
-.stat-item:hover {
-    background: var(--gray-100);
-    transform: translateX(5px);
-}
-
-.stat-item i {
-    font-size: 1.5rem;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: white;
-    border-radius: 10px;
-}
-
-.stat-info h5 {
-    font-weight: 700;
-    color: var(--gray-800);
-}
-
-.stat-info small {
-    font-size: 0.75rem;
-}
-
-.card {
-    border-radius: 15px;
-}
-
-.card-header {
-    border-radius: 15px 15px 0 0 !important;
-}
-
-.form-control, .form-select {
-    border-radius: 10px;
-    border: 1px solid var(--gray-300);
-    padding: 0.75rem 1rem;
-    transition: all 0.3s ease;
-}
-
-.form-control:focus, .form-select:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(255, 77, 77, 0.1);
-}
-
-.btn {
-    border-radius: 10px;
-    padding: 0.6rem 1.2rem;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-.table {
-    font-size: 0.9rem;
-}
-
-.table thead th {
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.5px;
-    color: var(--gray-600);
-}
-
-.badge {
-    padding: 0.4rem 0.8rem;
-    font-weight: 600;
-    border-radius: 6px;
-}
-
-.favorite-item-card {
-    background: var(--gray-50);
-    border-radius: 12px;
-    padding: 1rem;
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.favorite-item-card:hover {
-    background: var(--gray-100);
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-.favorite-item-image {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 0.75rem;
-}
-
-.favorite-item-placeholder {
-    width: 100%;
-    height: 120px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 2rem;
-    margin-bottom: 0.75rem;
-}
-
-.favorite-item-info h6 {
-    font-weight: 600;
-    color: var(--gray-800);
-}
-
-.review-item {
-    padding: 0.75rem;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-}
-
-.review-item:hover {
-    background: var(--gray-50);
-}
-    border-radius: 6px;
-}
-
-@media (max-width: 991.98px) {
-    .profile-image-container,
-    .profile-image,
-    .profile-image-placeholder {
-        width: 120px;
-        height: 120px;
-    }
+// Dark mode toggle functionality
+function toggleDarkMode() {
+    const body = document.body;
+    body.classList.toggle('dark-mode');
     
-    .profile-image-placeholder {
-        font-size: 3rem;
+    // Save preference to localStorage
+    localStorage.setItem('darkMode', body.classList.contains('dark-mode'));
+    
+    // Update icon
+    const icon = document.querySelector('.dark-mode-toggle i');
+    if (body.classList.contains('dark-mode')) {
+        icon.className = 'fas fa-sun';
+    } else {
+        icon.className = 'fas fa-moon';
     }
 }
-</style>
+
+// Load saved theme preference
+document.addEventListener('DOMContentLoaded', function() {
+    const savedDarkMode = localStorage.getItem('darkMode');
+    if (savedDarkMode === 'true') {
+        document.body.classList.add('dark-mode');
+        document.querySelector('.dark-mode-toggle i').className = 'fas fa-sun';
+    }
+});
+
+// Form validation
+document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', function(e) {
+        // Add loading state to submit button
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Saving...';
+            
+            // Re-enable after 2 seconds (adjust as needed)
+            setTimeout(() => {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-save me-2"></i>Save Changes';
+            }, 2000);
+        }
+    });
+});
+
+// Intersection Observer for scroll animations
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.animationPlayState = 'running';
+        }
+    });
+}, observerOptions);
+
+document.querySelectorAll('.animate-fade-in-up').forEach(el => {
+    el.style.animationPlayState = 'paused';
+    observer.observe(el);
+});
+</script>
 {% endblock %}
+
+{% block footer %}{% endblock %}

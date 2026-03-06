@@ -189,7 +189,7 @@ def user_dashboard(request):
     }
     
     # Loyalty points (based on total spent)
-    loyalty_points = int(total_spent / 10)  # 1 point per ₹10 spent
+    loyalty_points = int(total_spent / 10)  # 1 point per $10 spent
     next_reward_points = ((loyalty_points // 100) + 1) * 100
     points_to_next_reward = next_reward_points - loyalty_points
     
@@ -590,8 +590,8 @@ def checkout_view(request):
         return redirect('cart')
     
     total = sum(item.total_price for item in cart_items)
-    delivery_fee = Decimal('5.00')
-    grand_total = total + delivery_fee
+    delivery_fee = Decimal('0.00')  # No delivery fee
+    grand_total = total + delivery_fee  # Same as total now
     
     if request.method == 'POST':
         form = CheckoutForm(request.POST)
@@ -603,8 +603,8 @@ def checkout_view(request):
                 order.total = total
                 order.delivery_fee = delivery_fee
                 order.tax_amount = Decimal('0.00')  # No tax
-                # Save special instructions from notes field
-                order.special_instructions = form.cleaned_data.get('notes', '')
+                # Save notes from form
+                order.notes = form.cleaned_data.get('notes', '')
                 # Calculate estimated delivery time (30-45 minutes from now)
                 from django.utils import timezone
                 from datetime import timedelta
@@ -1054,7 +1054,7 @@ def apply_coupon(request):
         if cart_total < coupon.minimum_order_amount:
             return JsonResponse({
                 'success': False, 
-                'message': f'Minimum order amount is ₹{coupon.minimum_order_amount}. Your cart total is ₹{cart_total}'
+                'message': f'Minimum order amount is ${coupon.minimum_order_amount}. Your cart total is ${cart_total}'
             })
         
         discount_amount = coupon.calculate_discount(cart_total)
@@ -1063,7 +1063,7 @@ def apply_coupon(request):
         if validate_only:
             return JsonResponse({
                 'success': True,
-                'message': f'✓ Valid! {coupon.description} - Save ₹{float(discount_amount)}',
+                'message': f'✓ Valid! {coupon.description} - Save ${float(discount_amount)}',
                 'discount_amount': float(discount_amount),
                 'new_total': float(cart_total - discount_amount)
             })
@@ -1528,8 +1528,8 @@ def quick_view_ajax(request, item_id):
                             <h4>{item.name}</h4>
                             <p class="text-muted">{item.description}</p>
                             <div class="mb-3">
-                                <span class="h3 text-primary">₹{item.discounted_price}</span>
-                                {f'<span class="text-muted text-decoration-line-through ms-2">₹{item.price}</span>' if item.discount > 0 else ''}
+                                <span class="h3 text-primary">${item.discounted_price}</span>
+                                {f'<span class="text-muted text-decoration-line-through ms-2">${item.price}</span>' if item.discount > 0 else ''}
                             </div>
                             <div class="d-grid gap-2">
                                 <button class="btn btn-primary btn-lg" onclick="cartManager.addToCart({item.id}); bootstrap.Modal.getInstance(this.closest('.modal')).hide();">

@@ -144,7 +144,7 @@ class CouponSerializer(serializers.ModelSerializer):
     def get_discount_display(self, obj):
         if obj.discount_type == 'percentage':
             return f"{obj.discount_value}% off"
-        return f"₹{obj.discount_value} off"
+        return f"${obj.discount_value} off"
 
 
 class NotificationSerializer(serializers.ModelSerializer):

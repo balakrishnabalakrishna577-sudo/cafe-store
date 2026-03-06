@@ -176,13 +176,13 @@ class LiveSearch {
         }
 
         this.results.innerHTML = results.map(item => `
-            <a href="/menu/${item.slug}/" class="list-group-item list-group-item-action">
+            <a href="/menu/item/${item.slug}/" class="list-group-item list-group-item-action">
                 <div class="d-flex align-items-center">
                     <img src="${item.image}" alt="${item.name}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;" class="me-3">
                     <div>
                         <h6 class="mb-0">${item.name}</h6>
                         <small class="text-muted">${item.category}</small>
-                        <div class="text-primary fw-bold">₹${item.price}</div>
+                        <div class="text-primary fw-bold">${item.price}</div>
                     </div>
                 </div>
             </a>

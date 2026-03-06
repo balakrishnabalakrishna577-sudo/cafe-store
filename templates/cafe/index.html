@@ -60,6 +60,43 @@
         /* Added significant bottom padding */
     }
 
+    /* Hero Responsive Adjustments */
+    @media (max-width: 992px) {
+        .hero-section {
+            min-height: 70vh;
+            padding: 2rem 1rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hero-section {
+            min-height: 60vh;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+        }
+
+        .hero-buttons .btn {
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 0.5rem;
+        }
+    }
+
+
 
 
     .menu-item-card .card-body {
@@ -194,41 +231,7 @@
     }
 
 
-    /* Hero Responsive Adjustments */
-    @media (max-width: 992px) {
-        .hero-section {
-            min-height: 70vh;
-            padding: 2rem 1rem;
-        }
 
-        .hero-title {
-            font-size: clamp(2.5rem, 8vw, 4rem);
-        }
-
-        .hero-subtitle {
-            font-size: 1.2rem;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .hero-section {
-            min-height: 60vh;
-        }
-
-        .hero-title {
-            font-size: 2.5rem;
-        }
-
-        .hero-subtitle {
-            font-size: 1rem;
-        }
-
-        .hero-buttons .btn {
-            width: 100%;
-            max-width: 300px;
-            margin-bottom: 0.5rem;
-        }
-    }
 
     /* Category Carousel Styles - Fully Responsive */
     .category-carousel-wrapper {
@@ -489,6 +492,303 @@
             margin-top: 5px;
         }
     }
+    
+    /* Enhanced Mobile Responsiveness */
+    @media (max-width: 992px) {
+        .hero-buttons {
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .hero-btn-main {
+            width: 100%;
+            max-width: 300px;
+            padding: 15px 20px;
+        }
+        
+        .popular-dish-card {
+            margin-bottom: 2rem;
+        }
+        
+        .section-tag {
+            font-size: 0.8rem;
+        }
+        
+        .display-3 {
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .hero-section {
+            min-height: 70vh;
+            padding: 2rem 1rem;
+        }
+        
+        .hero-title {
+            font-size: clamp(2rem, 6vw, 3rem);
+            margin-bottom: 0.5rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero-buttons {
+            margin-top: 1.5rem;
+        }
+        
+        .brand-phone {
+            font-size: 1rem;
+        }
+        
+        .display-3 {
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+        }
+        
+        .lead {
+            font-size: 1rem;
+        }
+        
+        .row.g-5 {
+            gap: 1.5rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+        }
+        
+        .col-lg-6 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .hero-section {
+            min-height: 60vh;
+            padding: 1.5rem 0.75rem;
+        }
+        
+        .hero-title {
+            font-size: clamp(1.8rem, 6vw, 2.5rem);
+        }
+        
+        .hero-subtitle {
+            font-size: 0.9rem;
+        }
+        
+        .hero-buttons {
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .hero-btn-main {
+            width: 100%;
+            padding: 14px 18px;
+            font-size: 1rem;
+            /* top: 0.5rem; */
+            
+        }
+        
+        .display-3 {
+            font-size: clamp(1.5rem, 5vw, 2rem);
+        }
+        
+        .text-center {
+            text-align: center !important;
+        }
+        
+        .img-fluid {
+            width: 100%;
+            height: auto;
+        }
+        
+        .popular-dish-card {
+            margin-bottom: 1.5rem;
+        }
+        
+        .col-lg-4 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+        
+        .promo-card {
+            min-height: 250px;
+            padding: 1.5rem;
+        }
+        
+        .mini-ad {
+            margin-bottom: 1rem;
+        }
+    }
+    
+    /* Extra small devices */
+    @media (max-width: 425px) {
+        .hero-section {
+            min-height: 55vh;
+            padding: 1rem 0.5rem;
+        }
+        
+        .hero-title {
+            font-size: clamp(1.5rem, 6vw, 2rem);
+        }
+        
+        .hero-subtitle {
+            font-size: 0.85rem;
+        }
+        
+        .hero-btn-main {
+            padding: 10px 12px;
+            font-size: 0.9rem;
+        }
+        
+        .display-3 {
+            font-size: clamp(1.3rem, 5vw, 1.8rem);
+        }
+        
+        .promo-card {
+            min-height: 220px;
+            padding: 1rem;
+        }
+        
+        .btn-promo {
+            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+        }
+        
+        .section-tag {
+            font-size: 0.7rem;
+        }
+    }
+    
+    /* Very small devices */
+    @media (max-width: 375px) {
+        .hero-section {
+            min-height: 50vh;
+        }
+        
+        .hero-title {
+            font-size: clamp(1.3rem, 6vw, 1.8rem);
+        }
+        
+        .hero-subtitle {
+            font-size: 0.8rem;
+        }
+        
+        .hero-btn-main {
+            padding: 8px 10px;
+            font-size: 0.85rem;
+        }
+        
+        .display-3 {
+            font-size: clamp(1.2rem, 5vw, 1.6rem);
+        }
+        
+        .promo-card {
+            min-height: 200px;
+            padding: 0.8rem;
+        }
+        
+        .promo-badge {
+            font-size: 0.65rem;
+        }
+        
+        .promo-title {
+            font-size: 1.1rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+    }
+    
+    /* Content-specific responsive styles */
+    .content-section {
+        padding: 2rem 1rem;
+    }
+    
+    .menu-section-header {
+        padding: 0 1rem;
+    }
+    
+    .popular-dish-card {
+        margin-bottom: 2rem;
+    }
+    
+    .promo-card {
+        margin-bottom: 1.5rem;
+    }
+    
+    .mini-ad {
+        padding: 1rem;
+    }
+    
+    .mini-ad h5 {
+        font-size: 1rem;
+    }
+    
+    .mini-ad p {
+        font-size: 0.9rem;
+    }
+    
+    /* Category Carousel Mobile Optimization */
+    @media (max-width: 768px) {
+        .category-carousel-wrapper {
+            padding: 15px 20px;
+        }
+        
+        .category-circle {
+            width: 100px;
+            height: 100px;
+        }
+        
+        .category-name {
+            font-size: 0.875rem;
+            max-width: 100px;
+            margin-top: 8px;
+        }
+        
+        .carousel-nav-btn {
+            width: 35px;
+            height: 35px;
+            font-size: 1rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .category-carousel-wrapper {
+            padding: 10px 15px;
+        }
+        
+        .category-circle {
+            width: 85px;
+            height: 85px;
+        }
+        
+        .category-name {
+            font-size: 0.8rem;
+            max-width: 85px;
+            margin-top: 6px;
+        }
+        
+        .carousel-nav-btn {
+            width: 30px;
+            height: 30px;
+            font-size: 0.9rem;
+        }
+        
+        .carousel-nav-prev {
+            left: 0;
+        }
+        
+        .carousel-nav-next {
+            right: 0;
+        }
+    }
 </style>
 {% endblock %}
 
@@ -569,7 +869,7 @@
             <!-- Banner Ad -->
             <div class="col-12">
                 <div class="banner-ad"
-                    style="background: linear-gradient(135deg, {{ ad.gradient_start }} 0%, {{ ad.gradient_end }} 100%);">
+                    style="--ad-grad-start: {{ ad.gradient_start|default:'#ff6b35' }}; --ad-grad-end: {{ ad.gradient_end|default:'#f7931e' }};">
                     <div class="banner-content">
                         <div class="banner-left">
                             {% if ad.badge_text %}
@@ -592,7 +892,7 @@
             <!-- Promo Card -->
             <div class="col-md-6">
                 <div class="promo-card"
-                    style="background: linear-gradient(135deg, {{ ad.gradient_start }} 0%, {{ ad.gradient_end }} 100%);">
+                    style="--ad-grad-start: {{ ad.gradient_start|default:'#ff6b35' }}; --ad-grad-end: {{ ad.gradient_end|default:'#f7931e' }};">
                     <div class="promo-content">
                         {% if ad.badge_text %}
                         <div class="promo-badge">{{ ad.badge_text }}</div>
@@ -868,7 +1168,7 @@
             <!-- Promo Card -->
             <div class="col-md-6">
                 <div class="promo-card"
-                    style="background: linear-gradient(135deg, {{ ad.gradient_start }} 0%, {{ ad.gradient_end }} 100%);">
+                    style="--ad-grad-start: {{ ad.gradient_start|default:'#ff6b35' }}; --ad-grad-end: {{ ad.gradient_end|default:'#f7931e' }};">
                     <div class="promo-content">
                         {% if ad.badge_text %}
                         <div class="promo-badge">{{ ad.badge_text }}</div>
@@ -903,7 +1203,7 @@
             <!-- Banner Ad -->
             <div class="col-12">
                 <div class="banner-ad"
-                    style="background: linear-gradient(135deg, {{ ad.gradient_start }} 0%, {{ ad.gradient_end }} 100%);">
+                    style="--ad-grad-start: {{ ad.gradient_start|default:'#ff6b35' }}; --ad-grad-end: {{ ad.gradient_end|default:'#f7931e' }};">
                     <div class="banner-content">
                         <div class="banner-left">
                             {% if ad.badge_text %}
@@ -1022,6 +1322,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        background: linear-gradient(135deg, var(--ad-grad-start, #667eea) 0%, var(--ad-grad-end, #764ba2) 100%);
     }
 
     .promo-card:hover {
@@ -1030,7 +1331,8 @@
     }
 
     .promo-card-1 {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --ad-grad-start: #667eea;
+        --ad-grad-end: #764ba2;
         color: white;
     }
 
@@ -1112,7 +1414,7 @@
 
     /* Banner Ad */
     .banner-ad {
-        background: linear-gradient(135deg, #ff4d4d 0%, #ff6b35 100%);
+        background: linear-gradient(135deg, var(--ad-grad-start, #ff4d4d) 0%, var(--ad-grad-end, #ff6b35) 100%);
         border-radius: 20px;
         padding: 2rem 3rem;
         color: white;
@@ -1573,81 +1875,14 @@
     </div>
 </section>
 
-<!-- App Download Section -->
-<section class="py-5" style="background: linear-gradient(135deg, #ff4d4d 0%, #ff6b35 100%);">
-    <div class="container">
-        <div class="row align-items-center animate-on-scroll">
-            <div class="col-lg-6 text-white mb-4 mb-lg-0">
-                <h2 class="display-5 fw-bold mb-4">Get the Spices of India Cuisine App</h2>
-                <p class="lead mb-4">Order food anytime, anywhere. Download our app for exclusive deals and faster
-                    checkout.</p>
-                <div class="d-flex gap-3 flex-wrap">
-                    <a href="#" class="btn btn-light btn-lg d-flex align-items-center"
-                        style="border-radius: 15px; padding: 12px 24px;">
-                        <i class="fab fa-apple fa-2x me-3"></i>
-                        <div class="text-start">
-                            <small class="d-block" style="font-size: 0.7rem;">Download on the</small>
-                            <strong style="font-size: 1.1rem;">App Store</strong>
-                        </div>
-                    </a>
-                    <a href="#" class="btn btn-light btn-lg d-flex align-items-center"
-                        style="border-radius: 15px; padding: 12px 24px;">
-                        <i class="fab fa-google-play fa-2x me-3"></i>
-                        <div class="text-start">
-                            <small class="d-block" style="font-size: 0.7rem;">Get it on</small>
-                            <strong style="font-size: 1.1rem;">Google Play</strong>
-                        </div>
-                    </a>
-                </div>
-                <div class="mt-4">
-                    <div class="d-flex align-items-center mb-2">
-                        <i class="fas fa-check-circle me-2"></i>
-                        <span>Exclusive app-only deals</span>
-                    </div>
-                    <div class="d-flex align-items-center mb-2">
-                        <i class="fas fa-check-circle me-2"></i>
-                        <span>Track your order in real-time</span>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <i class="fas fa-check-circle me-2"></i>
-                        <span>Save your favorite orders</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 text-center">
-                <div class="position-relative" style="max-width: 400px; margin: 0 auto;">
-                    <div
-                        style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 30px; padding: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
-                        <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&h=300&fit=crop"
-                            alt="Mobile App" class="img-fluid rounded-4 shadow-lg"
-                            style="max-height: 400px; object-fit: cover;">
-                    </div>
-                    <!-- Floating badges -->
-                    <div class="position-absolute top-0 start-0 m-3" style="animation: float 3s ease-in-out infinite;">
-                        <div class="badge bg-white text-dark px-3 py-2 shadow-lg" style="border-radius: 20px;">
-                            <i class="fas fa-star text-warning me-1"></i>
-                            <strong>4.8</strong> Rating
-                        </div>
-                    </div>
-                    <div class="position-absolute bottom-0 end-0 m-3"
-                        style="animation: float 3s ease-in-out infinite 1.5s;">
-                        <div class="badge bg-white text-dark px-3 py-2 shadow-lg" style="border-radius: 20px;">
-                            <i class="fas fa-download text-success me-1"></i>
-                            <strong>50K+</strong> Downloads
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+
 
 <!-- CTA Section -->
 <section class="py-5">
     <div class="container">
         <div class="cta-section animate-on-scroll">
             <div class="position-relative" style="z-index: 2;">
-                <h3 class="display-6 fw-bold mb-4">
+                <h3 class="display-6 fw-bold mb-4" style="color: #ff6b35; text-align: center;">
                     Ready to Experience Amazing Food?
                 </h3>
                 <p class="lead text-muted mb-4">

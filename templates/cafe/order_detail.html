@@ -104,13 +104,33 @@
         color: white;
     }
 
-    .status-pending { background: #3b82f6; }
-    .status-confirmed { background: #06b6d4; }
-    .status-preparing { background: #f59e0b; }
-    .status-out-for-delivery { background: #f59e0b; }
-    .status-delivered { background: #10b981; }
-    .status-cancelled { background: #ef4444; }
-    .status-completed { background: #3b82f6; }
+    .status-pending {
+        background: #3b82f6;
+    }
+
+    .status-confirmed {
+        background: #06b6d4;
+    }
+
+    .status-preparing {
+        background: #f59e0b;
+    }
+
+    .status-out-for-delivery {
+        background: #f59e0b;
+    }
+
+    .status-delivered {
+        background: #10b981;
+    }
+
+    .status-cancelled {
+        background: #ef4444;
+    }
+
+    .status-completed {
+        background: #3b82f6;
+    }
 
     /* Progress Bar */
     .progress-container {
@@ -518,7 +538,16 @@
     }
 
     /* Print Styles - Force Single Page Only */
+    .invoice-print-wrapper {
+        display: none;
+    }
+
     @media print {
+        .invoice-print-wrapper {
+            display: block !important;
+            visibility: visible !important;
+        }
+
         /* Page setup for single page */
         @page {
             size: A4;
@@ -542,23 +571,27 @@
         }
 
         /* Show only the printable content */
-        .print-content,
+        .print-content {
+            visibility: visible !important;
+            display: block !important;
+        }
+
         .print-content * {
-            visibility: visible;
+            visibility: visible !important;
         }
 
         /* Position the print content to fit on one page */
         .print-content {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100vh;
-            margin: 0 !important;
-            padding: 8pt !important;
-            overflow: hidden;
-            font-size: 8pt !important;
-            font-family: 'Times New Roman', Times, serif !important;
+            position: fixed !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 100% !important;
+            height: auto !important;
+            background: white !important;
+            padding: 20pt !important;
+            z-index: 999999 !important;
+            visibility: visible !important;
+            display: block !important;
         }
 
         /* Print-specific styling */
@@ -569,8 +602,6 @@
             line-height: 1.1 !important;
             margin: 0 !important;
             padding: 0 !important;
-            height: 100vh !important;
-            overflow: hidden !important;
             font-family: 'Times New Roman', Times, serif !important;
         }
 
@@ -583,18 +614,40 @@
         }
 
         .print-logo {
-            font-size: 12pt !important;
+            font-size: 14pt !important;
             font-weight: bold !important;
             color: #000 !important;
             margin-bottom: 2pt !important;
             font-family: 'Times New Roman', Times, serif !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 10pt !important;
+        }
+
+        .invoice-logo {
+            height: 40pt !important;
+            width: auto !important;
+            border-radius: 50% !important;
+            border: 1px solid #000 !important;
         }
 
         .print-subtitle {
-            font-size: 7pt !important;
-            color: #666 !important;
-            margin: 1pt 0 !important;
+            font-size: 10pt !important;
+            color: #000 !important;
+            margin: 3pt 0 !important;
             font-family: 'Times New Roman', Times, serif !important;
+            font-weight: 600 !important;
+        }
+
+        .print-status-badge {
+            display: inline-block !important;
+            padding: 2pt 6pt !important;
+            border: 1px solid #000 !important;
+            border-radius: 4pt !important;
+            font-size: 9pt !important;
+            text-transform: uppercase !important;
+            margin-left: 5pt !important;
         }
 
         /* Ultra compact sections */
@@ -622,7 +675,8 @@
             font-family: 'Times New Roman', Times, serif !important;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #000 !important;
             padding: 1pt 2pt !important;
             text-align: left !important;
@@ -710,7 +764,8 @@
         }
 
         /* Hide any overflow */
-        html, body {
+        html,
+        body {
             overflow: hidden !important;
             height: 100vh !important;
         }
@@ -773,21 +828,25 @@
                             <div class="progress-fill" style="width: 100%; background: #10b981;"></div>
                             {% endif %}
                         </div>
-                        
+
                         <div class="progress-steps">
-                            <div class="progress-step {% if order.status == 'pending' or order.status == 'confirmed' or order.status == 'preparing' or order.status == 'out_for_delivery' or order.status == 'delivered' %}completed{% endif %}">
+                            <div
+                                class="progress-step {% if order.status == 'pending' or order.status == 'confirmed' or order.status == 'preparing' or order.status == 'out_for_delivery' or order.status == 'delivered' %}completed{% endif %}">
                                 <i class="fas fa-check-circle d-block mb-1"></i>
                                 <span>Order Placed</span>
                             </div>
-                            <div class="progress-step {% if order.status == 'confirmed' or order.status == 'preparing' or order.status == 'out_for_delivery' or order.status == 'delivered' %}completed{% endif %}">
+                            <div
+                                class="progress-step {% if order.status == 'confirmed' or order.status == 'preparing' or order.status == 'out_for_delivery' or order.status == 'delivered' %}completed{% endif %}">
                                 <i class="fas fa-check-circle d-block mb-1"></i>
                                 <span>Confirmed</span>
                             </div>
-                            <div class="progress-step {% if order.status == 'preparing' or order.status == 'out_for_delivery' or order.status == 'delivered' %}completed{% endif %}">
+                            <div
+                                class="progress-step {% if order.status == 'preparing' or order.status == 'out_for_delivery' or order.status == 'delivered' %}completed{% endif %}">
                                 <i class="fas fa-utensils d-block mb-1"></i>
                                 <span>Preparing</span>
                             </div>
-                            <div class="progress-step {% if order.status == 'out_for_delivery' or order.status == 'delivered' %}completed{% endif %}">
+                            <div
+                                class="progress-step {% if order.status == 'out_for_delivery' or order.status == 'delivered' %}completed{% endif %}">
                                 <i class="fas fa-truck d-block mb-1"></i>
                                 <span>Out for Delivery</span>
                             </div>
@@ -800,8 +859,10 @@
                     {% endif %}
 
                     <!-- Status Message -->
-                    <div class="alert alert-{% if order.status == 'delivered' %}success{% elif order.status == 'cancelled' %}danger{% elif order.status == 'preparing' or order.status == 'out_for_delivery' %}warning{% else %}info{% endif %}">
-                        <i class="alert-icon fas fa-{% if order.status == 'pending' %}clock{% elif order.status == 'confirmed' %}check{% elif order.status == 'preparing' %}utensils{% elif order.status == 'out_for_delivery' %}truck{% elif order.status == 'delivered' %}check-circle{% elif order.status == 'cancelled' %}times-circle{% endif %}"></i>
+                    <div
+                        class="alert alert-{% if order.status == 'delivered' %}success{% elif order.status == 'cancelled' %}danger{% elif order.status == 'preparing' or order.status == 'out_for_delivery' %}warning{% else %}info{% endif %}">
+                        <i
+                            class="alert-icon fas fa-{% if order.status == 'pending' %}clock{% elif order.status == 'confirmed' %}check{% elif order.status == 'preparing' %}utensils{% elif order.status == 'out_for_delivery' %}truck{% elif order.status == 'delivered' %}check-circle{% elif order.status == 'cancelled' %}times-circle{% endif %}"></i>
                         <strong>
                             {% if order.status == 'pending' %}
                             Order Being Processed
@@ -836,7 +897,7 @@
                     {% if order.estimated_delivery_time %}
                     <div class="text-center p-3 bg-light rounded">
                         <i class="fas fa-clock text-primary me-2"></i>
-                        <strong>Estimated Delivery:</strong> 
+                        <strong>Estimated Delivery:</strong>
                         <span class="text-primary fw-bold">{{ order.estimated_delivery_time|date:"g:i A" }}</span>
                     </div>
                     {% endif %}
@@ -855,9 +916,11 @@
                     <div class="order-item">
                         <div class="item-image-container">
                             {% if item.menu_item.get_image_url %}
-                            <img src="{{ item.menu_item.get_image_url }}" alt="{{ item.menu_item.name }}" class="item-image">
+                            <img src="{{ item.menu_item.get_image_url }}" alt="{{ item.menu_item.name }}"
+                                class="item-image" onerror="handleImageError(this)">
                             {% else %}
-                            <div class="item-image d-flex align-items-center justify-content-center bg-primary text-white">
+                            <div
+                                class="item-image d-flex align-items-center justify-content-center bg-primary text-white">
                                 <i class="fas fa-utensils fa-2x"></i>
                             </div>
                             {% endif %}
@@ -865,7 +928,7 @@
 
                         <div class="item-details">
                             <h3 class="item-name">{{ item.menu_item.name }}</h3>
-                            
+
                             {% if item.menu_item.description %}
                             <p class="item-description">{{ item.menu_item.description|truncatewords:20 }}</p>
                             {% endif %}
@@ -896,13 +959,15 @@
                         <div class="item-summary">
                             <div class="total-price">${{ item.total_price }}</div>
                             <div class="quantity-info">{{ item.quantity }} × ${{ item.price }}</div>
-                            
-                            <button class="btn btn-primary btn-sm btn-block" onclick="reorderItem('{{ item.menu_item.id }}', '{{ item.menu_item.name|escapejs }}')">
+
+                            <button class="btn btn-primary btn-sm btn-block"
+                                onclick="reorderItem('{{ item.menu_item.id }}', '{{ item.menu_item.name|escapejs }}')">
                                 <i class="fas fa-plus me-1"></i>Reorder
                             </button>
-                            
+
                             {% if order.status == 'delivered' %}
-                            <button class="btn btn-success btn-sm btn-block" onclick="reviewItem('{{ item.menu_item.id }}', '{{ item.menu_item.name|escapejs }}')">
+                            <button class="btn btn-success btn-sm btn-block"
+                                onclick="reviewItem('{{ item.menu_item.id }}', '{{ item.menu_item.name|escapejs }}')">
                                 <i class="fas fa-star me-1"></i>Review
                             </button>
                             {% endif %}
@@ -1005,7 +1070,7 @@
                         <span>Tax:</span>
                         <span class="fw-bold">${{ order.tax_amount }}</span>
                     </div>
-                    
+
                     <div class="summary-total d-flex justify-content-between">
                         <span>Total Paid:</span>
                         <span>${{ order.grand_total }}</span>
@@ -1070,10 +1135,16 @@
 </div>
 
 <!-- Ultra Compact Print Content - Single Page Only -->
-<div class="print-content" style="display: none;">
+<div class="invoice-print-wrapper print-content">
     <div class="print-header">
-        <div class="print-logo">Spices of India Cuisine - Order Invoice</div>
-        <div class="print-subtitle">#{{ order.order_number }} | {{ order.created_at|date:"d/m/Y g:i A" }} | {{ order.get_status_display }}</div>
+        <div class="print-logo">
+            <img src="{% static 'images/logo.jpeg' %}" alt="Logo" class="invoice-logo">
+            <span class="invoice-name">Spices of India Cuisine</span>
+        </div>
+        <div class="print-subtitle">
+            #{{ order.order_number }} | {{ order.created_at|date:"d/m/Y g:i A" }} |
+            <span class="print-status-badge">{{ order.get_status_display }}</span>
+        </div>
     </div>
 
     <!-- Customer & Order Info in 2 columns -->
@@ -1119,22 +1190,34 @@
 
     <!-- Order Summary - Compact -->
     <table class="summary-table">
-        <tr><td>Subtotal:</td><td style="text-align: right;">${{ order.total }}</td></tr>
-        <tr><td>Delivery:</td><td style="text-align: right;">${{ order.delivery_fee }}</td></tr>
-        <tr><td>Tax:</td><td style="text-align: right;">${{ order.tax_amount }}</td></tr>
-        <tr class="total-row"><td><strong>Total:</strong></td><td style="text-align: right;"><strong>${{ order.grand_total }}</strong></td></tr>
+        <tr>
+            <td>Subtotal:</td>
+            <td style="text-align: right;">${{ order.total }}</td>
+        </tr>
+        <tr>
+            <td>Delivery:</td>
+            <td style="text-align: right;">${{ order.delivery_fee }}</td>
+        </tr>
+        <tr>
+            <td>Tax:</td>
+            <td style="text-align: right;">${{ order.tax_amount }}</td>
+        </tr>
+        <tr class="total-row">
+            <td><strong>Total:</strong></td>
+            <td style="text-align: right;"><strong>${{ order.grand_total }}</strong></td>
+        </tr>
     </table>
 
     <div class="print-footer">
         <p>Thank you! | Sudhi – 214-493-5266 | info@chang.spicesofindiacuisine.com</p>
-        
+
         <!-- Authorized Signature Section -->
         <div style="margin-top: 15pt; display: flex; justify-content: flex-end;">
             <div style="width: 45%;">
-                <!-- Single signature line for Balakrishna -->
+                <!-- Single signature line for Sudhi -->
                 <div style="border-bottom: 1px solid #000; height: 20pt; margin-bottom: 3pt;"></div>
                 <p style="text-align: center; font-size: 6pt; margin: 0;">Authorized Signature</p>
-                <p style="text-align: center; font-size: 6pt; margin: 1pt 0 0 0; font-weight: bold;">Balakrishna</p>
+                <p style="text-align: center; font-size: 6pt; margin: 1pt 0 0 0; font-weight: bold;">Sudhi</p>
                 <p style="text-align: center; font-size: 5pt; margin: 0;">Spices of India Cuisine Management</p>
             </div>
         </div>
@@ -1155,7 +1238,7 @@
             xhr.open('POST', '/cart/add/', true);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.setRequestHeader('X-CSRFToken', csrfToken);
-            xhr.onreadystatechange = function() {
+            xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
                         try {
@@ -1203,7 +1286,7 @@
             var xhr = new XMLHttpRequest();
             xhr.open('POST', '/orders/{{ order.order_number }}/cancel/', true);
             xhr.setRequestHeader('X-CSRFToken', csrfToken);
-            xhr.onreadystatechange = function() {
+            xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     alert('Order cancelled successfully');
                     location.reload();
@@ -1214,7 +1297,7 @@
     }
 
     // Add CSRF token to page
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         if (!document.querySelector('[name=csrfmiddlewaretoken]')) {
             var csrfInput = document.createElement('input');
             csrfInput.type = 'hidden';

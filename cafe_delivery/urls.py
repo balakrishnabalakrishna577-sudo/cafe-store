@@ -2,11 +2,11 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from cafe.admin import admin_site
+
 
 urlpatterns = [
-    # Custom Django Admin Panel (with Jazzmin styling)
-    path('admin/', admin_site.urls),
+    # Admin URL
+    path('admin/', admin.site.urls),
     
     # REST API URLs
     path('api/v1/', include('api.urls')),

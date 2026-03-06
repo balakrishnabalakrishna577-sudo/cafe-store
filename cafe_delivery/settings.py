@@ -21,10 +21,13 @@ DEBUG = env('DEBUG', default=True)
 
 ALLOWED_HOSTS = ['*']
 
+# Application name
+APP_NAME = 'cafe'
+
 # Application definition
 INSTALLED_APPS = [
-    'jazzmin',  # Beautiful admin theme - must be before django.contrib.admin
-    'django.contrib.admin',  # Django Admin Panel
+    'colorfield',
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -37,6 +40,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'cafe.apps.CafeConfig',  # Use app config to ensure signals are loaded
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -44,11 +48,11 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'cafe.middleware.AdminSessionSeparationMiddleware',
     'cafe.middleware.CouponValidationMiddleware',
     'cafe.middleware.NoCacheMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -69,12 +73,11 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'cafe.context_processors.cart_count',
                 'cafe.context_processors.notifications_context',
-                'cafe.context_processors.admin_session_context',
                 'cafe.context_processors.advertisements_context',
             ],
-            'builtins': [
-                'cafe.templatetags.django_compat',
-            ],
+            # 'builtins': [
+            #     'cafe.templatetags.django_compat',
+            # ],
         },
     },
 ]
@@ -117,6 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
+
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
@@ -198,226 +202,4 @@ if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True
 
 
-# ============================================
-# JAZZMIN ADMIN THEME CONFIGURATION
-# ============================================
-
-JAZZMIN_SETTINGS = {
-    # Title on the login screen and header
-    "site_title": "Spices of India Cuisine Admin",
-    "site_header": "Spices of India Cuisine",
-    "site_brand": "Spices of India Cuisine Management",
-    "site_logo": None,  # Add your logo path here if you have one
-    "login_logo": None,
-    "site_logo_classes": "img-circle",
-    "site_icon": None,
-    
-    # Welcome text on the login screen
-    "welcome_sign": "Welcome to Spices of India Cuisine Admin Panel",
-    
-    # Copyright on the footer
-    "copyright": "Spices of India Cuisine",
-    
-    # The model admin to search from the search bar, search bar omitted if excluded
-    "search_model": "cafe.MenuItem",
-    
-    # Field name on user model that contains avatar ImageField/URLField/Charfield or a callable that receives the user
-    "user_avatar": None,
-    
-    ############
-    # Top Menu #
-    ############
-    
-    # Links to put along the top menu
-    "topmenu_links": [
-        {"name": "Dashboard", "url": "admin:custom_dashboard", "permissions": ["auth.view_user"]},
-        {"name": "Analytics", "url": "admin:custom_analytics", "permissions": ["auth.view_user"]},
-        {"name": "Normal Admin", "url": "/django-admin/", "new_window": True},
-        {"name": "View Site", "url": "/", "new_window": True},
-    ],
-    
-    #############
-    # User Menu #
-    #############
-    
-    # Additional links to include in the user menu on the top right ("app" url type is not allowed)
-    "usermenu_links": [
-        {"name": "View Site", "url": "/", "new_window": True},
-        {"model": "auth.user"},
-    ],
-    
-    #############
-    # Side Menu #
-    #############
-    
-    # Whether to display the side menu
-    "show_sidebar": True,
-    
-    # Whether to aut expand the menu
-    "navigation_expanded": True,
-    
-    # Hide these apps when generating side menu e.g (auth)
-    "hide_apps": [],
-    
-    # Hide these models when generating side menu (e.g auth.user)
-    "hide_models": [],
-    
-    # List of apps (and/or models) to base side menu ordering off of (does not need to contain all apps/models)
-    "order_with_respect_to": ["cafe", "auth"],
-    
-    # Custom links to append to app groups, keyed on app name
-    "custom_links": {
-        "cafe": [
-            {
-                "name": "📈 Analytics",
-                "url": "admin:custom_analytics",
-                "icon": "fas fa-chart-line",
-                "permissions": ["cafe.view_order"]
-            }
-        ]
-    },
-    
-    # Custom app and model ordering
-    "apps_order": [
-        "cafe",
-        "auth",
-    ],
-    
-    # Custom icons for side menu apps/models
-    "icons": {
-        # Auth app
-        "auth": "fas fa-users-cog",
-        "auth.user": "fas fa-user",
-        "auth.Group": "fas fa-users",
-        
-        # Cafe app - organized by category
-        "cafe": "fas fa-store",
-        
-        # Menu Management
-        "cafe.MenuItem": "fas fa-utensils",
-        "cafe.Category": "fas fa-th-large",
-        
-        # Order Management
-        "cafe.Order": "fas fa-shopping-cart",
-        "cafe.OrderItem": "fas fa-shopping-basket",
-        "cafe.OrderTracking": "fas fa-truck",
-        
-        # Customer Management
-        "cafe.UserProfile": "fas fa-id-card",
-        "cafe.DeliveryAddress": "fas fa-map-marker-alt",
-        
-        # Shopping Features
-        "cafe.Cart": "fas fa-cart-plus",
-        "cafe.Wishlist": "fas fa-heart",
-        
-        # Marketing & Engagement
-        "cafe.Coupon": "fas fa-ticket-alt",
-        "cafe.Notification": "fas fa-bell",
-        "cafe.Review": "fas fa-star",
-        "cafe.Rating": "fas fa-star-half-alt",
-    },
-    
-    # Icons that are used when one is not manually specified
-    "default_icon_parents": "fas fa-chevron-circle-right",
-    "default_icon_children": "fas fa-circle",
-    
-    #################
-    # Related Modal #
-    #################
-    # Use modals instead of popups
-    "related_modal_active": False,
-    
-    #############
-    # UI Tweaks #
-    #############
-    
-    # Relative paths to custom CSS/JS scripts (must be present in static files)
-    "custom_css": "css/admin_custom.css",
-    "custom_js": "js/admin_custom.js",
-    
-    # Whether to show the UI customizer on the sidebar
-    "show_ui_builder": False,
-    
-    ###############
-    # Change view #
-    ###############
-    
-    # Render out the change view as a single form, or in tabs, current options are
-    # - single
-    # - horizontal_tabs (default)
-    # - vertical_tabs
-    # - collapsible
-    # - carousel
-    "changeform_format": "horizontal_tabs",
-    
-    # Override change forms on a per modeladmin basis
-    "changeform_format_overrides": {
-        "auth.user": "collapsible",
-        "auth.group": "vertical_tabs",
-    },
-}
-
-JAZZMIN_UI_TWEAKS = {
-    "navbar_small_text": False,
-    "footer_small_text": False,
-    "body_small_text": False,
-    "brand_small_text": False,
-    "brand_colour": "navbar-danger",  # Changed to match custom admin red theme
-    "accent": "accent-danger",  # Changed to match custom admin red theme
-    "navbar": "navbar-white navbar-light",  # Light navbar to match custom admin
-    "no_navbar_border": False,
-    "navbar_fixed": True,  # Fixed navbar for better UX
-    "layout_boxed": False,
-    "footer_fixed": False,
-    "sidebar_fixed": True,  # Fixed sidebar to match custom admin
-    "sidebar": "sidebar-light-danger",  # Light sidebar with danger accent
-    "sidebar_nav_small_text": False,
-    "sidebar_disable_expand": True,  # Disable sidebar expand/collapse
-    "sidebar_nav_child_indent": True,
-    "sidebar_nav_compact_style": False,
-    "sidebar_nav_legacy_style": False,
-    "sidebar_nav_flat_style": True,  # Flat style to match custom admin
-    "theme": "default",
-    "dark_mode_theme": None,
-    "button_classes": {
-        "primary": "btn-danger",  # Changed to red to match custom admin
-        "secondary": "btn-warning",  # Changed to orange to match custom admin
-        "info": "btn-info",
-        "warning": "btn-warning",
-        "danger": "btn-danger",
-        "success": "btn-success"
-    },
-    # Custom CSS variables to match custom admin panel
-    "actions_sticky_top": False,
-}
-
-
-# REST Framework Configuration
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-    ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 20,
-    'DEFAULT_FILTER_BACKENDS': [
-        'rest_framework.filters.SearchFilter',
-        'rest_framework.filters.OrderingFilter',
-    ],
-}
-
-# CORS Configuration (for mobile app)
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # React Native
-    "http://localhost:8081",  # Expo
-    "http://127.0.0.1:3000",
-    "http://127.0.0.1:8081",
-]
-
-CORS_ALLOW_CREDENTIALS = True
-
-# For development, allow all origins (remove in production)
-CORS_ALLOW_ALL_ORIGINS = DEBUG
+# Beautiful Admin Interface Configuration

@@ -12,7 +12,7 @@
         position: relative;
         overflow: hidden;
     }
-    
+
     .notifications-hero::before {
         content: '';
         position: absolute;
@@ -23,7 +23,7 @@
         background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="25" cy="25" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
         opacity: 0.3;
     }
-    
+
     .notifications-hero .container {
         position: relative;
         z-index: 2;
@@ -56,7 +56,7 @@
         transform: translateY(-5px);
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
     }
-    
+
     .notification-card:hover::before {
         opacity: 1;
     }
@@ -65,11 +65,11 @@
         background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
         border-left: 5px solid #ff4d4d;
     }
-    
+
     .notification-card.unread::before {
         opacity: 1;
     }
-    
+
     .notification-card .position-relative {
         position: relative;
     }
@@ -87,7 +87,7 @@
         position: relative;
         overflow: hidden;
     }
-    
+
     .notification-icon::before {
         content: '';
         position: absolute;
@@ -99,7 +99,7 @@
         transform: rotate(45deg);
         transition: all 0.5s ease;
     }
-    
+
     .notification-card:hover .notification-icon::before {
         left: 100%;
     }
@@ -123,11 +123,11 @@
     .notification-icon.reminder {
         background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     }
-    
+
     .notification-icon.warning {
         background: linear-gradient(135deg, #feca57 0%, #ff9ff3 100%);
     }
-    
+
     .notification-icon.success {
         background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
     }
@@ -138,7 +138,7 @@
         color: #2d3748;
         margin-bottom: 0.5rem;
     }
-    
+
     .notification-message {
         color: #4a5568;
         font-size: 0.95rem;
@@ -151,7 +151,7 @@
         font-size: 0.85rem;
         font-weight: 500;
     }
-    
+
     .notification-time i {
         color: #cbd5e0;
     }
@@ -183,7 +183,7 @@
         transform: scale(1.05);
         box-shadow: 0 4px 12px rgba(229, 62, 62, 0.3);
     }
-    
+
     .btn-clear-all {
         background: rgba(255, 255, 255, 0.2);
         border: 2px solid rgba(255, 255, 255, 0.5);
@@ -194,7 +194,7 @@
         transition: all 0.3s ease;
         backdrop-filter: blur(10px);
     }
-    
+
     .btn-clear-all:hover {
         background: rgba(255, 255, 255, 0.3);
         border-color: white;
@@ -206,7 +206,7 @@
         padding: 4rem 2rem;
         text-align: center;
     }
-    
+
     .empty-state-icon {
         width: 120px;
         height: 120px;
@@ -220,13 +220,13 @@
         font-size: 3rem;
         box-shadow: 0 10px 40px rgba(255, 77, 77, 0.3);
     }
-    
+
     .empty-state h3 {
         color: #2d3748;
         font-weight: 700;
         margin-bottom: 1rem;
     }
-    
+
     .empty-state p {
         color: #718096;
         font-size: 1.1rem;
@@ -237,7 +237,7 @@
         flex-wrap: wrap;
         gap: 1rem;
     }
-    
+
     .notification-type-badge {
         display: inline-block;
         padding: 0.25rem 0.75rem;
@@ -248,22 +248,22 @@
         letter-spacing: 0.5px;
         margin-top: 0.5rem;
     }
-    
+
     .notification-type-badge.order_update {
         background: #d4f4dd;
         color: #11998e;
     }
-    
+
     .notification-type-badge.promotion {
         background: #ffe0e0;
         color: #ff6b6b;
     }
-    
+
     .notification-type-badge.info {
         background: #e0f2fe;
         color: #4facfe;
     }
-    
+
     .notification-type-badge.system {
         background: #ffe8e8;
         color: #ff4d4d;
@@ -273,40 +273,40 @@
         .notifications-hero {
             padding: 60px 0 30px;
         }
-        
+
         .notifications-hero h1 {
             font-size: 1.75rem;
         }
-        
+
         .notifications-hero p {
             font-size: 0.9rem;
         }
-        
+
         .notifications-hero .d-flex {
             flex-direction: column;
             text-align: center;
             gap: 1rem;
         }
-        
+
         .btn-clear-all {
             width: 100%;
             margin-top: 1rem;
         }
-        
+
         .notification-card {
             margin-bottom: 1rem;
             border-radius: 15px;
         }
-        
+
         .notification-card .card-body {
             padding: 1rem !important;
         }
-        
+
         .notification-card .d-flex {
             flex-direction: column;
             align-items: flex-start !important;
         }
-        
+
         .notification-icon {
             width: 50px;
             height: 50px;
@@ -314,19 +314,19 @@
             margin-bottom: 1rem;
             margin-right: 0 !important;
         }
-        
+
         .notification-title {
             font-size: 1rem;
         }
-        
+
         .notification-message {
             font-size: 0.9rem;
         }
-        
+
         .notification-time {
             font-size: 0.8rem;
         }
-        
+
         .btn-remove-notification {
             position: absolute;
             top: 1rem;
@@ -334,107 +334,107 @@
             padding: 0.4rem 0.6rem;
             font-size: 0.85rem;
         }
-        
+
         .notification-type-badge {
             font-size: 0.7rem;
             padding: 0.2rem 0.6rem;
         }
-        
+
         .empty-state {
             padding: 3rem 1rem;
         }
-        
+
         .empty-state-icon {
             width: 100px;
             height: 100px;
             font-size: 2.5rem;
         }
-        
+
         .empty-state h3 {
             font-size: 1.5rem;
         }
-        
+
         .empty-state p {
             font-size: 1rem;
         }
     }
-    
+
     @media (max-width: 576px) {
         .notifications-hero {
             padding: 50px 0 25px;
         }
-        
+
         .notifications-hero h1 {
             font-size: 1.5rem;
         }
-        
+
         .notifications-hero h1 i {
             font-size: 1.2rem;
         }
-        
+
         .notification-card {
             border-radius: 12px;
         }
-        
+
         .notification-card .card-body {
             padding: 0.875rem !important;
         }
-        
+
         .notification-icon {
             width: 45px;
             height: 45px;
             font-size: 1.1rem;
             border-radius: 12px;
         }
-        
+
         .notification-title {
             font-size: 0.95rem;
             padding-right: 2rem;
         }
-        
+
         .notification-message {
             font-size: 0.85rem;
             line-height: 1.5;
         }
-        
+
         .badge-new {
             font-size: 0.7rem;
             padding: 0.25rem 0.6rem;
         }
-        
+
         .btn-remove-notification {
             padding: 0.35rem 0.5rem;
             font-size: 0.8rem;
         }
-        
+
         .notification-time {
             font-size: 0.75rem;
         }
-        
+
         .notification-type-badge {
             font-size: 0.65rem;
             padding: 0.2rem 0.5rem;
         }
-        
+
         .empty-state {
             padding: 2rem 0.5rem;
         }
-        
+
         .empty-state-icon {
             width: 80px;
             height: 80px;
             font-size: 2rem;
             margin-bottom: 1.5rem;
         }
-        
+
         .empty-state h3 {
             font-size: 1.25rem;
         }
-        
+
         .empty-state p {
             font-size: 0.9rem;
         }
-        
+
         .btn-clear-all {
             font-size: 0.9rem;
             padding: 0.6rem 1.25rem;
@@ -444,135 +444,409 @@
 {% endblock %}
 
 {% block content %}
-<section class="notifications-hero">
-    <div class="container">
-        <div class="d-flex justify-content-between align-items-center">
-            <div>
-                <h1 class="mb-2">
-                    <i class="fas fa-bell me-3"></i>Notifications
-                </h1>
-                <p class="mb-0 opacity-90">Stay updated with your orders and exclusive offers</p>
-            </div>
-            {% if notifications %}
-            <div>
-                <form id="clear-all-form" action="{% url 'clear_all_notifications' %}" method="post" class="d-inline">
+<style>
+    :root {
+        --primary-gradient: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+        --glass-bg: rgba(255, 255, 255, 0.95);
+        --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+        --card-border-radius: 24px;
+        --icon-size: 56px;
+    }
+
+    .notifications-page {
+        background-color: #f8f9fa;
+        min-height: 100vh;
+        padding-bottom: 80px;
+    }
+
+    .notifications-header {
+        background: var(--primary-gradient);
+        padding: 80px 0 100px;
+        position: relative;
+        margin-bottom: -60px;
+        border-radius: 0 0 50px 50px;
+        overflow: hidden;
+    }
+
+    .notifications-header::before {
+        content: '';
+        position: absolute;
+        width: 150%;
+        height: 150%;
+        top: -25%;
+        left: -25%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+        animation: rotateBg 20s linear infinite;
+    }
+
+    @keyframes rotateBg {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .header-content {
+        position: relative;
+        z-index: 2;
+        color: white;
+    }
+
+    .notification-list {
+        position: relative;
+        z-index: 10;
+    }
+
+    .notification-card {
+        background: var(--glass-bg);
+        border-radius: var(--card-border-radius);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        box-shadow: var(--glass-shadow);
+        margin-bottom: 20px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+        position: relative;
+        animation: slideUp 0.5s ease backwards;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .notification-card:hover {
+        transform: translateY(-5px) scale(1.01);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        border-color: rgba(255, 107, 107, 0.2);
+    }
+
+    .notification-card.unread {
+        background: #ffffff;
+        border-left: 6px solid #FF6B6B;
+    }
+
+    .notification-card.unread::after {
+        content: '';
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 10px;
+        height: 10px;
+        background: #FF6B6B;
+        border-radius: 50%;
+        box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+    }
+
+    .notif-icon-wrapper {
+        width: var(--icon-size);
+        height: var(--icon-size);
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+        flex-shrink: 0;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .notification-card:hover .notif-icon-wrapper {
+        transform: scale(1.1) rotate(5deg);
+    }
+
+    /* Icon Variations */
+    .icon-order {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .icon-promo {
+        background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+    }
+
+    .icon-system {
+        background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+    }
+
+    .icon-alert {
+        background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%);
+    }
+
+    .icon-success {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    }
+
+    .notif-content h5 {
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 6px;
+        font-size: 1.1rem;
+    }
+
+    .notif-content p {
+        color: #718096;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 0;
+    }
+
+    .notif-meta {
+        font-size: 0.8rem;
+        color: #a0aec0;
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .notif-meta i {
+        font-size: 0.9em;
+    }
+
+    .btn-action {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+        border: none;
+        background: transparent;
+        color: #a0aec0;
+    }
+
+    .btn-action:hover {
+        background: #fff5f5;
+        color: #e53e3e;
+        transform: scale(1.1);
+    }
+
+    /* Empty State */
+    .empty-state-wrapper {
+        text-align: center;
+        padding: 60px 20px;
+        background: white;
+        border-radius: 30px;
+        box-shadow: var(--glass-shadow);
+        max-width: 600px;
+        margin: 0 auto;
+        animation: fadeIn 0.8s ease;
+    }
+
+    .empty-icon-box {
+        width: 140px;
+        height: 140px;
+        background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 30px;
+        position: relative;
+    }
+
+    .empty-icon-box::before {
+        content: '';
+        position: absolute;
+        inset: -10px;
+        border-radius: 50%;
+        border: 2px dashed #ffd1d1;
+        animation: spinSlow 30s linear infinite;
+    }
+
+    .empty-icon-box i {
+        font-size: 4rem;
+        color: #ff6b6b;
+        filter: drop-shadow(0 10px 20px rgba(255, 107, 107, 0.3));
+    }
+
+    @keyframes spinSlow {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .btn-browse {
+        background: var(--primary-gradient);
+        color: white;
+        padding: 15px 40px;
+        border-radius: 50px;
+        font-weight: 600;
+        border: none;
+        box-shadow: 0 10px 25px rgba(255, 107, 107, 0.4);
+        transition: all 0.3s ease;
+    }
+
+    .btn-browse:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(255, 107, 107, 0.5);
+        color: white;
+    }
+
+    .btn-clear {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 50px;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+
+    .btn-clear:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+        color: white;
+    }
+
+    @media (max-width: 768px) {
+        .notifications-header {
+            padding: 60px 0 80px;
+        }
+
+        .header-content h1 {
+            font-size: 2rem;
+        }
+
+        .notification-card {
+            padding: 20px !important;
+        }
+
+        .icon-size {
+            width: 44px;
+            height: 44px;
+            font-size: 1.2rem;
+        }
+    }
+</style>
+<div class="notifications-page">
+    <div class="notifications-header">
+        <div class="container header-content">
+            <div class="d-flex justify-content-between align-items-end">
+                <div>
+                    <h1 class="display-5 fw-bold mb-2">Notifications</h1>
+                    <p class="lead mb-0 opacity-75">Stay updated with your latest activities</p>
+                </div>
+                {% if notifications %}
+                <button type="button" class="btn btn-clear" onclick="confirmClearAll()">
+                    <i class="fas fa-broom me-2"></i>Clear All
+                </button>
+                <form id="clear-all-form" action="{% url 'clear_all_notifications' %}" method="post" class="d-none">
                     {% csrf_token %}
-                    <button type="button" class="btn btn-clear-all" onclick="confirmClearAll()">
-                        <i class="fas fa-trash-alt me-2"></i>Clear All
-                    </button>
                 </form>
+                {% endif %}
             </div>
-            {% endif %}
         </div>
     </div>
-</section>
 
-<section class="py-5">
-    <div class="container">
-        {% if notifications %}
-            <div class="row">
-                <div class="col-lg-9 mx-auto">
-                    {% for notification in notifications %}
-                    <div class="card notification-card {% if not notification.is_read %}unread{% endif %}">
-                        <div class="card-body p-4">
-                            <div class="d-flex align-items-start position-relative">
-                                <div class="notification-icon {{ notification.notification_type }} me-3 flex-shrink-0">
-                                    {% if notification.notification_type == 'order_update' %}
-                                        <i class="fas fa-shopping-bag"></i>
-                                    {% elif notification.notification_type == 'promotion' %}
-                                        <i class="fas fa-gift"></i>
-                                    {% elif notification.notification_type == 'info' %}
-                                        <i class="fas fa-info-circle"></i>
-                                    {% elif notification.notification_type == 'system' %}
-                                        <i class="fas fa-cog"></i>
-                                    {% elif notification.notification_type == 'reminder' %}
-                                        <i class="fas fa-bell"></i>
-                                    {% elif notification.notification_type == 'warning' %}
-                                        <i class="fas fa-exclamation-triangle"></i>
-                                    {% elif notification.notification_type == 'success' %}
-                                        <i class="fas fa-check-circle"></i>
-                                    {% else %}
-                                        <i class="fas fa-envelope"></i>
-                                    {% endif %}
-                                </div>
-                                
-                                <div class="flex-grow-1">
-                                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap">
-                                        <div class="flex-grow-1 pe-2">
-                                            <h6 class="notification-title mb-1">{{ notification.title }}</h6>
-                                            {% if not notification.is_read %}
-                                                <span class="badge-new">New</span>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    
-                                    <p class="notification-message mb-2">{{ notification.message }}</p>
-                                    
-                                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                                        <small class="notification-time">
-                                            <i class="fas fa-clock me-1"></i>
-                                            {{ notification.created_at|timesince }} ago
-                                        </small>
-                                        <span class="notification-type-badge {{ notification.notification_type }}">
-                                            {{ notification.get_notification_type_display }}
-                                        </span>
-                                    </div>
-                                </div>
-                                
-                                <form id="remove-form-{{ notification.id }}" action="{% url 'remove_notification' notification.id %}" method="post" class="d-inline">
-                                    {% csrf_token %}
-                                    <button type="button" class="btn btn-remove-notification" 
-                                            title="Remove notification"
-                                            onclick="confirmRemove({{ notification.id }})">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </form>
+    <div class="container notification-list">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                {% if notifications %}
+                {% for notification in notifications %}
+                <div class="card notification-card p-4 {% if not notification.is_read %}unread{% endif %}"
+                    style="animation-delay: {{ forloop.counter0|add:1 }}00ms">
+                    <div class="d-flex align-items-center">
+                        <!-- Helper to determine icon style based on type -->
+                        {% with type=notification.notification_type %}
+                        <div class="notif-icon-wrapper me-4 
+                                {% if type == 'order_update' %}icon-order
+                                {% elif type == 'promotion' %}icon-promo
+                                {% elif type == 'system' %}icon-system
+                                {% elif type == 'warning' %}icon-alert
+                                {% elif type == 'success' %}icon-success
+                                {% else %}icon-order{% endif %}">
+
+                            {% if type == 'order_update' %}<i class="fas fa-box-open"></i>
+                            {% elif type == 'promotion' %}<i class="fas fa-gift"></i>
+                            {% elif type == 'system' %}<i class="fas fa-cog"></i>
+                            {% elif type == 'warning' %}<i class="fas fa-exclamation"></i>
+                            {% elif type == 'success' %}<i class="fas fa-check"></i>
+                            {% else %}<i class="fas fa-bell"></i>{% endif %}
+                        </div>
+                        {% endwith %}
+
+                        <div class="flex-grow-1 notif-content">
+                            <h5>{{ notification.title }}</h5>
+                            <p>{{ notification.message }}</p>
+                            <div class="notif-meta">
+                                <span><i class="far fa-clock me-1"></i>{{ notification.created_at|timesince }}
+                                    ago</span>
+                                {% if not notification.is_read %}
+                                <span class="text-danger fw-bold">• New</span>
+                                {% endif %}
                             </div>
                         </div>
+
+                        <div class="ms-3">
+                            <form id="remove-form-{{ notification.id }}"
+                                action="{% url 'remove_notification' notification.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="button" class="btn-action" onclick="confirmRemove({{ notification.id }})"
+                                    title="Dismiss">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                    {% endfor %}
                 </div>
-            </div>
-        {% else %}
-            <div class="empty-state">
-                <div class="empty-state-icon">
-                    <i class="fas fa-bell-slash"></i>
+                {% endfor %}
+                {% else %}
+                <div class="empty-state-wrapper">
+                    <div class="empty-icon-box">
+                        <i class="fas fa-bell-slash"></i>
+                    </div>
+                    <h2 class="fw-bold mb-3">No New Notifications</h2>
+                    <p class="text-muted mb-4 fs-5">You're all caught up! Check back later for updates on your orders
+                        and exclusive offers.</p>
+                    <a href="{% url 'menu' %}" class="btn btn-browse">
+                        <i class="fas fa-utensils me-2"></i>Explore Menu
+                    </a>
                 </div>
-                <h3>No notifications yet</h3>
-                <p>We'll notify you about order updates, exclusive promotions, and more</p>
-                <a href="{% url 'menu' %}" class="btn btn-primary btn-lg" style="background: linear-gradient(135deg, #ff4d4d 0%, #ff6b35 100%); border: none; padding: 1rem 2rem; border-radius: 15px; font-weight: 600;">
-                    <i class="fas fa-utensils me-2"></i>Browse Menu
-                </a>
+                {% endif %}
             </div>
-        {% endif %}
+        </div>
     </div>
+</div>
 </section>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-function confirmClearAll() {
-    showConfirm(
-        'Clear All Notifications',
-        'Are you sure you want to clear all notifications? This action cannot be undone.',
-        () => {
-            document.getElementById('clear-all-form').submit();
-        },
-        'Yes, Clear All',
-        'Cancel'
-    );
-}
+    function confirmClearAll() {
+        showConfirm(
+            'Clear All Notifications',
+            'Are you sure you want to clear all notifications? This action cannot be undone.',
+            () => {
+                document.getElementById('clear-all-form').submit();
+            },
+            'Yes, Clear All',
+            'Cancel'
+        );
+    }
 
-function confirmRemove(notificationId) {
-    showConfirm(
-        'Remove Notification',
-        'Are you sure you want to remove this notification?',
-        () => {
-            document.getElementById('remove-form-' + notificationId).submit();
-        },
-        'Yes, Remove',
-        'Cancel'
-    );
-}
+    function confirmRemove(notificationId) {
+        showConfirm(
+            'Remove Notification',
+            'Are you sure you want to remove this notification?',
+            () => {
+                document.getElementById('remove-form-' + notificationId).submit();
+            },
+            'Yes, Remove',
+            'Cancel'
+        );
+    }
 </script>
 {% endblock %}

@@ -1,148 +1,327 @@
 {% extends 'cafe/base.html' %}
 {% load static %}
 
-{% block title %}Our Story | Spices of India Cuisine{% endblock %}
+{% block title %}Our Story - Spices of India Cuisine{% endblock %}
 
 {% block extra_css %}
 <style>
-    @media (max-width: 991.98px) {
-        section.py-5.position-relative {
-            min-height: 30vh !important;
-            padding: 2.5rem 0 !important;
+    :root {
+        --story-gradient: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+        --text-dark: #2d3748;
+        --text-light: #718096;
+    }
+
+    .story-hero {
+        position: relative;
+        height: 60vh;
+        background: url('https://images.unsplash.com/photo-1596560548464-f010549b84d7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') center/cover fixed;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-align: center;
+    }
+
+    .story-hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(3px);
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 800px;
+        padding: 0 20px;
+        animation: fadeUp 1s ease-out;
+    }
+
+    .since-badge {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        padding: 10px 30px;
+        border-radius: 50px;
+        font-family: 'Playfair Display', serif;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        display: inline-block;
+        margin-bottom: 2rem;
+        font-size: 0.9rem;
+    }
+
+    .story-section {
+        padding: 100px 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .bg-pattern {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.03;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .chef-card {
+        background: white;
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease;
+    }
+
+    .chef-card:hover {
+        transform: translateY(-10px);
+    }
+
+    .chef-img-wrapper {
+        position: relative;
+        height: 500px;
+        overflow: hidden;
+    }
+
+    .chef-img-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .chef-card:hover .chef-img-wrapper img {
+        transform: scale(1.05);
+    }
+
+    .experience-badge {
+        position: absolute;
+        bottom: 30px;
+        right: 30px;
+        background: white;
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        text-align: center;
+        min-width: 120px;
+    }
+
+    .exp-number {
+        display: block;
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: var(--story-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        line-height: 1;
+    }
+
+    .exp-label {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--text-light);
+        font-weight: 600;
+    }
+
+    .content-wrapper {
+        padding-left: 50px;
+    }
+
+    .quote-box {
+        background: linear-gradient(to right, rgba(255, 107, 107, 0.1), transparent);
+        border-left: 4px solid #FF6B6B;
+        padding: 30px;
+        border-radius: 0 20px 20px 0;
+        margin: 40px 0;
+    }
+
+    .quote-text {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.4rem;
+        font-style: italic;
+        color: var(--text-dark);
+        line-height: 1.6;
+    }
+
+    .journey-timeline {
+        position: relative;
+        padding-left: 30px;
+        margin-top: 40px;
+    }
+
+    .journey-timeline::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 10px;
+        bottom: 0;
+        width: 2px;
+        background: #e2e8f0;
+    }
+
+    .timeline-item {
+        position: relative;
+        padding-bottom: 30px;
+    }
+
+    .timeline-dot {
+        position: absolute;
+        left: -35px;
+        top: 5px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #FF6B6B;
+        box-shadow: 0 0 0 4px white;
+    }
+
+    .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+        margin-top: 60px;
+    }
+    
+    .feature-card {
+        background: white;
+        padding: 40px 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        text-align: center;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        border-color: #FF6B6B;
+    }
+    
+    .feature-icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        color: #FF6B6B;
+        font-size: 1.8rem;
+        box-shadow: 0 10px 20px rgba(255, 107, 107, 0.15);
+    }
+
+    .cta-section {
+        background: var(--story-gradient);
+        padding: 80px 0;
+        color: white;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cta-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 30l30 30H0L30 30zm0 0L0 0h60L30 30z' fill='%23ffffff' fill-opacity='0.05'/%3E%3C/svg%3E");
+    }
+
+    @keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
         }
-        .display-2 {
-            font-size: 2rem !important;
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
     }
-    @media (max-width: 767.98px) {
-        .ps-lg-4 {
-            padding-left: 0 !important;
+
+    @media (max-width: 991px) {
+        .content-wrapper {
+            padding-left: 0;
+            margin-top: 40px;
         }
-        .img-fluid[style*="min-height"] {
-            min-height: 280px !important;
+
+        .chef-img-wrapper {
+            height: 400px;
         }
-    }
-    @media (max-width: 575.98px) {
-        section.py-5.position-relative {
-            min-height: 25vh !important;
-            padding: 2rem 0 !important;
-        }
-        .display-2 {
-            font-size: 1.75rem !important;
+
+        .story-hero {
+            height: 50vh;
         }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<!-- Hero Section with Heritage Feel -->
-<section class="py-5 position-relative overflow-hidden"
-    style="background: var(--gray-900); min-height: 40vh; display: flex; align-items: center;">
-    <div class="position-absolute top-0 start-0 w-100 h-100 opacity-25">
-    </div>
-    <div class="container position-relative z-1 text-center">
-        <span class="badge bg-primary px-3 py-2 mb-3 rounded-pill" style="letter-spacing: 2px;">SINCE 2024</span>
-        <h1 class="display-2 fw-bold text-white mb-4 font-cursive">Our Story</h1>
-        <div class="mx-auto" style="width: 80px; height: 3px; background: var(--brand-blue);"></div>
+<!-- Hero Section -->
+<section class="story-hero">
+    <div class="hero-content">
+        <span class="since-badge">Est. Since 2024</span>
+        <h1 class="display-2 fw-bold mb-4">Our Culinary Journey</h1>
+        <p class="lead mb-0 fs-4 opacity-90">Where passion meets tradition in every dish</p>
     </div>
 </section>
 
-<!-- Chef Sudhi & The Legacy -->
-<section class="py-5 bg-white">
-    <div class="container py-lg-5">
-        <div class="row align-items-center g-5">
+<!-- Chef's Story Section -->
+<section class="story-section bg-light">
+    <div class="bg-pattern"></div>
+    <div class="container">
+        <div class="row align-items-center">
             <div class="col-lg-5">
-                <div class="position-relative">
-                    <!-- Premium Framed Image -->
-                    <div class="p-3 bg-white shadow-lg rounded-4 overflow-hidden border">
-                        <img src="{% static 'images/logo.jpeg' %}" alt="Chef Sudhi" class="img-fluid rounded-3"
-                            style="min-height: 450px; object-fit: cover;">
-                    </div>
-                    <!-- Stats Badge Overlapping -->
-                    <div class="position-absolute top-0 end-0 translate-middle p-4 bg-primary text-white rounded-circle shadow-lg d-none d-md-flex flex-column align-items-center justify-content-center"
-                        style="width: 120px; height: 120px; margin-top: 40px;">
-                        <span class="h2 fw-bold mb-0">20+</span>
-                        <small class="text-uppercase" style="font-size: 0.7rem;">Years Experience</small>
+                <div class="chef-card" data-aos="fade-right">
+                    <div class="chef-img-wrapper">
+                        <img src="{% static 'images/logo.jpeg' %}" alt="Chef Sudhi">
+                        <div class="experience-badge">
+                            <span class="exp-number">20+</span>
+                            <span class="exp-label">Years of<br>Excellence</span>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-lg-7">
-                <div class="ps-lg-4">
-                    <h2 class="display-5 fw-bold mb-4 font-serif text-cocoa">Welcome to Spices of India</h2>
-                    <p class="lead text-primary fw-bold mb-4 font-cursive" style="font-size: 1.5rem;">
-                        Where tradition, flavor, and passion come together.
-                    </p>
-                    <div class="font-serif text-muted" style="font-size: 1.15rem; line-height: 1.8;">
-                        <p class="mb-4">
-                            Hello, my name is <strong>Sudhi</strong>, and I am delighted to welcome you to Spices of
-                            India in Forney, TX.
-                            My culinary journey began in India, where I earned my degree from the <strong>Institute of
-                                Hotel Management and Catering Technology, Chennai</strong>.
-                        </p>
-                        <p class="mb-4">
-                            I later trained at the iconic <strong>Taj Connemara, Chennai</strong>, and worked as a Chef
-                            at <strong>ITC Maratha</strong>, a Luxury Collection Hotel in Mumbai.
-                            These institutions are globally recognized for setting the gold standard in Indian
-                            hospitality and culinary arts.
-                        </p>
-                        <p class="mb-4">
-                            Over the years, I have owned and operated several restaurants across the United States,
-                            specializing in
-                            authentic Indian and Indo-Chinese cuisine. These experiences have shaped my passion for bold
-                            flavors,
-                            premium ingredients, and traditional cooking techniques.
-                        </p>
-                        <p class="mb-0">
-                            At Spices of India, every dish is prepared with care, authenticity, and attention to detail.
-                            It is my pleasure to bring the rich culinary heritage of India to the Forney community.
+                <div class="content-wrapper" data-aos="fade-left">
+                    <h5 class="text-uppercase text-danger fw-bold letter-spacing-2 mb-2">Meet The Chef</h5>
+                    <h2 class="display-5 fw-bold mb-4 font-serif">Welcome to Spices of India</h2>
+
+                    <div class="quote-box">
+                        <p class="quote-text mb-0">"Cooking is not just about ingredients; it's about telling a story
+                            through flavors. My goal is to bring the authentic taste of Indian heritage to your plate."
                         </p>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
-<!-- Secondary Story Section: Vibrant Flavors -->
-<section class="py-5" style="background: #F8FDFF;">
-    <div class="container py-lg-5">
-        <div class="row align-items-center g-5 flex-lg-row-reverse">
-            <div class="col-lg-6">
-                <div class="rounded-4 overflow-hidden shadow-lg">
-                    <img src="{% static 'images/about/vibrant-food.jpg' %}" alt="Indian Flavors" class="img-fluid"
-                        style="height: 400px; width: 100%; object-fit: cover;">
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="pe-lg-5">
-                    <h2 class="display-6 fw-bold mb-4 font-cursive text-brand">Taste India’s Vibrant Flavors</h2>
-                    <h3 class="h4 fw-bold mb-3 font-serif">Bold Flavors, Authentic Taste</h3>
-                    <p class="text-muted mb-5 font-serif" style="font-size: 1.2rem;">
-                        Experience the bold, authentic flavors of India with our street food and fusion dishes. Each
-                        bite is a journey through India’s rich culinary heritage.
-                    </p>
-                    <div class="row g-4">
-                        <div class="col-md-6">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="bg-white p-3 rounded shadow-sm text-primary">
-                                    <i class="fas fa-map-marker-alt fa-lg"></i>
-                                </div>
-                                <div>
-                                    <h6 class="mb-0 fw-bold">Forney, TX</h6>
-                                    <small class="text-muted">7200 FM 741, 75126</small>
-                                </div>
-                            </div>
+                    <p class="text-muted fs-5 mb-4">Hello, I'm <strong>Sudhi</strong>. My culinary journey began in the
+                        vibrant streets of Chennai, where I cultivated my passion for authentic Indian cuisine.</p>
+
+                    <div class="journey-timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <h5 class="fw-bold mb-1">Chennai Beginnings</h5>
+                            <p class="text-muted mb-0">Graduated from the prestigious Institute of Hotel Management and
+                                Catering Technology.</p>
                         </div>
-                        <div class="col-md-6">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="bg-white p-3 rounded shadow-sm text-primary">
-                                    <i class="fas fa-phone-alt fa-lg"></i>
-                                </div>
-                                <div>
-                                    <h6 class="mb-0 fw-bold">214.493.5266</h6>
-                                    <small class="text-muted">Call Sudhi Directly</small>
-                                </div>
-                            </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <h5 class="fw-bold mb-1">Elite Training</h5>
+                            <p class="text-muted mb-0">Honed skills at Taj Connemara and ITC Maratha, perfecting the art
+                                of luxury dining.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <h5 class="fw-bold mb-1">Global Vision</h5>
+                            <p class="text-muted mb-0">Bringing world-class Indian and Indo-Chinese flavors to the heart
+                                of Texas.</p>
                         </div>
                     </div>
                 </div>
@@ -151,23 +330,98 @@
     </div>
 </section>
 
-<!-- Final CTA Section -->
-<section class="py-5 bg-white">
+<!-- Features Section -->
+<section class="story-section">
     <div class="container">
-        <div class="p-5 rounded-4 text-center position-relative overflow-hidden" style="background: var(--brand-blue);">
-            <!-- Decorative Pattern -->
-            <div class="position-absolute top-0 start-0 w-100 h-100 opacity-10"
-                style="background: url('https://www.transparenttextures.com/patterns/az-subtle.png');"></div>
+        <div class="text-center max-w-700 mx-auto mb-5" data-aos="fade-up">
+            <h2 class="display-5 fw-bold mb-3 font-serif">The Spices of India Experience</h2>
+            <p class="text-muted fs-5">We believe in delivering more than just food; we deliver an experience steeped in
+                tradition and quality.</p>
+        </div>
 
-            <div class="position-relative z-1">
-                <h3 class="display-5 fw-bold text-white mb-4 font-cursive">We look forward to serving you!</h3>
-                <p class="text-white mb-4 opacity-75" style="font-size: 1.25rem;">Experience true hospitality and the
-                    finest Indian cuisine in Texas.</p>
-                <div class="d-flex gap-3 justify-content-center">
-                    <a href="{% url 'menu' %}" class="btn btn-outline-light px-5 py-3 rounded-0 fw-bold">BROWSE MENU</a>
-                    <a href="{% url 'contact' %}" class="btn btn-dark px-5 py-3 rounded-0 fw-bold">CONTACT US</a>
+        <div class="feature-grid">
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="feature-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <h4 class="fw-bold mb-3">Fresh Ingredients</h4>
+                <p class="text-muted mb-0">We source only the freshest, high-quality ingredients to ensure every dish
+                    bursts with natural flavor.</p>
+            </div>
+
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="feature-icon">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <h4 class="fw-bold mb-3">Authentic Recipes</h4>
+                <p class="text-muted mb-0">Recipes passed down through generations, preserving the true essence of
+                    Indian culinary heritage.</p>
+            </div>
+
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="feature-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h4 class="fw-bold mb-3">Made with Love</h4>
+                <p class="text-muted mb-0">Every meal is prepared with passion and care, just like a home-cooked meal
+                    served to family.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Location Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                    <div class="row g-0">
+                        <div class="col-md-6 bg-dark text-white p-5 d-flex flex-column justify-content-center">
+                            <h3 class="fw-bold mb-4">Visit Us</h3>
+                            <div class="d-flex align-items-start mb-4">
+                                <i class="fas fa-map-marker-alt text-danger fs-4 me-3 mt-1"></i>
+                                <div>
+                                    <h5 class="mb-1">Forney, TX</h5>
+                                    <p class="mb-0 opacity-75">7200 FM 741, 75126</p>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-start mb-4">
+                                <i class="fas fa-phone-alt text-danger fs-4 me-3 mt-1"></i>
+                                <div>
+                                    <h5 class="mb-1">Call Us</h5>
+                                    <p class="mb-0 opacity-75">214.493.5266</p>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-clock text-danger fs-4 me-3 mt-1"></i>
+                                <div>
+                                    <h5 class="mb-1">Opening Hours</h5>
+                                    <p class="mb-0 opacity-75">Mon - Sun: 11:00 AM - 10:00 PM</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <img src="{% static 'images/about/vibrant-food.jpg' %}" alt="Location"
+                                class="w-100 h-100 object-fit-cover">
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container position-relative z-1">
+        <h2 class="display-4 fw-bold mb-4">Ready to Experience the Magic?</h2>
+        <p class="lead mb-5 opacity-90">Join us for an unforgettable dining experience.</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{% url 'menu' %}"
+                class="btn btn-light btn-lg px-5 py-3 rounded-pill fw-bold text-danger shadow-lg">Browse Menu</a>
+            <a href="{% url 'contact' %}" class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill fw-bold">Contact
+                Us</a>
         </div>
     </div>
 </section>

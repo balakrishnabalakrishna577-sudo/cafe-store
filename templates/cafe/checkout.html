@@ -11,15 +11,28 @@
     }
     
     body {
-        background: #f8f9fa;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
         overflow-x: hidden;
+        background-attachment: fixed;
     }
 
     .checkout-hero {
-        background: linear-gradient(135deg, #ff4d4d 0%, #ff6b35 100%);
-        padding: 40px 0 30px;
+        background: linear-gradient(135deg, #8B0000 0%, #4D0000 100%);
+        padding: 50px 0 40px;
         position: relative;
         overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .checkout-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23FFFFFF' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4H32v4h-4v2h4v4h2v-4h4v-2h-4zm-4-4v-4H28v4h-4v2h4v4h2v-4h4v-2h-4zm-4-4v-4H24v4h-4v2h4v4h2v-4h4v-2h-4zm-4-4v-4H20v4h-4v2h4v4h2v-4h4v-2h-4z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        opacity: 0.1;
     }
 
     .checkout-hero-content {
@@ -30,14 +43,15 @@
     }
 
     .checkout-title {
-        font-size: 2rem;
+        font-size: 2.2rem;
         font-weight: 800;
         margin-bottom: 0.5rem;
         color: white;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
 
     .checkout-subtitle {
-        font-size: 1rem;
+        font-size: 1.1rem;
         opacity: 0.9;
         margin-bottom: 0.75rem;
     }
@@ -65,33 +79,75 @@
 
     .section-card {
         background: white;
-        border-radius: 15px;
-        padding: 1.5rem;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(139, 0, 0, 0.08);
         margin-bottom: 1.5rem;
+        border: none;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .section-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #8B0000, #D4AF37, #8B0000);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+    
+    .section-card:hover {
+        box-shadow: 0 15px 40px rgba(139, 0, 0, 0.15);
+        transform: translateY(-5px);
+    }
+    
+    .section-card:hover::before {
+        opacity: 1;
     }
 
     .section-header {
         display: flex;
         align-items: center;
         gap: 0.75rem;
-        margin-bottom: 1.25rem;
-        padding-bottom: 0.75rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
         border-bottom: 2px solid #f0f0f0;
+        position: relative;
+    }
+
+    .section-header::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 50px;
+        height: 2px;
+        background: linear-gradient(90deg, #8B0000, #D4AF37);
     }
 
     .section-number {
-        width: 40px;
-        height: 40px;
-        background: linear-gradient(135deg, #ff4d4d, #ff6b35);
+        width: 44px;
+        height: 44px;
+        background: linear-gradient(135deg, #8B0000, #D4AF37);
         color: white;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         font-weight: 700;
-        font-size: 1.125rem;
+        font-size: 1.25rem;
         flex-shrink: 0;
+        box-shadow: 0 4px 10px rgba(139, 0, 0, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    .section-number:hover {
+        transform: scale(1.1);
     }
 
     .section-title {
@@ -158,20 +214,23 @@
     }
 
     .btn-proceed {
-        background: linear-gradient(135deg, #ff4d4d, #ff6b35);
+        background: linear-gradient(135deg, #8B0000, #D4AF37);
         border: none;
-        padding: 0.875rem 1.5rem;
-        border-radius: 10px;
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
         color: white;
-        font-weight: 600;
-        font-size: 0.95rem;
+        font-weight: 700;
+        font-size: 1rem;
         cursor: pointer;
         width: 100%;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        box-shadow: 0 5px 15px rgba(139, 0, 0, 0.3);
     }
 
     .btn-proceed:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(255, 77, 77, 0.3);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(139, 0, 0, 0.4);
+        background: linear-gradient(135deg, #9B0000, #E4B347);
     }
 
     .step-complete-icon {
@@ -187,22 +246,43 @@
     
     .payment-option-card {
         border: 2px solid #e0e0e0;
-        border-radius: 12px;
-        padding: 1rem;
+        border-radius: 15px;
+        padding: 1.5rem;
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         background: white;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #ffffff 0%, #fdfdfd 100%);
+    }
+    
+    .payment-option-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #FF9933, #D4AF37, #8B0000);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+    
+    .payment-option-card:hover::before {
+        opacity: 1;
     }
 
     .payment-option-card:hover {
-        border-color: #ff4d4d;
-        box-shadow: 0 4px 15px rgba(255, 77, 77, 0.1);
+        border-color: #8B0000;
+        box-shadow: 0 10px 25px rgba(139, 0, 0, 0.15);
+        transform: translateY(-3px);
     }
 
     .payment-option-card.selected {
-        border-color: #8B4789;
-        background: #faf8fb;
-        box-shadow: 0 4px 15px rgba(139, 71, 137, 0.15);
+        border-color: #8B0000;
+        background: linear-gradient(135deg, #fff8f0 0%, #fff5f0 100%);
+        box-shadow: 0 10px 25px rgba(139, 0, 0, 0.2);
+        transform: scale(1.02);
     }
 
     .payment-option-card input[type="radio"] {
@@ -325,16 +405,23 @@
     }
 
     .form-control, .form-select {
-        border-radius: 10px;
-        border: 2px solid #ced4da;
-        padding: 0.75rem 1rem;
+        border-radius: 12px;
+        border: 2px solid #e0e0e0;
+        padding: 0.875rem 1rem;
         font-size: 16px;
         width: 100%;
+        transition: all 0.3s ease;
+        background-color: #fdfdfd;
     }
 
-    .form-control:focus {
-        border-color: #ff4d4d;
-        box-shadow: 0 0 0 0.2rem rgba(255, 77, 77, 0.15);
+    .form-control:focus, .form-select:focus {
+        border-color: #8B0000;
+        box-shadow: 0 0 0 0.2rem rgba(139, 0, 0, 0.25);
+        background-color: white;
+    }
+
+    .form-control:hover, .form-select:hover {
+        border-color: #d0d0d0;
     }
 
     .form-label {
@@ -351,11 +438,31 @@
 
     .order-summary-card {
         background: white;
-        border-radius: 15px;
-        padding: 1.5rem;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        border-radius: 20px;
+        padding: 1.75rem;
+        box-shadow: 0 10px 30px rgba(139, 0, 0, 0.08);
         position: sticky;
         top: 90px;
+        border: none;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        background: linear-gradient(135deg, #ffffff 0%, #fdf6f0 100%);
+        overflow: hidden;
+    }
+    
+    .order-summary-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #8B0000, #D4AF37, #8B0000);
+        opacity: 1;
+    }
+    
+    .order-summary-card:hover {
+        box-shadow: 0 15px 40px rgba(139, 0, 0, 0.15);
+        transform: translateY(-5px);
     }
 
     .summary-header {
@@ -370,39 +477,55 @@
     .summary-item {
         display: flex;
         justify-content: space-between;
-        padding: 0.75rem 0;
-        border-bottom: 1px solid #f0f0f0;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid #f8f9fa;
+        transition: all 0.3s ease;
+    }
+
+    .summary-item:hover {
+        background: rgba(139, 0, 0, 0.02);
+        padding-left: 0.5rem;
+        border-radius: 8px;
     }
 
     .item-name {
         font-weight: 600;
-        font-size: 0.9rem;
-        color: #333;
+        font-size: 0.95rem;
+        color: #2c3e50;
     }
 
     .item-qty {
-        font-size: 0.75rem;
-        color: #6c757d;
+        font-size: 0.8rem;
+        color: #7f8c8d;
     }
 
     .item-price {
         font-weight: 700;
-        color: #333;
+        color: #8B0000;
+        font-size: 0.95rem;
     }
 
     .bill-row {
         display: flex;
         justify-content: space-between;
-        padding: 0.75rem 0;
-        font-size: 0.9rem;
+        padding: 0.8rem 0;
+        font-size: 0.95rem;
+        border-bottom: 1px solid #f8f9fa;
+        transition: all 0.3s ease;
+    }
+
+    .bill-row:last-child {
+        border-bottom: none;
     }
 
     .bill-row.total {
         border-top: 2px solid #f0f0f0;
-        margin-top: 0.5rem;
-        padding-top: 1rem;
-        font-size: 1.125rem;
-        font-weight: 700;
+        border-bottom: none;
+        margin-top: 1rem;
+        padding-top: 1.2rem;
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #8B0000;
     }
 
     .bill-label {
@@ -410,31 +533,36 @@
     }
 
     .bill-value {
-        font-weight: 600;
-        color: #333;
+        font-weight: 700;
+        color: #2c3e50;
+        font-size: 1rem;
     }
 
     .bill-value.total {
-        color: #ff4d4d;
-        font-size: 1.5rem;
+        color: #8B0000;
+        font-size: 1.6rem;
+        text-shadow: 0 1px 2px rgba(139, 0, 0, 0.1);
     }
 
     .place-order-btn {
-        background: linear-gradient(135deg, #28a745, #20c997);
+        background: linear-gradient(135deg, #28a745, #2ecc71);
         border: none;
-        padding: 1rem;
-        border-radius: 12px;
+        padding: 1.1rem;
+        border-radius: 15px;
         color: white;
         font-weight: 700;
-        font-size: 1rem;
+        font-size: 1.1rem;
         width: 100%;
         margin-top: 1rem;
         cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
     }
 
     .place-order-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(40, 167, 69, 0.4);
+        background: linear-gradient(135deg, #38b854, #3ce082);
     }
 
     .info-box {
@@ -446,7 +574,7 @@
     }
 
     .info-box-icon {
-        color: #ff6b35;
+        color: #D4AF37;
         font-size: 1.25rem;
         margin-right: 0.75rem;
     }
@@ -474,6 +602,10 @@
         
         textarea.form-control {
             min-height: 100px;
+        }
+        
+        .payment-option-card {
+            padding: 1rem;
         }
     }
 
@@ -614,53 +746,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <!-- Pay Online -->
-                                <div class="payment-option-card" onclick="selectPaymentMethod('online')">
-                                    <input type="radio" name="payment_method" value="razorpay" id="online">
-                                    <div class="payment-option-content">
-                                        <div class="payment-left">
-                                            <div class="payment-price-section">
-                                                <div class="payment-price-original">${{ grand_total }}</div>
-                                                <div class="payment-price-discounted">${{ grand_total|add:"-31" }}</div>
-                                                <div class="payment-savings">Save $31</div>
-                                            </div>
-                                            <div class="payment-method-name">Pay Online</div>
-                                            <div class="payment-extra-info">
-                                                <i class="fas fa-percentage"></i> Extra discount with bank offers
-                                            </div>
-                                            <div class="payment-options-icons">
-                                                <span>💳 PhonePe</span>
-                                                <span>💳 Paytm</span>
-                                                <span>💳 GPay</span>
-                                                <span class="payment-more">+more</span>
-                                            </div>
-                                        </div>
-                                        <div class="payment-right">
-                                            <div class="payment-radio"></div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Test Payment -->
-                                <div class="payment-option-card" onclick="selectPaymentMethod('dummy')">
-                                    <input type="radio" name="payment_method" value="dummy" id="dummy">
-                                    <div class="payment-option-content">
-                                        <div class="payment-left">
-                                            <div class="payment-price">${{ grand_total }}</div>
-                                            <div class="payment-method-name">
-                                                <span class="payment-icon-emoji">🧪</span>
-                                                Test Mode
-                                            </div>
-                                            <div class="payment-extra-info">
-                                                <i class="fas fa-info-circle"></i> For testing only
-                                            </div>
-                                        </div>
-                                        <div class="payment-right">
-                                            <div class="payment-radio"></div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
 
                             <div class="info-box">
@@ -725,10 +810,7 @@
                             <span class="bill-value">${{ total }}</span>
                         </div>
 
-                        <div class="bill-row">
-                            <span class="bill-label">Delivery Fee</span>
-                            <span class="bill-value">${{ delivery_fee }}</span>
-                        </div>
+                        
 
                         <div class="bill-row">
                             <span class="bill-label">GST & Charges</span>
@@ -752,14 +834,13 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Payment method selection
     window.selectPaymentMethod = function (method) {
+        // Since there's only one payment method, just ensure it's selected
+        const codCard = document.querySelector('#cod').closest('.payment-option-card');
         document.querySelectorAll('.payment-option-card').forEach(card => {
             card.classList.remove('selected');
         });
-        event.currentTarget.classList.add('selected');
-        const radioInput = event.currentTarget.querySelector('input[type="radio"]');
-        if (radioInput) {
-            radioInput.checked = true;
-        }
+        codCard.classList.add('selected');
+        document.getElementById('cod').checked = true;
     };
 
     // Step navigation

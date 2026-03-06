@@ -7,377 +7,641 @@
 <style>
     /* Hero Section */
     .item-hero {
-        background: #f8f9fa;
-        padding: 120px 0 40px;
+        background: linear-gradient(135deg, #8B0000 0%, #4D0000 100%);
+        padding: 140px 0 60px;
         position: relative;
         overflow: hidden;
-        border-bottom: 1px solid #eee;
+        box-shadow: 0 10px 30px rgba(139, 0, 0, 0.3);
     }
 
+    .item-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M50 0 L60 40 L100 50 L60 60 L50 100 L40 60 L0 50 L40 40 Z" fill="rgba(212,175,55,0.1)"/></svg>');
+        background-size: 80px 80px;
+        opacity: 0.4;
+    }
 
+    .item-hero .breadcrumb {
+        background: #ffffff;
+        padding: 0.8rem 2.5rem;
+        display: inline-flex;
+        border-radius: 50px;
+        border: 1px solid #D4AF37;
+        margin: 0 auto;
+        list-style: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .item-hero .breadcrumb-item a {
+        color: #8B0000;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.1rem;
+        transition: color 0.3s ease;
+    }
+
+    .item-hero .breadcrumb-item a:hover {
+        color: #FF9933;
+    }
+
+    .item-hero .breadcrumb-item.active {
+        color: #222222;
+        font-weight: 800;
+        font-size: 1.1rem;
+    }
+
+    .item-hero .breadcrumb-item+.breadcrumb-item::before {
+        color: #D4AF37;
+        content: "\f105";
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        padding: 0 15px;
+    }
+
+    /* Floating Spices */
+    .floating-spice {
+        position: absolute;
+        opacity: 0.15;
+        z-index: 1;
+        pointer-events: none;
+        animation: float-slow 10s infinite ease-in-out;
+    }
+
+    @keyframes float-slow {
+
+        0%,
+        100% {
+            transform: translateY(0) rotate(0deg);
+        }
+
+        50% {
+            transform: translateY(-20px) rotate(10deg);
+        }
+    }
 
     /* Main Content */
     .item-section {
-        padding: 2rem 0;
+        background:
+            radial-gradient(circle at 100% 100%, rgba(139, 0, 0, 0.03) 0%, transparent 50%),
+            radial-gradient(circle at 0% 0%, rgba(255, 153, 51, 0.03) 0%, transparent 50%),
+            #ffffff;
+        background-image: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%238b0000" fill-opacity="0.02"><path d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6zM36 4V0h-2v4h-4v2h4v4h2V6h4V4h-4z" /></g></g></svg>');
+        padding: 4rem 0;
     }
 
     /* Image Container */
     .image-container {
         position: relative;
-        border-radius: 20px;
+        border-radius: 30px;
         overflow: hidden;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        border: 4px solid #fff;
     }
 
     .item-image {
         width: 100%;
-        height: 350px;
+        height: 420px;
         object-fit: cover;
-        transition: transform 0.3s ease;
+        transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
     }
 
-    .item-image:hover {
-        transform: scale(1.05);
-    }
-
-    .item-placeholder {
-        width: 100%;
-        height: 350px;
-        background: linear-gradient(135deg, #ff4d4d 0%, #ff6b35 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 4rem;
-        color: white;
+    .image-container:hover .item-image {
+        transform: scale(1.1);
     }
 
     /* Details Card */
     .details-card {
-        background: white;
+        background: #fffdf9;
         border-radius: 20px;
-        padding: 1.5rem;
-        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem 2rem;
+        box-shadow: 0 15px 50px rgba(139, 0, 0, 0.08);
+        border: 1px solid #ffe8d6;
+        position: relative;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         height: 100%;
     }
 
+    .details-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 6px;
+        background: linear-gradient(90deg, #FF9933, #D4AF37, #8B0000);
+        border-radius: 30px 30px 0 0;
+    }
 
     .category-badge {
-        display: inline-block;
-        background: linear-gradient(135deg, #ff4d4d, #ff6b35);
-        color: white;
-        padding: 0.4rem 1rem;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        margin-bottom: 1rem;
-    }
-
-    .item-title {
-        font-size: 1.75rem;
-        font-weight: 800;
-        color: #333;
-        margin-bottom: 0.75rem;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        flex-wrap: wrap;
-    }
-
-    .veg-badge,
-    .non-veg-badge {
         display: inline-flex;
         align-items: center;
-        gap: 0.3rem;
-        padding: 0.4rem 0.9rem;
-        border-radius: 20px;
-        font-size: 0.75rem;
-        font-weight: 700;
+        background: rgba(139, 0, 0, 0.1);
+        color: #8B0000;
+        padding: 0.4rem 1.2rem;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        border: 1px solid rgba(139, 0, 0, 0.2);
         text-transform: uppercase;
-    }
-
-    .veg-badge {
-        background: linear-gradient(135deg, #28a745, #20c997);
-        color: white;
-    }
-
-    .non-veg-badge {
-        background: linear-gradient(135deg, #dc3545, #e74c3c);
-        color: white;
-    }
-
-    .item-badges {
-        display: flex;
-        gap: 0.5rem;
-        margin-bottom: 0.75rem;
-        flex-wrap: wrap;
-    }
-
-    .badge-item {
-        padding: 0.3rem 0.8rem;
-        border-radius: 15px;
-        font-size: 0.8rem;
-        font-weight: 600;
-    }
-
-    .badge-spicy {
-        background: #fff3cd;
-        color: #856404;
-    }
-
-    .badge-popular {
-        background: #d1ecf1;
-        color: #0c5460;
-    }
-
-    .item-description {
-        color: #6c757d;
-        line-height: 1.5;
-        margin-bottom: 1rem;
-        font-size: 0.9rem;
-    }
-
-    /* Price Section */
-    .price-box {
-        background: linear-gradient(135deg, #ff4d4d 0%, #ff6b35 100%);
-        padding: 1rem;
-        border-radius: 15px;
-        margin-bottom: 1rem;
-        text-align: center;
-        color: white;
-    }
-
-    .price-original {
-        text-decoration: line-through;
-        opacity: 0.8;
-        font-size: 0.9rem;
-    }
-
-    .price-current {
-        font-size: 2rem;
-        font-weight: 800;
-        margin: 0.25rem 0;
-    }
-
-    .discount-tag {
-        background: rgba(255, 255, 255, 0.2);
-        padding: 0.25rem 0.7rem;
-        border-radius: 15px;
-        font-size: 0.8rem;
-        display: inline-block;
-    }
-
-    /* Quantity Section */
-    .quantity-section {
-        margin-bottom: 0;
-    }
-
-    .quantity-label {
-        font-weight: 700;
-        margin-bottom: 0.75rem;
-        color: #333;
-        font-size: 0.9rem;
-    }
-
-    .quantity-controls {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        justify-content: flex-start;
-    }
-
-    .qty-btn {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        border: none;
-        background: linear-gradient(135deg, #ff4d4d, #ff6b35);
-        color: white;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .qty-btn:hover {
-        transform: scale(1.1);
-    }
-
-    .qty-input {
-        width: 60px;
-        height: 40px;
-        text-align: center;
-        border: 2px solid #ff4d4d;
-        border-radius: 10px;
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: #ff4d4d;
-    }
-
-    /* Action Buttons */
-    .btn-add-cart {
-        background: linear-gradient(135deg, #28a745, #20c997);
-        border: none;
-        padding: 0.75rem;
-        border-radius: 12px;
-        color: white;
-        font-weight: 700;
-        font-size: 1rem;
-        width: 100%;
-        transition: all 0.3s ease;
-        margin-bottom: 0;
-    }
-
-    .btn-add-cart:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
-    }
-
-    .btn-wishlist {
-        background: white;
-        border: 2px solid #dc3545;
-        padding: 0.75rem;
-        border-radius: 12px;
-        color: #dc3545;
-        font-weight: 700;
-        width: 100%;
-        transition: all 0.3s ease;
-        font-size: 1rem;
-    }
-
-    .btn-wishlist:hover {
-        background: #dc3545;
-        color: white;
-    }
-
-    /* Info Cards */
-    .info-card {
-        background: #f8f9fa;
-        padding: 0.75rem;
-        border-radius: 12px;
-        margin-bottom: 0;
-        text-align: center;
-    }
-
-    .info-card-title {
-        font-weight: 700;
-        margin-bottom: 0.25rem;
-        color: #333;
-        font-size: 0.8rem;
-    }
-
-    .info-card-text {
-        color: #6c757d;
-        font-size: 0.8rem;
-        margin: 0;
-    }
-
-    /* Related Items */
-    .related-section {
-        padding: 3rem 0;
-        background: #f8f9fa;
-    }
-
-    .section-title {
-        font-size: 1.75rem;
-        font-weight: 800;
-        margin-bottom: 2rem;
-        text-align: center;
-        color: #333;
-    }
-
-    .related-card {
-        background: white;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-        transition: all 0.3s ease;
-        text-decoration: none;
-        color: inherit;
-        display: block;
-    }
-
-    .related-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    }
-
-    .related-image {
-        width: 100%;
-        height: 180px;
-        object-fit: cover;
-    }
-
-    .related-placeholder {
-        width: 100%;
-        height: 180px;
-        background: linear-gradient(135deg, #ff4d4d, #ff6b35);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 2rem;
-    }
-
-    .related-body {
-        padding: 1rem;
+        letter-spacing: 0.5px;
     }
 
     .related-title {
         font-weight: 700;
         margin-bottom: 0.5rem;
-        color: #333;
+        color: #8B0000;
+    }
+
+    .badge-item {
+        padding: 0.5rem 1rem;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .badge-spicy {
+        background: #fff5f5;
+        color: #e03131;
+        border-color: #ffa8a8;
+    }
+
+    .badge-popular {
+        background: #fff9db;
+        color: #f08c00;
+        border-color: #ffe066;
+    }
+
+    .item-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 2rem;
+        font-weight: 900;
+        color: #222222;
+        /* High-contrast charcoal */
+        margin-bottom: 0.75rem;
+        letter-spacing: -0.5px;
+    }
+
+    /* Dietary Indicators */
+    .dietary-indicator {
+        display: inline-flex;
+        padding: 6px;
+        border: 2px solid #ccc;
+        background: white;
+        border-radius: 4px;
+        line-height: 0;
+        vertical-align: middle;
+        margin-right: 12px;
+    }
+
+    .dietary-indicator.veg {
+        border-color: #28a745;
+    }
+
+    .dietary-indicator.non-veg {
+        border-color: #dc3545;
+    }
+
+    .dietary-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+    }
+
+    .veg .dietary-dot {
+        background: #28a745;
+    }
+
+    .non-veg .dietary-dot {
+        clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        background: #dc3545;
+    }
+
+    .price-original {
+        text-decoration: line-through;
+        opacity: 0.7;
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-right: 10px;
+    }
+
+    .discount-tag {
+        background: #FFD700;
+        color: #8B0000;
+        padding: 0.4rem 1rem;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 800;
+        display: inline-block;
+        margin-left: 10px;
+        border: 1px solid #fff;
+    }
+
+    .item-description {
+        font-size: 0.95rem;
+        color: #555;
+        line-height: 1.5;
+        margin: 1rem 0;
+        font-family: 'Outfit', sans-serif;
+    }
+
+    /* Price Section */
+    .price-box {
+        background: linear-gradient(135deg, #8B0000 0%, #4D0000 100%);
+        padding: 1rem;
+        border-radius: 16px;
+        margin: 1rem 0;
+        color: white;
+        box-shadow: 0 10px 30px rgba(139, 0, 0, 0.2);
+        border: 2px solid #D4AF37;
+    }
+
+    .price-current {
+        font-size: 2rem;
+        font-weight: 900;
+        color: #FFD700;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+.quantity-label {
+    color: #000000;
+}
+
+.info-card-title {
+    color: #8B0000;
+    font-weight: 700;
+}
+
+.info-card-text {
+    color: #222222;
+    font-weight: 800;
+    margin: 0;
+    font-size: 1.1rem;
+}
+    /* Quantity Controls */
+    .qty-btn {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        background: #8B0000;
+        color: #fff;
+        border: 1px solid #D4AF37;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+    }
+
+    .qty-btn:hover {
+        background: #D4AF37;
+        color: #8B0000;
+        transform: translateY(-2px);
+    }
+
+    .qty-input {
+        width: 60px;
+        height: 42px;
+        border: 2px solid #8B0000;
+        border-radius: 10px;
+        font-size: 1.25rem;
+        font-weight: 900;
+        background: #fff;
+    }
+
+    /* Action Buttons */
+    .btn-add-cart {
+        background: linear-gradient(135deg, #FF9933 0%, #FFCC33 100%);
+        color: #8B0000 !important;
+        height: 48px;
+        font-size: 1.05rem;
+        font-weight: 900;
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 10px 25px rgba(255, 153, 51, 0.3);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .btn-wishlist {
+        background: #fff;
+        border: 2px solid #8B0000;
+        color: #8B0000;
+        height: 48px;
+        font-size: 1.05rem;
+        font-weight: 700;
+        border-radius: 12px;
+    }
+
+    /* Spice & Nutrition Meter */
+    .spice-meter {
+        display: flex;
+        gap: 5px;
+        margin-top: 5px;
+    }
+
+    .spice-chili {
+        color: #ddd;
+        font-size: 0.9rem;
+    }
+
+    .spice-chili.active {
+        color: #dc3545;
+        filter: drop-shadow(0 0 5px rgba(220, 53, 69, 0.4));
+    }
+
+    .nutrition-token {
+        background: #f1f3f5;
+        padding: 5px 12px;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #495057;
+        border: 1px solid #e9ecef;
+    }
+
+    .feature-highlight:hover {
+        transform: translateX(10px);
+        background: #fffdf9;
+        border-color: #D4AF37;
+    }
+
+    .feature-icon {
+        width: 45px;
+        height: 45px;
+        background: rgba(139, 0, 0, 0.1);
+        color: #8B0000;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+    }
+
+    /* Related Section */
+    .related-section {
+        background: radial-gradient(circle at 50% 50%, #fffdf9 0%, #fff5ed 100%);
+        padding: 6rem 0;
+        border-top: 1px solid #ffe8d6;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .related-section::before {
+        content: '\f818';
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        position: absolute;
+        top: -50px;
+        right: -30px;
+        font-size: 20rem;
+        color: rgba(139, 0, 0, 0.02);
+        transform: rotate(-15deg);
+    }
+
+    .section-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.8rem;
+        font-weight: 900;
+        color: #8B0000;
+        margin-bottom: 4rem;
+        text-align: center;
+        position: relative;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+        border-radius: 2px;
+    }
+
+    .related-card {
+        display: block;
+        background: #fff;
+        border-radius: 20px;
+        overflow: hidden;
+        text-decoration: none !important;
+        transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+        border: 1px solid #ffe8d6;
+        height: 100%;
+        box-shadow: 0 10px 30px rgba(139, 0, 0, 0.03);
+        position: relative;
+    }
+
+    .related-card:hover {
+        transform: translateY(-15px);
+        box-shadow: 0 25px 50px rgba(139, 0, 0, 0.12);
+        border-color: #D4AF37;
+    }
+
+    .related-image-wrapper {
+        position: relative;
+        height: 240px;
+        overflow: hidden;
+    }
+
+    .related-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .related-placeholder {
+        height: 240px;
+        background: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        color: #dee2e6;
+    }
+
+    .related-card:hover .related-image {
+        transform: scale(1.15);
+    }
+
+    .related-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to top, rgba(139, 0, 0, 0.6) 0%, transparent 100%);
+        opacity: 0;
+        transition: all 0.4s ease;
+        display: flex;
+        align-items: flex-end;
+        padding: 1.5rem;
+    }
+
+    .related-card:hover .related-overlay {
+        opacity: 1;
+    }
+
+    .view-label {
+        color: #fff;
+        font-weight: 800;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        transform: translateY(20px);
+        transition: all 0.4s ease 0.1s;
+    }
+
+    .related-card:hover .view-label {
+        transform: translateY(0);
+    }
+
+    .related-body {
+        padding: 1.5rem;
+        background: #fff;
+        position: relative;
+        z-index: 2;
+    }
+
+    .related-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #222;
+        margin-bottom: 0.5rem;
+        transition: color 0.3s ease;
+    }
+
+    .related-card:hover .related-title {
+        color: #8B0000;
     }
 
     .related-price {
-        color: #28a745;
-        font-weight: 700;
+        font-family: 'Outfit', sans-serif;
+        color: #D4AF37;
+        font-weight: 800;
         font-size: 1.1rem;
     }
 
-    /* Responsive */
-    @media (max-width: 768px) {
-        .item-hero {
-            padding: 90px 0 30px;
-        }
-        .item-image,
-        .item-placeholder {
-            height: 300px;
+    @media (max-width: 991.98px) {
+        .item-image {
+            height: 400px;
         }
 
         .item-title {
-            font-size: 1.5rem;
-        }
-
-        .price-current {
-            font-size: 2rem;
-        }
-
-        .details-card {
-            margin-top: 1rem;
+            font-size: 2.5rem;
         }
     }
-
-    @media (max-width: 575.98px) {
-        .item-hero {
-            padding: 80px 0 24px;
-        }
-        .item-image,
-        .item-placeholder {
-            height: 260px;
-        }
-        .item-title {
-            font-size: 1.35rem;
-        }
-        .price-current {
-            font-size: 1.5rem;
-        }
-        .price-box {
-            padding: 0.75rem;
-        }
+    
+    /* Responsive improvements for details card */
+    @media (max-width: 991.98px) {
         .details-card {
-            padding: 1rem;
+            padding: 1.25rem 1.75rem;
         }
-        .btn-lg {
-            min-height: 48px;
+        
+        .item-title {
+            font-size: 2rem;
+        }
+        
+        .item-description {
+            font-size: 0.9rem;
+        }
+    }
+    
+    @media (max-width: 767.98px) {
+        .details-card {
+            padding: 1rem 1.5rem;
+        }
+        
+        .item-title {
+            font-size: 1.8rem;
+        }
+        
+        .item-description {
+            font-size: 0.85rem;
+        }
+        
+        .category-badge {
+            font-size: 0.75rem;
+            padding: 0.3rem 1rem;
+        }
+    }
+    
+    @media (max-width: 575.98px) {
+        .details-card {
+            padding: 0.8rem 1.2rem;
+        }
+        
+        .item-title {
+            font-size: 1.6rem;
+        }
+        
+        .item-description {
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+        
+        .price-box {
+            padding: 0.8rem;
+        }
+        
+        .price-current {
+            font-size: 1.6rem;
+        }
+        
+        .btn-add-cart, .btn-wishlist {
+            height: 44px;
+            font-size: 0.9rem;
+        }
+        
+        .qty-btn {
+            width: 38px;
+            height: 38px;
+            font-size: 1rem;
+        }
+        
+        .qty-input {
+            width: 50px;
+            height: 38px;
+            font-size: 1.1rem;
+        }
+    }
+    
+    @media (max-width: 479px) {
+        .details-card {
+            padding: 0.7rem 1rem;
+        }
+        
+        .item-title {
+            font-size: 1.4rem;
+        }
+        
+        .item-description {
+            font-size: 0.75rem;
+            line-height: 1.35;
+        }
+        
+        .feature-highlight {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .feature-icon {
+            margin-bottom: 0.5rem;
+        }
+        
+        .nutrition-token {
+            font-size: 0.7rem;
+            padding: 4px 10px;
         }
     }
 </style>
@@ -388,9 +652,17 @@
 
 <!-- Hero Section -->
 <section class="item-hero">
-    <div class="container">
+    <!-- Floating Decorative Icons -->
+    <i class="fas fa-pepper-hot floating-spice" style="top: 20%; left: 10%; font-size: 2rem;"></i>
+    <i class="fas fa-leaf floating-spice" style="top: 60%; left: 5%; font-size: 1.5rem; animation-delay: -2s;"></i>
+    <i class="fas fa-seedling floating-spice"
+        style="top: 30%; right: 10%; font-size: 1.8rem; animation-delay: -5s;"></i>
+    <i class="fas fa-mortar-pestle floating-spice"
+        style="top: 70%; right: 15%; font-size: 2.2rem; animation-delay: -7s;"></i>
+
+    <div class="container text-center" style="position: relative; z-index: 2;">
         <nav aria-label="breadcrumb">
-            <ol class="breadcrumb justify-content-center">
+            <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
                 <li class="breadcrumb-item"><a href="{% url 'menu' %}">Menu</a></li>
                 <li class="breadcrumb-item active">{{ item.name }}</li>
@@ -407,7 +679,7 @@
             <div class="col-lg-6 mb-4">
                 <div class="image-container">
                     {% if item.get_image_url %}
-                    <img src="{{ item.get_image_url }}" alt="{{ item.name }}" class="item-image">
+                    <img src="{{ item.get_image_url }}" alt="{{ item.name }}" class="item-image" onerror="handleImageError(this)">
                     {% else %}
                     <div class="item-placeholder">
                         <i class="fas fa-utensils"></i>
@@ -425,35 +697,71 @@
                     </span>
 
                     <!-- Title with Veg/Non-Veg Badge -->
-                    <h1 class="item-title">
-                        {% if item.is_vegetarian %}
-                        <span class="veg-badge">
-                            <i class="fas fa-circle"></i> VEG
-                        </span>
-                        {% else %}
-                        <span class="non-veg-badge">
-                            <i class="fas fa-drumstick-bite"></i> NON-VEG
-                        </span>
-                        {% endif %}
-                        {{ item.name }}
-                    </h1>
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="dietary-indicator {% if item.is_vegetarian %}veg{% else %}non-veg{% endif %}"
+                                title="{% if item.is_vegetarian %}Vegetarian{% else %}Non-Vegetarian{% endif %}">
+                                <div class="dietary-dot"></div>
+                            </div>
+                            <h1 class="item-title mb-0">{{ item.name }}</h1>
+                        </div>
+                        <div class="text-end">
+                            <div class="text-warning small mb-1">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <span class="ms-1 text-muted fw-bold">(4.8)</span>
+                            </div>
+                            {% if item.is_spicy %}
+                            <div class="spice-meter justify-content-end">
+                                <i class="fas fa-pepper-hot spice-chili active"></i>
+                                <i class="fas fa-pepper-hot spice-chili active"></i>
+                                <i class="fas fa-pepper-hot spice-chili active"></i>
+                                <i class="fas fa-pepper-hot spice-chili"></i>
+                                <i class="fas fa-pepper-hot spice-chili"></i>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
 
-                    <!-- Badges -->
-                    <div class="item-badges">
-                        {% if item.is_spicy %}
-                        <span class="badge-item badge-spicy">
-                            <i class="fas fa-fire me-1"></i>Spicy
-                        </span>
-                        {% endif %}
-                        {% if item.is_popular %}
-                        <span class="badge-item badge-popular">
-                            <i class="fas fa-star me-1"></i>Popular
-                        </span>
-                        {% endif %}
+                    <!-- Nutrition Info -->
+                    <div class="d-flex gap-2 mb-4">
+                        <span class="nutrition-token">450 kcal</span>
+                        <span class="nutrition-token">25g Protein</span>
+                        <span class="nutrition-token">15g Fats</span>
+                        <span class="nutrition-token">35g Carbs</span>
                     </div>
 
                     <!-- Description -->
-                    <p class="item-description">{{ item.description }}</p>
+                    <p class="item-description">
+                        <i class="fas fa-quote-left me-2 opacity-50"></i>
+                        {{ item.description }}
+                        <i class="fas fa-quote-right ms-2 opacity-50"></i>
+                    </p>
+
+                    <!-- Feature Highlights -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <div class="feature-highlight">
+                                <div class="feature-icon"><i class="fas fa-mortar-pestle"></i></div>
+                                <div>
+                                    <h6 class="mb-0 fw-bold">Authentic Spices</h6>
+                                    <small class="text-muted">Hand-ground masalas</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="feature-highlight">
+                                <div class="feature-icon"><i class="fas fa-fire-alt"></i></div>
+                                <div>
+                                    <h6 class="mb-0 fw-bold">Grand Tandoor</h6>
+                                    <small class="text-muted">Cooked in clay oven</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Price Box -->
                     <div class="price-box">
@@ -544,13 +852,18 @@
             {% for related in related_items %}
             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                 <a href="{% url 'menu_item_detail' related.slug %}" class="related-card">
-                    {% if related.get_image_url %}
-                    <img src="{{ related.get_image_url }}" alt="{{ related.name }}" class="related-image">
-                    {% else %}
-                    <div class="related-placeholder">
-                        <i class="fas fa-utensils"></i>
+                    <div class="related-image-wrapper">
+                        {% if related.get_image_url %}
+                        <img src="{{ related.get_image_url }}" alt="{{ related.name }}" class="related-image" onerror="handleImageError(this)">
+                        {% else %}
+                        <div class="related-placeholder">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        {% endif %}
+                        <div class="related-overlay">
+                            <span class="view-label">View Recipe <i class="fas fa-arrow-right ms-2"></i></span>
+                        </div>
                     </div>
-                    {% endif %}
                     <div class="related-body">
                         <h5 class="related-title">{{ related.name }}</h5>
                         <div class="related-price">${{ related.discounted_price|default:related.price }}</div>

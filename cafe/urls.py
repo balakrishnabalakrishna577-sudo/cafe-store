@@ -1,12 +1,13 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
-from . import admin_views
 
 urlpatterns = [
     # Home and menu
     path('', views.home_view, name='home'),
     path('menu/', views.MenuView.as_view(), name='menu'),
+    # Handle incorrect URL pattern (menu/slug instead of menu/item/slug)
+    path('menu/<slug:slug>/', views.MenuItemDetailView.as_view(), name='menu_item_detail_redirect'),
     path('menu/item/<slug:slug>/', views.MenuItemDetailView.as_view(), name='menu_item_detail'),
     path('search/', views.search_menu, name='search_menu'),
     
@@ -89,32 +90,7 @@ urlpatterns = [
     path('share-item/<int:item_id>/', views.share_item, name='share_item'),
     path('orders/<str:order_number>/print/', views.print_receipt, name='print_receipt'),
     
-    # Custom Admin URLs
-    path('custom-admin/', admin_views.admin_login_view, name='admin_login'),
-    path('custom-admin/logout/', admin_views.admin_logout_view, name='admin_logout'),
-    path('custom-admin/dashboard/', admin_views.admin_dashboard, name='custom_admin_dashboard'),
-    path('custom-admin/orders/', admin_views.admin_orders, name='admin_orders'),
-    path('custom-admin/orders/<int:order_id>/', admin_views.admin_order_detail, name='admin_order_detail'),
-    path('custom-admin/orders/<int:order_id>/update-status/', admin_views.update_order_status, name='update_order_status'),
-    path('custom-admin/orders/<int:order_id>/update-payment-method/', admin_views.update_payment_method, name='update_payment_method'),
-    path('custom-admin/orders/<int:order_id>/update-payment-status/', admin_views.update_payment_status, name='update_payment_status'),
-    path('custom-admin/orders/<int:order_id>/cancel/', admin_views.admin_cancel_order, name='admin_cancel_order'),
-    path('custom-admin/orders/<int:order_id>/mark-payment-received/', admin_views.mark_payment_received, name='mark_payment_received'),
-    path('custom-admin/orders/<int:order_id>/mark-received/', admin_views.mark_order_received, name='mark_order_received'),
-    path('custom-admin/menu/', admin_views.admin_menu, name='admin_menu'),
-    path('custom-admin/menu/add/', admin_views.admin_menu_add, name='admin_menu_add'),
-    path('custom-admin/menu/<int:item_id>/edit/', admin_views.admin_menu_edit, name='admin_menu_edit'),
-    path('custom-admin/menu/<int:item_id>/delete/', admin_views.admin_menu_delete, name='admin_menu_delete'),
-    path('custom-admin/categories/', admin_views.admin_categories, name='admin_categories'),
-    path('custom-admin/categories/add/', admin_views.admin_category_add, name='admin_category_add'),
-    path('custom-admin/categories/<int:category_id>/edit/', admin_views.admin_category_edit, name='admin_category_edit'),
-    path('custom-admin/categories/<int:category_id>/delete/', admin_views.admin_category_delete, name='admin_category_delete'),
-    path('custom-admin/customers/', admin_views.admin_customers, name='admin_customers'),
-    path('custom-admin/customers/<int:customer_id>/', admin_views.admin_customer_detail, name='admin_customer_detail'),
-    path('custom-admin/reviews/', admin_views.admin_reviews, name='admin_reviews'),
-    path('custom-admin/reviews/<int:review_id>/delete/', admin_views.admin_delete_review, name='admin_delete_review'),
-    path('custom-admin/analytics/', admin_views.admin_analytics, name='admin_analytics'),
-    path('custom-admin/settings/', admin_views.admin_settings, name='admin_settings'),
+
     
     # Real-time AJAX endpoints
     path('cart/count/', views.cart_count, name='cart_count'),

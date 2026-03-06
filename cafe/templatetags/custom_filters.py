@@ -29,3 +29,16 @@ def percentage(value, total):
         return (float(value) / float(total)) * 100
     except (ValueError, TypeError):
         return 0
+
+@register.filter
+def status_color(status):
+    """Return Bootstrap color class for order status"""
+    status_colors = {
+        'pending': 'warning',
+        'confirmed': 'info',
+        'preparing': 'primary',
+        'out_for_delivery': 'info',
+        'delivered': 'success',
+        'cancelled': 'danger',
+    }
+    return status_colors.get(str(status), 'secondary')

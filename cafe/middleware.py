@@ -5,28 +5,6 @@ from django.contrib import messages
 from cafe.models import Coupon
 
 
-class AdminSessionSeparationMiddleware(MiddlewareMixin):
-    """
-    Middleware to separate admin and user sessions
-    """
-    
-    def process_request(self, request):
-        # Admin paths that should only be accessible with admin session
-        admin_paths = ['/admin/']
-        
-        # Check if current path is an admin path
-        is_admin_path = any(request.path.startswith(path) for path in admin_paths)
-        
-        # Check admin session status
-        is_admin_session = request.session.get('is_admin_session', False)
-        
-        # If accessing admin paths without admin session, redirect to admin login
-        if is_admin_path and not is_admin_session and request.path != '/admin/':
-            return redirect('admin_login')
-        
-        return None
-
-
 class NoCacheMiddleware(MiddlewareMixin):
     """
     Middleware to prevent browser caching of pages

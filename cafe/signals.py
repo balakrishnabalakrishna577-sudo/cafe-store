@@ -57,7 +57,7 @@ def order_created(sender, instance, created, **kwargs):
             Notification.objects.create(
                 user=instance.user,
                 title=f'Order #{instance.order_number} Placed',
-                message=f'Your order has been placed successfully. Total: ₹{instance.grand_total}',
+                message=f'Your order has been placed successfully. Total: ${instance.grand_total}',
                 notification_type='order_update'
             )
         except Exception:

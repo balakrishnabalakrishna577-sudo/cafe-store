@@ -132,8 +132,8 @@ function initializeSearch() {
     const searchResults = document.getElementById('search-results');
     
     // Mobile search
-    const searchInputMobile = document.getElementById('search-input-mobile');
-    const searchResultsMobile = document.getElementById('search-results-mobile');
+    const searchInputMobile = document.getElementById('mobile-search-input');
+    const searchResultsMobile = document.getElementById('mobile-search-results');
     
     let searchTimeout;
     
@@ -304,7 +304,10 @@ function initializeSearch() {
                     return;
                 }
                 console.error('Search error:', error);
-                resultsContainer.innerHTML = '<div class="search-result-item text-danger"><i class="fas fa-exclamation-triangle me-2"></i>Search failed. Please try again.</div>';
+                // Only show empty state, hide error message to maintain clean UI
+                resultsContainer.innerHTML = '<div class="search-result-item text-muted d-none"><i class="fas fa-exclamation-triangle me-2"></i>Search failed. Please try again.</div>';
+                // Hide results container if there's an error
+                resultsContainer.style.display = 'none';
             });
     }
     
@@ -318,7 +321,7 @@ function initializeSearch() {
                         ${item.image ? `<img src="${item.image}" alt="${item.name}" class="rounded me-3" style="width: 50px; height: 50px; object-fit: cover; flex-shrink: 0;">` : '<div class="search-item-placeholder me-3"><i class="fas fa-utensils"></i></div>'}
                         <div class="flex-grow-1 min-w-0">
                             <div class="fw-bold text-truncate">${item.name}</div>
-                            <div class="text-success small">₹${item.price}</div>
+                            <div class="text-success small">${item.price}</div>
                         </div>
                         <div class="text-muted small">
                             <i class="fas fa-arrow-right"></i>
@@ -882,7 +885,19 @@ function initializeMobileSearch() {
             }
             
             // Show loading state
-            resultsContainer.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--gray-400);"><i class="fas fa-spinner fa-spin"></i> Searching...</div>';
+            resultsContainer.innerHTML = `
+                <div class="search-loading-state">
+                    <div class="search-loading-spinner"></div>
+                    <div class="search-loading-text">
+                        <p>Searching delicious options...</p>
+                        <div class="search-loading-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+            `;
             
             searchTimeout = setTimeout(() => {
                 performMobileSearch(query);
@@ -914,24 +929,45 @@ function performMobileSearch(query) {
                     const imageUrl = item.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop';
                     
                     return `
-                        <a href="/menu/item/${item.slug}/" class="search-result-item">
-                            <img src="${imageUrl}" 
-                                 alt="${item.name}" 
-                                 class="search-result-image" 
-                                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop';">
+                        <a href="/menu/item/${item.slug}/" class="search-result-item" data-item-id="${item.id}">
+                            <div class="search-result-image-container">
+                                <img src="${imageUrl}" 
+                                     alt="${item.name}" 
+                                     class="search-result-image" 
+                                     onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop';">
+                                <div class="search-result-badge">
+                                    <i class="fas fa-utensils"></i>
+                                </div>
+                            </div>
                             <div class="search-result-info">
                                 <span class="search-result-name">${item.name}</span>
-                                <small class="search-result-category" style="display: block; color: var(--gray-500); font-size: 0.8rem; margin-bottom: 0.2rem;">${item.category}</small>
+                                <small class="search-result-category">${item.category}</small>
                                 <span class="search-result-price">₹${item.price}</span>
+                                <div class="search-result-meta">
+                                    <span class="search-result-time"><i class="fas fa-clock"></i> ${item.preparation_time} min</span>
+                                    ${item.has_discount ? `<span class="search-result-discount">${Math.round(item.discount)}% OFF</span>` : ''}
+                                </div>
                             </div>
                         </a>
                     `;
                 }).join('');
             } else {
                 resultsContainer.innerHTML = `
-                    <div style="text-align: center; padding: 2rem; color: var(--gray-400);">
-                        <i class="fas fa-search" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.3;"></i>
-                        <p style="margin: 0;">No items found for "${query}"</p>
+                    <div class="search-empty-state">
+                        <div class="search-empty-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h4>No Results Found</h4>
+                        <p>Try searching for something else or browse our menu categories</p>
+                        <div class="search-suggestions">
+                            <small class="text-muted">Popular searches:</small>
+                            <div class="search-suggestion-tags mt-2">
+                                <span class="suggestion-tag" onclick="document.getElementById('mobile-search').value='biryani'; performMobileSearch('biryani')">Biryani</span>
+                                <span class="suggestion-tag" onclick="document.getElementById('mobile-search').value='chicken'; performMobileSearch('chicken')">Chicken</span>
+                                <span class="suggestion-tag" onclick="document.getElementById('mobile-search').value='paneer'; performMobileSearch('paneer')">Paneer</span>
+                            </div>
+                        </div>
+                        <a href="/menu/" class="btn btn-outline-primary btn-sm mt-3">Browse Full Menu</a>
                     </div>
                 `;
             }
@@ -939,9 +975,13 @@ function performMobileSearch(query) {
         .catch(error => {
             console.error('Search error:', error);
             resultsContainer.innerHTML = `
-                <div style="text-align: center; padding: 2rem; color: var(--danger-color);">
-                    <i class="fas fa-exclamation-circle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
-                    <p style="margin: 0;">Search failed. Please try again.</p>
+                <div class="search-error-state">
+                    <div class="search-error-icon">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <h4>Something Went Wrong</h4>
+                    <p>We couldn't complete your search. Please try again in a moment.</p>
+                    <button class="btn btn-primary btn-sm mt-2" onclick="location.reload()">Retry</button>
                 </div>
             `;
         });
@@ -954,6 +994,251 @@ function initializeMobileSidebar() {
     console.log('Mobile navigation using dropdown menu');
 }
 
+// Responsive utility functions for user pages
+window.userPageResponsive = {
+    // Optimize user profile layout
+    optimizeProfileLayout: function() {
+        if (window.responsiveManager.isMobile()) {
+            // On mobile, rearrange profile sidebar and content
+            const profileSidebar = document.querySelector('.col-lg-4');
+            const profileContent = document.querySelector('.col-lg-8');
+            
+            if (profileSidebar && profileContent) {
+                // Move sidebar to bottom on mobile
+                profileContent.after(profileSidebar);
+            }
+        }
+    },
+    
+    // Optimize wishlist layout
+    optimizeWishlistLayout: function() {
+        if (window.responsiveManager.isMobile()) {
+            // Add mobile-specific classes
+            const wishlistItems = document.querySelectorAll('.wishlist-item-card');
+            wishlistItems.forEach(item => {
+                item.classList.add('mobile-layout');
+            });
+        }
+    },
+    
+    // Optimize cart layout
+    optimizeCartLayout: function() {
+        if (window.responsiveManager.isMobile()) {
+            const billDetails = document.querySelector('.bill-details-card');
+            const cartItems = document.querySelector('.cart-items-section');
+            
+            if (billDetails && cartItems) {
+                // Move bill details below cart items on mobile
+                cartItems.after(billDetails);
+            }
+        }
+    },
+    
+    // Initialize all user page optimizations
+    init: function() {
+        // Run initial optimization
+        this.optimizeProfileLayout();
+        this.optimizeWishlistLayout();
+        this.optimizeCartLayout();
+        
+        // Listen for breakpoint changes
+        window.addEventListener('breakpointChange', (event) => {
+            this.optimizeProfileLayout();
+            this.optimizeWishlistLayout();
+            this.optimizeCartLayout();
+        });
+    }
+};
+
+// Initialize user page responsive utilities
+if (document.querySelector('.user-profile') || 
+    document.querySelector('.wishlist-page') || 
+    document.querySelector('.cart-page') || 
+    document.querySelector('.orders-page')) {
+    window.userPageResponsive.init();
+}
+
+// Responsive Breakpoints Manager
+function initializeResponsiveManager() {
+    // Define breakpoints
+    const breakpoints = {
+        xs: 0,
+        sm: 576,
+        md: 768,
+        lg: 992,
+        xl: 1200,
+        xxl: 1400
+    };
+    
+    let currentBreakpoint = getCurrentBreakpoint();
+    
+    // Function to get current breakpoint
+    function getCurrentBreakpoint() {
+        const width = window.innerWidth;
+        
+        if (width >= breakpoints.xxl) return 'xxl';
+        if (width >= breakpoints.xl) return 'xl';
+        if (width >= breakpoints.lg) return 'lg';
+        if (width >= breakpoints.md) return 'md';
+        if (width >= breakpoints.sm) return 'sm';
+        return 'xs';
+    }
+    
+    // Function to dispatch breakpoint change event
+    function dispatchBreakpointEvent() {
+        const newBreakpoint = getCurrentBreakpoint();
+        
+        if (newBreakpoint !== currentBreakpoint) {
+            currentBreakpoint = newBreakpoint;
+            
+            // Dispatch custom event
+            const event = new CustomEvent('breakpointChange', {
+                detail: { breakpoint: currentBreakpoint }
+            });
+            
+            window.dispatchEvent(event);
+        }
+    }
+    
+    // Listen for window resize events
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(dispatchBreakpointEvent, 250);
+    });
+    
+    // Initialize on load
+    dispatchBreakpointEvent();
+    
+    // Expose to global scope
+    window.responsiveManager = {
+        getCurrentBreakpoint: getCurrentBreakpoint,
+        breakpoints: breakpoints,
+        isMobile: function() {
+            return ['xs', 'sm'].includes(getCurrentBreakpoint());
+        },
+        isTablet: function() {
+            return ['md'].includes(getCurrentBreakpoint());
+        },
+        isDesktop: function() {
+            return ['lg', 'xl', 'xxl'].includes(getCurrentBreakpoint());
+        }
+    };
+}
+
+// Initialize responsive manager
+initializeResponsiveManager();
+
+// Responsive utility functions for user pages
+window.userPageResponsive = {
+    // Optimize user profile layout
+    optimizeProfileLayout: function() {
+        if (window.responsiveManager.isMobile()) {
+            // On mobile, rearrange profile sidebar and content
+            const profileSidebar = document.querySelector('.col-lg-4');
+            const profileContent = document.querySelector('.col-lg-8');
+            
+            if (profileSidebar && profileContent) {
+                // Move sidebar to bottom on mobile
+                profileContent.after(profileSidebar);
+            }
+        }
+    },
+    
+    // Optimize wishlist layout
+    optimizeWishlistLayout: function() {
+        if (window.responsiveManager.isMobile()) {
+            // Add mobile-specific classes
+            const wishlistItems = document.querySelectorAll('.wishlist-item-card');
+            wishlistItems.forEach(item => {
+                item.classList.add('mobile-layout');
+            });
+        }
+    },
+    
+    // Optimize cart layout
+    optimizeCartLayout: function() {
+        if (window.responsiveManager.isMobile()) {
+            const billDetails = document.querySelector('.bill-details-card');
+            const cartItems = document.querySelector('.cart-items-section');
+            
+            if (billDetails && cartItems) {
+                // Move bill details below cart items on mobile
+                cartItems.after(billDetails);
+            }
+        }
+    },
+    
+    // Initialize all user page optimizations
+    init: function() {
+        // Run initial optimization
+        this.optimizeProfileLayout();
+        this.optimizeWishlistLayout();
+        this.optimizeCartLayout();
+        
+        // Listen for breakpoint changes
+        window.addEventListener('breakpointChange', (event) => {
+            this.optimizeProfileLayout();
+            this.optimizeWishlistLayout();
+            this.optimizeCartLayout();
+        });
+    }
+};
+
+// Initialize user page responsive utilities
+if (document.querySelector('.user-profile') || 
+    document.querySelector('.wishlist-page') || 
+    document.querySelector('.cart-page') || 
+    document.querySelector('.orders-page')) {
+    window.userPageResponsive.init();
+}
+
+// Navbar compact functionality for all pages in responsive mode
+function initializeCompactNavbar() {
+    const navbar = document.querySelector('.main-navbar');
+    
+    if (navbar) {
+        // Make navbar more compact based on screen size
+        function updateNavbarSize() {
+            if (window.responsiveManager.isMobile()) {
+                navbar.style.minHeight = '40px';
+            } else if (window.responsiveManager.isTablet()) {
+                navbar.style.minHeight = '46px';
+            } else {
+                navbar.style.minHeight = '60px';
+            }
+        }
+        
+        // Initial update
+        updateNavbarSize();
+        
+        // Listen for breakpoint changes
+        window.addEventListener('breakpointChange', (event) => {
+            updateNavbarSize();
+            
+            // Add appropriate classes based on screen size
+            if (window.responsiveManager.isMobile()) {
+                navbar.classList.add('navbar-compact-xs');
+                navbar.classList.remove('navbar-compact-sm', 'navbar-compact-md');
+            } else if (window.responsiveManager.isTablet()) {
+                navbar.classList.add('navbar-compact-sm');
+                navbar.classList.remove('navbar-compact-xs', 'navbar-compact-md');
+            } else {
+                navbar.classList.remove('navbar-compact-xs', 'navbar-compact-sm');
+            }
+        });
+        
+        // Add initial classes based on current screen size
+        if (window.responsiveManager.isMobile()) {
+            navbar.classList.add('navbar-compact-xs');
+        } else if (window.responsiveManager.isTablet()) {
+            navbar.classList.add('navbar-compact-sm');
+        }
+    }
+}
+
+// Initialize compact navbar functionality
+initializeCompactNavbar();
 
 // Mobile Sidebar Navigation
 function initializeMobileSidebar() {
@@ -1105,5 +1390,38 @@ function initializeMobileSidebar() {
             overlay: mobileSidebarOverlay
         });
     }
+}
+
+
+// Handle image loading states
+document.addEventListener('DOMContentLoaded', function() {
+    const menuImages = document.querySelectorAll('.menu-image');
+    menuImages.forEach(img => {
+        // Add loading class initially
+        img.classList.add('loading');
+        
+        // When image loads successfully
+        img.addEventListener('load', function() {
+            this.classList.remove('loading');
+            this.classList.add('loaded');
+        });
+        
+        // Handle image load errors
+        img.addEventListener('error', function() {
+            this.classList.remove('loading');
+            // Optionally replace with a fallback image
+            // this.src = '/static/images/default-food-image.jpg';
+        });
+    });
+});
+
+// Fallback for images that fail to load
+function handleImageError(imgElement) {
+    // Set a default food placeholder image
+    imgElement.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop';
+    imgElement.alt = 'Food Item';
+    imgElement.classList.remove('loading');
+    imgElement.classList.add('loaded');
+    return true; // Prevent further error events
 }
 

@@ -203,7 +203,9 @@ class Order(models.Model):
 
     @property
     def grand_total(self):
-        return self.total + self.delivery_fee
+        total = self.total or Decimal('0.00')
+        delivery_fee = self.delivery_fee or Decimal('0.00')
+        return total + delivery_fee
 
     @property
     def payment_id(self):
