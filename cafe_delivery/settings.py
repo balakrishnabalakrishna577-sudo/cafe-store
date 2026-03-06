@@ -22,7 +22,7 @@ DEBUG = env('DEBUG', default=True)
 ALLOWED_HOSTS = ['*']
 
 # Application name
-APP_NAME = 'cafe'
+APP_NAME = 'cafe-store'
 
 # Application definition
 INSTALLED_APPS = [

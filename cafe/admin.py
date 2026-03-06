@@ -7,9 +7,9 @@ from decimal import Decimal
 from .models import *
 
 # Admin site branding
-admin.site.site_header = 'Cafe Administration'
-admin.site.site_title = 'Cafe Admin'
-admin.site.index_title = 'Cafe Management Portal'
+admin.site.site_header = 'Cafe Store Administration'
+admin.site.site_title = 'Cafe Store Admin'
+admin.site.index_title = 'Cafe Store Management Portal'
 
 # Custom Admin Actions
 @admin.action(description='Mark selected items as available')
