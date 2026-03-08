@@ -6,11 +6,6 @@ from django.db.models import Count, Sum
 from decimal import Decimal
 from .models import *
 
-# Admin site branding
-admin.site.site_header = 'Cafe Store Administration'
-admin.site.site_title = 'Cafe Store Admin'
-admin.site.index_title = 'Cafe Store Management Portal'
-
 # Custom Admin Actions
 @admin.action(description='Mark selected items as available')
 def make_available(modeladmin, request, queryset):
@@ -53,7 +48,7 @@ class MenuItemAdmin(admin.ModelAdmin):
             'fields': ('name', 'slug', 'category', 'description', 'ingredients')
         }),
         ('Pricing', {
-            'fields': ('price', 'discount_percent')
+            'fields': ('price', 'discount')
         }),
         ('Availability', {
             'fields': ('available', 'is_featured', 'item_type')
@@ -76,18 +71,15 @@ class MenuItemAdmin(admin.ModelAdmin):
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'phone', 'city', 'get_orders_count', 'get_wishlist_count', 'created_at')
     list_filter = ('city', 'created_at')
-    search_fields = ('user__username', 'user__email', 'phone', 'city')
+    search_fields = ('user_username', 'user_email', 'phone', 'city')
     readonly_fields = ('created_at',)
     
     fieldsets = (
         ('User Information', {
-            'fields': ('user', 'phone', 'birth_date')
+            'fields': ('user', 'phone', 'date_of_birth')
         }),
         ('Address', {
-            'fields': ('address', 'city', 'state', 'postal_code')
-        }),
-        ('Preferences', {
-            'fields': ('preferred_language', 'newsletter_subscription', 'notifications_enabled')
+            'fields': ('address', 'city', 'postal_code')
         }),
         ('Image', {
             'fields': ('image',)
@@ -111,7 +103,7 @@ class UserProfileAdmin(admin.ModelAdmin):
 class CartAdmin(admin.ModelAdmin):
     list_display = ('user', 'menu_item', 'quantity', 'get_total_price', 'saved_for_later', 'is_selected', 'created_at')
     list_filter = ('saved_for_later', 'is_selected', 'created_at')
-    search_fields = ('user__username', 'menu_item__name')
+    search_fields = ('user_username', 'menu_item_name')
     readonly_fields = ('created_at', 'updated_at')
     
     fieldsets = (
@@ -147,7 +139,7 @@ class OrderItemInline(admin.TabularInline):
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('order_number', 'user', 'total', 'delivery_fee', 'status', 'payment_status', 'payment_method', 'created_at')
     list_filter = ('status', 'payment_status', 'payment_method', 'created_at')
-    search_fields = ('order_number', 'user__username', 'user__email', 'phone')
+    search_fields = ('order_number', 'user_username', 'user_email', 'phone')
     readonly_fields = ('order_number', 'created_at', 'updated_at', 'get_grand_total')
     inlines = [OrderItemInline]
     date_hierarchy = 'created_at'
@@ -183,7 +175,7 @@ class OrderAdmin(admin.ModelAdmin):
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ('order', 'menu_item', 'quantity', 'price', 'get_total_price', 'created_at')
     list_filter = ('order__created_at',)
-    search_fields = ('order__order_number', 'menu_item__name')
+    search_fields = ('order_order_number', 'menu_item_name')
     readonly_fields = ('get_total_price', 'created_at')
     
     fieldsets = (
@@ -207,7 +199,7 @@ class OrderItemAdmin(admin.ModelAdmin):
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ('user', 'menu_item', 'order', 'rating', 'created_at')
     list_filter = ('rating', 'created_at')
-    search_fields = ('user__username', 'menu_item__name', 'comment')
+    search_fields = ('user_username', 'menu_item_name', 'comment')
     readonly_fields = ('created_at',)
 
 # Wishlist Admin
@@ -215,7 +207,7 @@ class ReviewAdmin(admin.ModelAdmin):
 class WishlistAdmin(admin.ModelAdmin):
     list_display = ('user', 'menu_item', 'created_at')
     list_filter = ('created_at',)
-    search_fields = ('user__username', 'menu_item__name')
+    search_fields = ('user_username', 'menu_item_name')
     readonly_fields = ('created_at',)
 
 # Rating Admin
@@ -223,7 +215,7 @@ class WishlistAdmin(admin.ModelAdmin):
 class RatingAdmin(admin.ModelAdmin):
     list_display = ('user', 'menu_item', 'rating', 'created_at')
     list_filter = ('rating', 'created_at')
-    search_fields = ('user__username', 'menu_item__name')
+    search_fields = ('user_username', 'menu_item_name')
     readonly_fields = ('created_at', 'updated_at')
 
 # Coupon Admin
